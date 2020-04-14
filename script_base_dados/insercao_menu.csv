@@ -1,0 +1,17 @@
+4,Risco,N,2,riscoleitos,http://vilaverdesuporte.saude.ws/infger/paineis/painel_risco_leitos.php,EVALDO,2019-12-02 00:00:00,,,22
+12,Cores do Painel de Risco,N,11,cadastro_cor,http://vilaverdesuporte.saude.ws/infger/cadastro/cadastro_cores_risco.php,EVALDO,2019-12-16 00:00:00,,,
+3,Painel Geral,N,2,painelleitos,http://vilaverdesuporte.saude.ws/infger/paineis/painel_leitos.php,EVALDO,2019-12-02 00:00:00,,,21
+13,Painel de Solicitações da Farmácia,N,5,solicitacaofarmacia,http://187.16.185.242:3000/public/dashboard/b60f7c4b-69fc-4c52-9e72-5ffc28574a8b,EVALDO,2019-12-17 00:00:00,,,
+14,Usuários,N,11,cadastrousuario,http://vilaverdesuporte.saude.ws/infger/cadastro/cadastro_usuario.php,EVALDO,2019-12-18 00:00:00,,,
+15,Grupos de Acesso,N,11,gruposusuarios,http://vilaverdesuporte.saude.ws/infger/cadastro/cadastro_grupo_acesso.php,EVALDO,2019-12-18 00:00:00,,,
+16,Grupos de Acesso x Usuários ,N,11,gruposacessousuario,http://vilaverdesuporte.saude.ws/infger/cadastro/cadastro_grupo_acesso_usua.php,EVALDO,2019-12-18 00:00:00,,,
+17,Menus de Informações Gerenciais,N,11,menuinfgerenciais,http://vilaverdesuporte.saude.ws/infger/cadastro/cadastro_menu.php,EVALDO,2019-12-19 00:00:00,,,
+11,Cadastros,S,,cadastros,,EVALDO,2019-12-16 00:00:00,evaldo,2019-12-19 13:20:03.537644,
+23,Grupo de Usuários Por Menu,N,11,grupousuamenu,http://vilaverdesuporte.saude.ws/infger/cadastro/cadastro_grupo_usua_menu.php,evaldo,2019-12-19 14:37:37.567101,,,
+2,Leitos,S,,leitos,,EVALDO,2019-12-02 00:00:00,,,2
+5,Informações Gerenciais,S,,infgerenciais,,EVALDO,2019-12-02 00:00:00,,,3
+6,Dados Assistenciais,N,5,dadosassistenciais,http://187.16.185.242:3000/public/dashboard/f6c949cd-7702-4894-a28a-4862589045e8,EVALDO,2019-12-02 00:00:00,,,31
+7,Painel Horário de Leitos,N,5,geralleitos,http://187.16.185.242:3000/public/dashboard/b3efe9c1-c6d5-49fb-90a7-eee0a4c305ac,EVALDO,2019-12-02 00:00:00,,,32
+9,Painel de Leitos para análise de Dieta,N,5,analisedieta,http://187.16.185.242:3000/public/dashboard/cf6efb4e-7ad9-4ecd-84bb-f60f21a59547,EVALDO,2019-12-03 00:00:00,,,
+8,Painel Histórico de Leitos,N,5,historicoleito,http://187.16.185.242:3000/public/dashboard/20da3eb1-6e2c-4fb5-b5be-36ec80f5ca7c,EVALDO,2019-12-02 00:00:00,,,33
+10,Movimentos do Período,N,5,movperiodo,http://187.16.185.242:3000/public/dashboard/44f73c17-554b-4b7e-b6cf-202d083da102,EVALDO,2019-12-06 00:00:00,,,

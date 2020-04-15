@@ -20,11 +20,11 @@
 		$textoconsulta = strtoupper($_POST['textoconsulta']);
 		
 		$sql = "SELECT count(1)
-				FROM pts.tb_c_grupo_usua_menu_sist_pts grupo_menu
-				   , pts.tb_c_grupo_acesso grupo
-				   , pts.tb_c_menu_sist_pts menu
+				FROM integracao.tb_c_grupo_usua_menu_sist_integracao grupo_menu
+				   , integracao.tb_c_grupo_acesso grupo
+				   , integracao.tb_c_menu_sist_integracao menu
 				where grupo_menu.id_grupo_acesso = grupo.id_grupo_acesso
-				  and grupo_menu.id_menu_sist_pts = menu.id_menu_sist_pts
+				  and grupo_menu.id_menu_sist_integracao = menu.id_menu_sist_integracao
 				  and upper(grupo.nm_grupo_acesso) like '%" . $textoconsulta . "%'";
 		
 		if ($pdo==null){
@@ -40,25 +40,25 @@
 		$num_total = $row[0];	
 		$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-		$sql ="SELECT grupo_menu.id_grupo_usua_menu_sist_pts
+		$sql ="SELECT grupo_menu.id_grupo_usua_menu_sist_integracao
 					 , grupo.nm_grupo_acesso
-					 , menu.nm_menu_sist_pts
-				FROM pts.tb_c_grupo_usua_menu_sist_pts grupo_menu
-				   , pts.tb_c_grupo_acesso grupo
-				   , pts.tb_c_menu_sist_pts menu
+					 , menu.nm_menu_sist_integracao
+				FROM integracao.tb_c_grupo_usua_menu_sist_integracao grupo_menu
+				   , integracao.tb_c_grupo_acesso grupo
+				   , integracao.tb_c_menu_sist_integracao menu
 				where grupo_menu.id_grupo_acesso = grupo.id_grupo_acesso
-				  and grupo_menu.id_menu_sist_pts = menu.id_menu_sist_pts
+				  and grupo_menu.id_menu_sist_integracao = menu.id_menu_sist_integracao
 				  and upper(grupo.nm_grupo_acesso) like '%" . $textoconsulta . "%'
 				order by 2, 3 LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";		
 		
 	} else{
 		
 			$sql = "SELECT count(1)
-				FROM pts.tb_c_grupo_usua_menu_sist_pts grupo_menu
-				   , pts.tb_c_grupo_acesso grupo
-				   , pts.tb_c_menu_sist_pts menu
+				FROM integracao.tb_c_grupo_usua_menu_sist_integracao grupo_menu
+				   , integracao.tb_c_grupo_acesso grupo
+				   , integracao.tb_c_menu_sist_integracao menu
 				where grupo_menu.id_grupo_acesso = grupo.id_grupo_acesso
-				  and grupo_menu.id_menu_sist_pts = menu.id_menu_sist_pts	";
+				  and grupo_menu.id_menu_sist_integracao = menu.id_menu_sist_integracao	";
 			
 			if ($pdo==null){
 					header(Config::$webLogin);
@@ -72,14 +72,14 @@
 			$num_total = $row[0];	
 			$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-			$sql ="SELECT grupo_menu.id_grupo_usua_menu_sist_pts
+			$sql ="SELECT grupo_menu.id_grupo_usua_menu_sist_integracao
 					 , grupo.nm_grupo_acesso
-					 , menu.nm_menu_sist_pts
-				FROM pts.tb_c_grupo_usua_menu_sist_pts grupo_menu
-				   , pts.tb_c_grupo_acesso grupo
-				   , pts.tb_c_menu_sist_pts menu
+					 , menu.nm_menu_sist_integracao
+				FROM integracao.tb_c_grupo_usua_menu_sist_integracao grupo_menu
+				   , integracao.tb_c_grupo_acesso grupo
+				   , integracao.tb_c_menu_sist_integracao menu
 				where grupo_menu.id_grupo_acesso = grupo.id_grupo_acesso
-				  and grupo_menu.id_menu_sist_pts = menu.id_menu_sist_pts				 
+				  and grupo_menu.id_menu_sist_integracao = menu.id_menu_sist_integracao				 
 				order by 2, 3 LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
 	}
 	
@@ -101,7 +101,7 @@
 		try
 		{	
 		
-			$sql = "insert into pts.tb_c_grupo_usua_menu_sist_pts values ((select NEXTVAL('pts.sq_grupo_usua_menu_sist_pts')), ". $_POST['id_grupo_acesso'].", ". $_POST['id_menu_sist_pts'] .", '". $_SESSION['usuario'] ."', current_timestamp, null,null) ";
+			$sql = "insert into integracao.tb_c_grupo_usua_menu_sist_integracao values ((select NEXTVAL('integracao.sq_grupo_usua_menu_sist_integracao')), ". $_POST['id_grupo_acesso'].", ". $_POST['id_menu_sist_integracao'] .", '". $_SESSION['usuario'] ."', current_timestamp, null,null) ";
 
 			$result = pg_query($pdo, $sql);
 
@@ -129,7 +129,7 @@
 		{
 
 			// remove do banco			
-			$sql = "DELETE FROM pts.tb_c_grupo_usua_menu_sist_pts WHERE id_grupo_usua_menu_sist_pts = ".$_SESSION['id_grupo_usua_menu_sist_pts']."";			
+			$sql = "DELETE FROM integracao.tb_c_grupo_usua_menu_sist_integracao WHERE id_grupo_usua_menu_sist_integracao = ".$_SESSION['id_grupo_usua_menu_sist_integracao']."";			
 			
 			$result = pg_query($pdo, $sql);
 
@@ -157,7 +157,7 @@
 	 <meta charset="utf-8">
 	 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	 <meta name="viewport" content="width=device-width, initial-scale=1">
-	 <title>pts de Grupos de Acesso x Menu</title>
+	 <title>integracao de Grupos de Acesso x Menu</title>
 
 	 <link href="../css/bootstrap.min.css" rel="stylesheet">
 	 <link href="../css/style.css" rel="stylesheet">
@@ -195,8 +195,8 @@
 					while($row = pg_fetch_row($ret)) {
 					?>						
 						<tr>
-							<td id="id_grupo_usua_menu_sist_pts" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
-							<td id="nm_menu_sist_pts" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
+							<td id="id_grupo_usua_menu_sist_integracao" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
+							<td id="nm_menu_sist_integracao" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
 							<td id="id_grupo_acesso" value="<?php echo $row[2];?>"><?php echo $row[2];?></td>																		
 							<td class="actions">								
 								<input type="button" value="Visualizar" class="btn btn-success btn-xs visualiza"/>
@@ -251,16 +251,16 @@
 		
 			var currentRow=$(this).closest("tr"); 
 			
-			var id_grupo_usua_menu_sist_pts = currentRow.find("td:eq(0)").text();
+			var id_grupo_usua_menu_sist_integracao = currentRow.find("td:eq(0)").text();
 			var id_grupo_acesso = currentRow.find("td:eq(1)").text();				
-			var id_menu_sist_pts = currentRow.find("td:eq(2)").text();				
+			var id_menu_sist_integracao = currentRow.find("td:eq(2)").text();				
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
 				 url: "../delecao/delecao_grupo_usua_menu.php", //
-				 data: {id_grupo_usua_menu_sist_pts:id_grupo_usua_menu_sist_pts, id_grupo_acesso:id_grupo_acesso,
-				 id_menu_sist_pts:id_menu_sist_pts},
+				 data: {id_grupo_usua_menu_sist_integracao:id_grupo_usua_menu_sist_integracao, id_grupo_acesso:id_grupo_acesso,
+				 id_menu_sist_integracao:id_menu_sist_integracao},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();
@@ -285,12 +285,12 @@
 		$("#tabela").on('click', '.visualiza', function(){
 			
 			var currentRow=$(this).closest("tr"); 			
-			var id_grupo_usua_menu_sist_pts = currentRow.find("td:eq(0)").text();					
+			var id_grupo_usua_menu_sist_integracao = currentRow.find("td:eq(0)").text();					
 						
 			$.ajax({
 				url:"../visualizacao/visualizacao_grupo_usua_menu.php",
 				method:"POST",
-				data:{id_grupo_usua_menu_sist_pts:id_grupo_usua_menu_sist_pts},
+				data:{id_grupo_usua_menu_sist_integracao:id_grupo_usua_menu_sist_integracao},
 				success:function(data){
 					$('#visualizacao').html(data);
 					$('#visualiza').modal('show');

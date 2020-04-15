@@ -7,9 +7,15 @@ GRANT USAGE ON SCHEMA integracao TO evaldo;
 GRANT SELECT ON ALL TABLES IN SCHEMA integracao TO evaldo;
 GRANT SELECT, UPDATE, DELETE, INSERT ON ALL TABLES IN SCHEMA integracao TO evaldo;
 
-GRANT SELECT on integracao.xxxxxxxxxxx TO evaldo;
+GRANT SELECT on integracao.vw_menu_princ_integracao TO evaldo;
+GRANT SELECT on integracao.vw_menu_princ_integracao_usua TO evaldo;
+GRANT SELECT on integracao.vw_menu_princ_usua TO evaldo;
 
-GRANT SELECT, UPDATE, INSERT, DELETE ON integracao.xxxxxxxxxxxxx TO evaldo;
+GRANT SELECT, UPDATE, INSERT, DELETE ON integracao.tb_c_grupo_acesso TO evaldo;
+GRANT SELECT, UPDATE, INSERT, DELETE ON integracao.tb_c_grupo_usua_acesso TO evaldo;
+GRANT SELECT, UPDATE, INSERT, DELETE ON integracao.tb_c_grupo_usua_menu_sist_integracao TO evaldo;
+GRANT SELECT, UPDATE, INSERT, DELETE ON integracao.tb_c_menu_sist_integracao TO evaldo;
+GRANT SELECT, UPDATE, INSERT, DELETE ON integracao.tb_c_usua_acesso TO evaldo;
 
 --Example grant on sequence object database
 --GRANT ALL ON SEQUENCE integracao.xxxxxxxxxxxxxxxx TO evaldo;

@@ -23,29 +23,6 @@ CREATE OR REPLACE VIEW integracao.vw_menu_princ_integracao AS
 ALTER TABLE integracao.vw_menu_princ_integracao
     OWNER TO postgres;
 	
-	
--- View: integracao.vw_menu_princ_usua
--- DROP VIEW integracao.vw_menu_princ_usua;
-
-CREATE OR REPLACE VIEW integracao.vw_menu_princ_usua AS
- SELECT menu_princ.menu_principal,
-    menu_princ.sub_menu,
-    menu_princ.nm_objt_menu_princ,
-    menu_princ.nm_objt_sub_menu_princ,
-    menu_princ.nm_link_objt_menu_princ,
-    menu_princ.nm_link_objt_sub_menu_princ,
-    menu_princ.qt_menu_nivel_1,
-    menu_princ.qt_menu_nivel_2,
-    menu_princ.nu_pcao_menu,
-    menu_princ_usua.nm_usua_acesso
-   FROM integracao.vw_menu_princ_integracao menu_princ,
-    integracao.vw_menu_princ_integracao_usua menu_princ_usua
-  WHERE menu_princ.sub_menu = menu_princ_usua.nm_menu_sist_integracao;
-
-ALTER TABLE integracao.vw_menu_princ_usua
-    OWNER TO postgres;
-	
-	
 -- View: integracao.vw_menu_princ_integracao_usua
 -- DROP VIEW integracao.vw_menu_princ_integracao_usua;
 
@@ -74,3 +51,27 @@ CREATE OR REPLACE VIEW integracao.vw_menu_princ_integracao_usua AS
 
 ALTER TABLE integracao.vw_menu_princ_integracao_usua
     OWNER TO postgres;
+	
+	
+-- View: integracao.vw_menu_princ_usua
+-- DROP VIEW integracao.vw_menu_princ_usua;
+
+CREATE OR REPLACE VIEW integracao.vw_menu_princ_usua AS
+ SELECT menu_princ.menu_principal,
+    menu_princ.sub_menu,
+    menu_princ.nm_objt_menu_princ,
+    menu_princ.nm_objt_sub_menu_princ,
+    menu_princ.nm_link_objt_menu_princ,
+    menu_princ.nm_link_objt_sub_menu_princ,
+    menu_princ.qt_menu_nivel_1,
+    menu_princ.qt_menu_nivel_2,
+    menu_princ.nu_pcao_menu,
+    menu_princ_usua.nm_usua_acesso
+   FROM integracao.vw_menu_princ_integracao menu_princ,
+    integracao.vw_menu_princ_integracao_usua menu_princ_usua
+  WHERE menu_princ.sub_menu = menu_princ_usua.nm_menu_sist_integracao;
+
+ALTER TABLE integracao.vw_menu_princ_usua
+    OWNER TO postgres;
+	
+	

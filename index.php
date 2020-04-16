@@ -9,7 +9,7 @@
 	$menu_princ_anterior="";
 	$fl_sist_admn="";
 	
-	$sql = "SELECT fl_sist_admn from pts.tb_c_usua_acesso where nm_usua_acesso = '".$_SESSION['usuario']."'";
+	$sql = "SELECT fl_sist_admn from integracao.tb_c_usua_acesso where nm_usua_acesso = '".$_SESSION['usuario']."'";
 	
 	try {
 		if ($pdo==null){
@@ -19,11 +19,11 @@
 		$ret_usua_row = pg_fetch_row($ret_usua);
 		if ($ret_usua_row[0]=="S"){
 			$fl_sist_admn="S";			
-			$sql = "SELECT * from pts.vw_menu_princ_pts order by nu_pcao_menu, menu_principal asc ";			
+			$sql = "SELECT * from integracao.vw_menu_princ_integracao order by nu_pcao_menu, menu_principal asc ";			
 			$ret_menu_princ = pg_query($pdo, $sql);	
 		}else{
 			$fl_sist_admn="N";			
-			$sql = "SELECT distinct * from pts.vw_menu_princ_usua where nm_usua_acesso = '".$_SESSION['usuario']."' order by nu_pcao_menu, menu_principal asc ";			
+			$sql = "SELECT distinct * from integracao.vw_menu_princ_usua where nm_usua_acesso = '".$_SESSION['usuario']."' order by nu_pcao_menu, menu_principal asc ";			
 			$ret_menu_princ = pg_query($pdo, $sql);	
 		}					
 	} catch (PDOException $e) {
@@ -34,7 +34,7 @@
 	<!DOCTYPE html>
 	<html>
 	<head>
-		<link rel="shortcut icon" href="./img/pts_2.ico" type="image/x-icon" />
+		<link rel="shortcut icon" href="./img/integracao_2.ico" type="image/x-icon" />
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">		
 		<link rel="stylesheet" href="./css/font-awesome.min.css">
@@ -592,7 +592,7 @@
 				}				
 			
 	</style>
-		<title>PTS</title>
+		<title>integracao</title>
 	</head>
 	<body  bgcolor="#cfc" id="bd">
 		<div class="container" id="divcabec">			
@@ -615,9 +615,9 @@
 							$sql="";
 							
 							if ($fl_sist_admn=="S"){
-								$sql = "SELECT distinct * from pts.vw_menu_princ_pts where menu_principal = '" .$row_menu_princ[0]."' order by nu_pcao_menu, sub_menu asc" ;
+								$sql = "SELECT distinct * from integracao.vw_menu_princ_integracao where menu_principal = '" .$row_menu_princ[0]."' order by nu_pcao_menu, sub_menu asc" ;
 							} else {
-								$sql = "SELECT distinct * from pts.vw_menu_princ_usua where nm_usua_acesso = '".$_SESSION['usuario']."' and menu_principal='" .$row_menu_princ[0]."' order by nu_pcao_menu, menu_principal asc ";								
+								$sql = "SELECT distinct * from integracao.vw_menu_princ_usua where nm_usua_acesso = '".$_SESSION['usuario']."' and menu_principal='" .$row_menu_princ[0]."' order by nu_pcao_menu, menu_principal asc ";								
 							}
 							
 							$ret_submenu = pg_query($pdo, $sql);

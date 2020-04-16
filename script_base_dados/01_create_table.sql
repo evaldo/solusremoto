@@ -130,15 +130,23 @@ COMMENT ON COLUMN integracao.tb_ctrl_leito.fl_rtgrd
 ----------------------------------------------------------------------------------------------------------- Table: integracao.tb_c_usua_acesso
 -- DROP TABLE integracao.tb_c_usua_acesso;
 
+-- Table: integracao.tb_c_usua_acesso
+
+-- DROP TABLE integracao.tb_c_usua_acesso;
+
 CREATE TABLE integracao.tb_c_usua_acesso
 (
     cd_usua_acesso integer NOT NULL,
-    nm_usua_acesso character varying(255) NOT NULL,
-    fl_sist_admn character varying(255),
-    cd_usua_incs character varying(255) not null,
-    dt_incs timestamp without time zone not null,
-    cd_usua_altr character varying(255) ,
+    nm_usua_acesso character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    fl_sist_admn character varying(255) COLLATE pg_catalog."default",
+    cd_usua_incs character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    dt_incs timestamp without time zone NOT NULL,
+    cd_usua_altr character varying(255) COLLATE pg_catalog."default",
     dt_altr timestamp without time zone,
+    ds_usua_acesso character varying(400) COLLATE pg_catalog."default",
+    cd_faixa_ip_1 character varying(50) COLLATE pg_catalog."default",
+    cd_faixa_ip_2 character varying(50) COLLATE pg_catalog."default",
+    fl_acesso_ip character varying(1) COLLATE pg_catalog."default",
     CONSTRAINT pk_usua_acesso PRIMARY KEY (cd_usua_acesso)
 )
 WITH (
@@ -148,6 +156,21 @@ TABLESPACE pg_default;
 
 ALTER TABLE integracao.tb_c_usua_acesso
     OWNER to postgres;
+
+GRANT SELECT ON TABLE integracao.tb_c_usua_acesso TO adrianasilva;
+
+GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tb_c_usua_acesso TO evaldo;
+
+GRANT UPDATE, DELETE, SELECT, INSERT ON TABLE integracao.tb_c_usua_acesso TO ftesta;
+
+GRANT INSERT, UPDATE, DELETE, SELECT ON TABLE integracao.tb_c_usua_acesso TO ldaibert;
+
+GRANT DELETE, SELECT, INSERT, UPDATE ON TABLE integracao.tb_c_usua_acesso TO mmattos;
+
+GRANT UPDATE, INSERT, SELECT, DELETE ON TABLE integracao.tb_c_usua_acesso TO mvilela;
+
+GRANT ALL ON TABLE integracao.tb_c_usua_acesso TO postgres;
+
 COMMENT ON TABLE integracao.tb_c_usua_acesso
     IS 'Armazena os usuários de acesso para controle de perfil de acesso.';
 
@@ -156,10 +179,10 @@ COMMENT ON COLUMN integracao.tb_c_usua_acesso.cd_usua_acesso
 
 COMMENT ON COLUMN integracao.tb_c_usua_acesso.nm_usua_acesso
     IS 'Nome do usuário de acesso para controle de perfil de acesso.';
-	
+
 COMMENT ON COLUMN integracao.tb_c_usua_acesso.fl_sist_admn
     IS 'Flag (S/N) se o usuário é administrador ou não.';
-	
+
 COMMENT ON COLUMN integracao.tb_c_usua_acesso.cd_usua_incs
     IS 'Código do usuário que realizou a inclusão do registro.';
 
@@ -170,7 +193,19 @@ COMMENT ON COLUMN integracao.tb_c_usua_acesso.cd_usua_altr
     IS 'Código do usuário que realizou a alteração do registro.';
 
 COMMENT ON COLUMN integracao.tb_c_usua_acesso.dt_altr
-    IS 'Data de alteração do registro.';	
+    IS 'Data de alteração do registro.';
+
+COMMENT ON COLUMN integracao.tb_c_usua_acesso.ds_usua_acesso
+    IS 'Descrição do usuário de acesso.';
+
+COMMENT ON COLUMN integracao.tb_c_usua_acesso.cd_faixa_ip_1
+    IS 'Código da faixa de IP 1 permitido para acesso.';
+
+COMMENT ON COLUMN integracao.tb_c_usua_acesso.cd_faixa_ip_2
+    IS 'Código da faixa de IP 2 permitido para acesso.';
+
+COMMENT ON COLUMN integracao.tb_c_usua_acesso.fl_acesso_ip
+    IS 'Flag que estabelece acesso por qualquer IP.';	
 
 ---------------------------------------------------------------------------------------------------------
 -- Table: cadastro.tb_c_menu_sist_integracao
@@ -402,3 +437,29 @@ COMMENT ON COLUMN integracao.tb_c_grupo_usua_menu_sist_integracao.cd_usua_altr
 
 COMMENT ON COLUMN integracao.tb_c_grupo_usua_menu_sist_integracao.dt_altr
     IS 'Data de alteração do registro.';
+	
+-- Table: integracao.tb_c_log_acesso
+
+-- DROP TABLE integracao.tb_c_log_acesso;
+
+CREATE TABLE integracao.tb_c_log_acesso
+(
+    id_log_acesso integer NOT NULL,
+    cd_usua_acesso integer NOT NULL,
+    nm_usua_acesso character varying(255) COLLATE pg_catalog."default",
+    dt_log_acesso timestamp without time zone,
+    CONSTRAINT pk_c_log_acesso PRIMARY KEY (id_log_acesso)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE integracao.tb_c_log_acesso
+    OWNER to postgres;
+
+GRANT SELECT ON TABLE integracao.tb_c_log_acesso TO adrianasilva;
+
+GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tb_c_log_acesso TO evaldo;
+
+GRANT ALL ON TABLE integracao.tb_c_log_acesso TO postgres;	

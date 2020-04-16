@@ -2,9 +2,9 @@
 	
 	session_start();		
 	
-    //include '../database.php';
-	include 'conexao_sqlserver.php';
-	//include 'config.php';
+    include '../database.php';
+	include '../conexao_sqlserver.php';
+	//include '../config.php';
 	
     global $objConnSqlServer;	
 	
@@ -69,8 +69,7 @@
 		 <div id="main" class="container-fluid" style="margin-top: 50px"> 
 			<div class="container" style="margin-left: 0px ">
 				<h2>Gestão de Leitos</h2>
-				<br>				
-				<hr>				
+				<br>												
 			</div>			
 		</div> <!-- /#top -->
 	 	
@@ -79,24 +78,26 @@
 		<div id="list" class="row" style="margin-left: 5px; margin-right: 5px; ">
 		
 			<div class="table-responsive">
-				<table class="table table-striped" cellspacing="5" cellpadding="2" id="tabela">
+				<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+				<table class="table w-auto small">
+				<!--<table class="table table-striped" cellspacing="5" cellpadding="2" id="tabela">-->
 					<thead>
 						<tr>
-							<th style="width: 30%;">Leito</th>
-							<th style="width: 10%;">Admissão</th>
-							<th style="width: 40%;">Paciente</th>
-							<th style="width: 40%;">Carater de Interação</th>
-							<th style="width: 5%;">Sexo</th>																			
-							<th style="width: 10%;">Data de Nasc.</th>
-							<th style="width: 30%;">Convênio</th>
-							<th style="width: 15%;">Médico</th>
-							<th style="width: 15%;">Psicólogo</th>
-							<th style="width: 15%;">Terapeuta</th>
-							<th style="width: 15%;">CID</th>
-							<th style="width: 5%;">Fumante</th>
-							<th rowspan="2" style="width: 30%;">Dieta/Consistência</th>
-							<th style="width: 10%;">Prvs. de Alta</th>
-							<th style="width: 30%;">Ocorrências</th>
+							<th>Leito</th>
+							<th>Admissão</th>
+							<th>Paciente</th>
+							<th>Carater de Interação</th>
+							<th>Sexo</th>																			
+							<th>Data de Nasc.</th>
+							<th>Convênio</th>
+							<th>Médico</th>
+							<th>Psicólogo</th>
+							<th>Terapeuta</th>
+							<th>CID</th>
+							<th>Fumante</th>
+							<th rowspan="2">Dieta/Consistência</th>
+							<th>Prvs. de Alta</th>
+							<th>Ocorrências</th>
 							
 						</tr>
 					</thead>				
@@ -111,33 +112,38 @@
 								
 								<td id="hsp_dthre" value="<?php echo $row['HSP_DTHRE'];?>" ><?php echo $row['HSP_DTHRE'];?></td>
 								
-								<td id="pac_nome" value="<?php echo $row['PAC_NOME'];?>" style="width: 15px;"><?php echo $row['PAC_NOME'];?></td>
+								<td id="pac_nome" value="<?php echo $row['PAC_NOME'];?>"><?php echo $row['PAC_NOME'];?></td>
 								
-								<td id="ds_crtr_intnc" value="<?php echo ['DS_CRTR_INTNC'];?>" style="width: 15px;"><input type="text" value="<?php echo $row['DS_CRTR_INTNC'];?>" style="display:none"/><?php echo $row['DS_CRTR_INTNC'];?></td>
+								<td id="ds_crtr_intnc"><input type="text" value="<?php echo $row['DS_CRTR_INTNC'];?>" class="form-control"/></td>
 								
-								<td id="pac_sexo" value="<?php echo $row['PAC_SEXO'];?>" style="width: 15px;"><?php echo $row['PAC_SEXO'];?></td>								
+								<td id="pac_sexo" value="<?php echo $row['PAC_SEXO'];?>"><?php echo $row['PAC_SEXO'];?></td>								
 								
-								<td id="pac_nasc" value="<?php echo $row['PAC_NASC'];?>" style="width: 15px;"><?php echo $row['PAC_NASC'];?></td>
+								<td id="pac_nasc" value="<?php echo $row['PAC_NASC'];?>"><?php echo $row['PAC_NASC'];?></td>
 								
-								<td id="cnv_nome" value="<?php echo $row['CNV_NOME'];?>" style="width: 15px;"><?php echo $row['CNV_NOME'];?></td>
+								<td id="cnv_nome" value="<?php echo $row['CNV_NOME'];?>"><?php echo $row['CNV_NOME'];?></td>
 								
-								<td id="ds_mdco" value="<?php echo $row['DS_MDCO'];?>" style="width: 15px;"><input type="text" value="<?php echo $row['DS_MDCO'];?>" style="display:none"/><?php echo $row['DS_MDCO'];?></td>
+								<td id="ds_mdco" value="<?php echo $row['DS_MDCO'];?>"><input type="text" value="<?php echo $row['DS_MDCO'];?>" style="display:none"/><?php echo $row['DS_MDCO'];?></td>
 								
-								<td id="ds_psgo" value="<?php echo $row['DS_PSGO'];?>" style="width: 15px;"><input type="text" value="<?php echo $row['DS_PSGO'];?>" style="display:none"/><?php echo $row['DS_PSGO'];?></td>
+								<td id="ds_psgo" value="<?php echo $row['DS_PSGO'];?>"><input type="text" value="<?php echo $row['DS_PSGO'];?>" style="display:none"/><?php echo $row['DS_PSGO'];?></td>
 								
-								<td id="ds_trpta" value="<?php echo $row['DS_TRPTA'];?>" style="width: 15px;"><input type="text" value="<?php echo $row['DS_TRPTA'];?>" style="display:none"/><?php echo $row['DS_TRPTA'];?></td>
+								<td id="ds_trpta" value="<?php echo $row['DS_TRPTA'];?>"><input type="text" value="<?php echo $row['DS_TRPTA'];?>" style="display:none"/><?php echo $row['DS_TRPTA'];?></td>
 								
-								<td id="ds_cid" value="<?php echo $row['DS_CID'];?>" style="width: 15px;"><input type="text" value="<?php echo $row['DS_CID'];?>" style="display:none"/><?php echo $row['DS_CID'];?></td>
+								<td id="ds_cid" value="<?php echo $row['DS_CID'];?>"><input type="text" value="<?php echo $row['DS_CID'];?>" style="display:none"/><?php echo $row['DS_CID'];?></td>
 								
 								<td id="fl_fmnte" value="<?php echo $row['FL_FMNTE'];?>" style="width: 15px;"><input type="text" value="<?php echo $row['FL_FMNTE'];?>" style="display:none"/><?php echo $row['FL_FMNTE'];?></td>
 								
-								<td id="ds_dieta" value="<?php echo $row['DS_DIETA'];?>" style="width: 15px;"><input type="text" value="<?php echo $row['DS_DIETA'];?>" style="display:none"/><?php echo $row['DS_DIETA'];?></td>
+								<td id="ds_dieta" value="<?php echo $row['DS_DIETA'];?>"><input type="text" value="<?php echo $row['DS_DIETA'];?>" style="display:none"/><?php echo $row['DS_DIETA'];?></td>
 								
-								<td id="ds_const" value="<?php echo $row['DS_CONST'];?>" style="width: 15px;"><input type="text" value="<?php echo $row['DS_CONST'];?>" style="display:none"/><?php echo $row['DS_CONST'];?></td>
+								<td id="ds_const" value="<?php echo $row['DS_CONST'];?>"><input type="text" value="<?php echo $row['DS_CONST'];?>" style="display:none"/><?php echo $row['DS_CONST'];?></td>
 												
-								<td id="dt_prvs_alta" value="<?php echo $row['DT_PRVS_ALTA'];?>" style="width: 15px;"><input type="text" value="<?php echo $row['DT_PRVS_ALTA'];?>" style="display:none"/><?php echo $row['DT_PRVS_ALTA'];?></td>
+								<td id="dt_prvs_alta" value="<?php echo $row['DT_PRVS_ALTA'];?>"><input type="text" value="<?php echo $row['DT_PRVS_ALTA'];?>" style="display:none"/><?php echo $row['DT_PRVS_ALTA'];?></td>
 								
-								<td id="ds_ocorr" value="<?php echo $row['DS_OCORR'];?>" style="width: 15px;"><input type="text" value="<?php echo $row['DS_OCORR'];?>" style="display:none"/><?php echo $row['DS_OCORR'];?></td>
+								<td id="ds_ocorr" value="<?php echo $row['DS_OCORR'];?>"><input type="text" value="<?php echo $row['DS_OCORR'];?>" style="display:none"/><?php echo $row['DS_OCORR'];?></td>
+								
+								<td class="actions">								
+									<input type="button" value="..." class="btn btn-success btn-xs atualizar"/>
+									
+								</td>
 								
 							</tr>
 						<?php $cont=$cont+1;}  ?>	

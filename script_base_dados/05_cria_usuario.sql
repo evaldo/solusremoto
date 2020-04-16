@@ -16,6 +16,7 @@ GRANT SELECT, UPDATE, INSERT, DELETE ON integracao.tb_c_grupo_usua_acesso TO eva
 GRANT SELECT, UPDATE, INSERT, DELETE ON integracao.tb_c_grupo_usua_menu_sist_integracao TO evaldo;
 GRANT SELECT, UPDATE, INSERT, DELETE ON integracao.tb_c_menu_sist_integracao TO evaldo;
 GRANT SELECT, UPDATE, INSERT, DELETE ON integracao.tb_c_usua_acesso TO evaldo;
+GRANT DELETE, UPDATE, INSERT, SELECT ON integracao.tb_c_log_acesso TO evaldo;
 
 --Example grant on sequence object database
 --GRANT ALL ON SEQUENCE integracao.xxxxxxxxxxxxxxxx TO evaldo;

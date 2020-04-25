@@ -1,9 +1,54 @@
 -- Table: integracao.tb_ctrl_leito
 -- DROP TABLE integracao.tb_ctrl_leito;
 
+CREATE TABLE integracao.tb_ctrl_leito_smart
+(
+	loc_leito_id character varying(255) COLLATE pg_catalog."default",	
+	ds_leito character varying(255) COLLATE pg_catalog."default",
+	ds_andar character varying(255) COLLATE pg_catalog."default",
+	dt_prvs_alta timestamp without time zone,
+	nm_pcnt character varying(255) COLLATE pg_catalog."default",
+	ds_sexo character varying(255) COLLATE pg_catalog."default",
+    dt_nasc_pcnt timestamp without time zone,    
+    nm_cnvo character varying(255) COLLATE pg_catalog."default"
+)
+
+COMMENT ON TABLE integracao.tb_ctrl_leito_smart
+    IS 'Tabela de controle de leito com cópia dos dados do sistema Smart';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.dt_nasc_pcnt
+    IS 'Data de nascimento do paciente';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.nm_pcnt
+    IS 'Nome do paciente';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.ds_leito
+    IS 'Descrição do leito';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.ds_andar
+    IS 'Descrição do andar do hospital';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.dt_prvs_alta
+    IS 'Data de previsão de alta';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.ds_sexo
+    IS 'Descrição do sexo';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.loc_leito_id
+    IS 'Id do Leito';
+	
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.nm_cnvo
+    IS 'Nome do convênio';	
+    
+----------------------------------------------------------------------------------------------
+
+-- Table: integracao.tb_ctrl_leito
+-- DROP TABLE integracao.tb_ctrl_leito;
+
 CREATE TABLE integracao.tb_ctrl_leito
 (
-    cd_ctrl_leito integer NOT NULL,
+    loc_leito_id character varying(255) COLLATE pg_catalog."default",
+	cd_ctrl_leito integer,
     dt_nasc_pcnt timestamp without time zone,
     nm_pcnt character varying(255) COLLATE pg_catalog."default",
     ds_leito character varying(255) COLLATE pg_catalog."default",
@@ -28,10 +73,10 @@ CREATE TABLE integracao.tb_ctrl_leito
     ds_sexo character varying(255) COLLATE pg_catalog."default",
     ds_const character varying(255) COLLATE pg_catalog."default",
     ds_crtr_intnc character varying(100) COLLATE pg_catalog."default",
-    fl_status_leito character varying(10) COLLATE pg_catalog."default",
+    fl_status_leito character varying(255) COLLATE pg_catalog."default",
     fl_acmpte boolean,
     fl_rtgrd boolean,
-    CONSTRAINT pk_integracao_ctrl_leito PRIMARY KEY (cd_ctrl_leito)
+    tp_dia_leito_manut integer
 )
 WITH (
     OIDS = FALSE
@@ -40,6 +85,45 @@ TABLESPACE pg_default;
 
 ALTER TABLE integracao.tb_ctrl_leito
     OWNER to postgres;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO administrativo;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO alinediniz;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO bcorrea;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO camila;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO evaldo;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO farmacia;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO fcampos;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO flavia;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO gabriela;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO glaucodiretor;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO lamorim;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO mvilela;
+
+GRANT ALL ON TABLE integracao.tb_ctrl_leito TO postgres;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO posto01;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO posto02;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO posto03;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO posto04;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO qualidade;
+
+GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO tivilaverde;
+
 COMMENT ON TABLE integracao.tb_ctrl_leito
     IS 'Tabela de controle de leito';
 
@@ -127,6 +211,11 @@ COMMENT ON COLUMN integracao.tb_ctrl_leito.fl_acmpte
 COMMENT ON COLUMN integracao.tb_ctrl_leito.fl_rtgrd
     IS 'Flag do Retaguarda';
 
+COMMENT ON COLUMN integracao.tb_ctrl_leito.tp_dia_leito_manut
+    IS 'Tempo em dias de leitos em manutenção';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito.loc_leito_id
+    IS 'Id do Leito';
 ----------------------------------------------------------------------------------------------------------- Table: integracao.tb_c_usua_acesso
 -- DROP TABLE integracao.tb_c_usua_acesso;
 

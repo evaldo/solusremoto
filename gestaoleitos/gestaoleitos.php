@@ -5,6 +5,9 @@
     include '../database.php';
 	include '../conexao_sqlserver.php';
 	//include '../config.php';
+	error_reporting(0); 
+	$itens_por_pagina=35;
+	$pagina=intval($_GET['pagina']);
 	
     global $objConnSqlServer;	
 	
@@ -14,6 +17,24 @@
 	$sql = '';
 	
 	//if(isset($_POST['botaoconsultar'])){
+		
+		$sql ="select count(1) AS QTDE_REG FROM dbo.view_db_gest_leitos; ";
+		
+		if ($objConnSqlServer){			
+			$retSqlServer = sqlsrv_query($objConnSqlServer,$sql);		
+			if($retSqlServer === false) {
+				die( print_r( sqlsrv_errors(), true) );
+			}	
+		} else {			
+			echo "<div class=\"alert alert-warning alert-dismissible\">
+						<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
+						<strong>Erro de Conexão!</strong> Não foi possível conectar no Sistema de Prontuário Médico.</div>";			
+			//header(Config::$webLogin);
+		}
+		$row = sqlsrv_fetch_array($retSqlServer, SQLSRV_FETCH_ASSOC);		
+		$num_total = $row['QTDE_REG'];	
+		$num_paginas = ceil($num_total/$itens_por_pagina);
+		$num_reg_pagina = $pagina*$itens_por_pagina;
 		
 		$sql ="select LOC_NOME, 
 		        CASE WHEN LTRIM(RTRIM(REPLACE(LOC_NOME, 'LEITO',''))) NOT IN ('ECT1', 'ECT2') THEN
@@ -39,7 +60,8 @@
 				'RET' as FL_RTGRD,
 				'ACM' as FL_ACMP,
 				'Em manutenção' as DS_STATUS
-		FROM dbo.view_db_gest_leitos ORDER BY 1, 3; ";
+		FROM dbo.view_db_gest_leitos ORDER BY 1, 3 ;";
+		
 		
 		if ($objConnSqlServer){
 			
@@ -93,8 +115,8 @@
 	 	<div class="container" style="margin-left: 0px; margin-right: 0px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 120px; border: 1px solid #E6E6E6;">
 			<h2>Gestão de Leitos</h2>
 			<br>
-			<label> Nome do paciente: <input style="width: 300px" type="text" id="buscapac" onkeyup="Busca(3, 'buscapac')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>
-			<label> Andar: <input style="width: 300px" type="text" id="buscaandar" onkeyup="Busca(1, 'buscaandar')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>			
+			<label style="font-weight:bold; font-size: 11px"> Nome do paciente: <input style="width: 300px; font-size: 11px" type="text" id="buscapac" onkeyup="Busca(3, 'buscapac')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>
+			<label style="font-weight:bold; font-size: 11px"> Andar: <input style="width: 300px; font-size: 11px" type="text" id="buscaandar" onkeyup="Busca(1, 'buscaandar')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>			
 		</div> <!-- /#top -->
 		
 		<div id="list" class="row" style="margin-left: 2px; margin-right: 2px">
@@ -102,13 +124,13 @@
 			<div class="table-responsive" style="margin-top: 120px">				
 				<table id="tabela" class="display table table-responsive table-striped table-bordered table-sm table-condensed">
 				
-					<tr>
+					<tr style="font-size: 11px">
 						<th style="text-align:center">Leito</th>
 						<th style="text-align:center">Andar</th>
 						<th style="text-align:center">Admissão</th>
 						<th style="text-align:center">Paciente</th>
 						<th style="text-align:center">Carater de Internação</th>
-						<th style="text-align:center">Sexo</th>																			
+						<!--<th style="text-align:center">Sexo</th>-->								
 						<th style="text-align:center">Data de Nasc.</th>
 						<th style="text-align:center">Convênio</th>
 						<th style="text-align:center">Médico</th>
@@ -118,11 +140,11 @@
 						<th style="text-align:center">Fumante</th>
 						<th colspan="2" style="text-align:center">Dieta/Consistência</th>
 						<th style="text-align:center">Prvs. de Alta</th>
-						<th style="text-align:center">Ocorrências</th>
+						<!--<th style="text-align:center">Ocorrências</th>-->
 						<th style="text-align:center">Retagd.</th>
 						<th style="text-align:center">Acomp.</th>
 						<th style="text-align:center">Status</th>
-						<th style="text-align:center">Ações</th>
+						<th colspan="2" style="text-align:center">Ações</th>
 						
 					</tr>
 					
@@ -145,7 +167,7 @@
 								
 								<!--<td id="ds_crtr_intnc"><input type="text" value="<?php echo $row['DS_CRTR_INTNC'];?>" class="form-control"/></td>-->
 								
-								<td data-toggle="tooltip" data-placement="top" title="Sexo" style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="pac_sexo" value="<?php echo $row['PAC_SEXO'];?>"><?php echo $row['PAC_SEXO'];?></td>								
+								<!--<td data-toggle="tooltip" data-placement="top" title="Sexo" style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="pac_sexo" value="<?php echo $row['PAC_SEXO'];?>"><?php echo $row['PAC_SEXO'];?></td>-->
 								
 								<td data-toggle="tooltip" data-placement="top" title="Data de Nasc." style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="pac_nasc" value="<?php echo $row['PAC_NASC'];?>"><?php echo $row['PAC_NASC'];?></td>
 								
@@ -167,16 +189,20 @@
 												
 								<td data-toggle="tooltip" data-placement="top" title="Prvs. de Alta" style="text-align:center" id="dt_prvs_alta" value="<?php echo $row['DT_PRVS_ALTA'];?>"><input type="text" value="<?php echo $row['DT_PRVS_ALTA'];?>" style="display:none"/><?php echo $row['DT_PRVS_ALTA'];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Ocorrências" style="text-align:center; font-weight:bold; background-color:#FFE4C4" id="ds_ocorr" value="<?php echo $row['DS_OCORR'];?>"><input type="text" value="<?php echo $row['DS_OCORR'];?>" style="display:none"/><?php echo $row['DS_OCORR'];?></td>
+								<!--<td data-toggle="tooltip" data-placement="top" title="Ocorrências" style="text-align:center; font-weight:bold; background-color:#FFE4C4" id="ds_ocorr" value="<?php echo $row['DS_OCORR'];?>"><input type="text" value="<?php echo $row['DS_OCORR'];?>" style="display:none"/><?php echo $row['DS_OCORR'];?></td>-->
 								
 								<td data-toggle="tooltip" data-placement="top" title="Retaguarda?" style="text-align:center" id="fl_rtgrd" value="<?php echo $row['FL_RTGRD'];?>"><input type="text" value="<?php echo $row['FL_RTGRD'];?>" style="display:none"/><?php echo $row['FL_RTGRD'];?></td>
 								
 								<td data-toggle="tooltip" data-placement="top" title="Acompanhante?" style="text-align:center" id="fl_acmp" value="<?php echo $row['FL_ACMP'];?>"><input type="text" value="<?php echo $row['FL_ACMP'];?>" style="display:none"/><?php echo $row['FL_ACMP'];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Status do Leito" style="text-align:center" id="ds_status" value="<?php echo $row['DS_STATUS'];?>"><input type="text" value="<?php echo $row['DS_STATUS'];?>" style="display:none"/><?php echo $row['DS_STATUS'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Status do Leito" style="text-align:center; font-weight:bold; background-color:red" id="ds_status" value="<?php echo $row['DS_STATUS'];?>"></td>
 								
-								<td class="actions">								
-									<input type="button" value="..." class="btn btn-success btn-xs atualizar"/>
+								<td class="actions">
+									<input type="image" src="../img/lupa_1.png"  height="30" width="30" class="btn-xs visualiza"/>																		
+								</td>
+								
+								<td class="actions">
+									<input type="image" src="../img/Update_2.ico"  height="30" width="30" class="btn-xs visualiza"/>									
 									
 								</td>
 								
@@ -187,7 +213,18 @@
 			</div>
 			
 		</div> <!-- /#list -->				
-		
+		<div>			
+			<ul class="pagination">
+				<li class="page-item"><a class="page-link" href="gestaoleitos.php?pagina=0">Primeiro</a></li>
+				<?php 				
+				for ($i=0; $i<$num_paginas;$i++){										
+				?>
+					<li class="page-item" ><a class="page-link" href="gestaoleitos.php?pagina=<?php echo $i;?>">
+						<?php echo $i+1;?></a></li>
+				<?php } ?>
+				<li class="page-item"><a class="page-link" href="gestaoleitos.php?pagina=<?php echo $num_paginas-1; ?>">Último</a></li>
+			</ul>		
+		</div>
 	 <script src="../js/jquery.min.js"></script>
 	 <script src="../js/bootstrap.min.js"></script>
 	 <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
@@ -212,111 +249,49 @@
 			}
 	 </script>
 	</body>
-	<!--function selecionaPresenca(indexCol, flagPresenca) {
-			
-		  var iLinhaTabela;
-		  
-		  for(iLinhaTabela = 1;iLinhaTabela <= document.getElementById("tabela").rows.length;iLinhaTabela++){
-		  
-			  var celpresenca = document.getElementById("tabela").rows[iLinhaTabela].cells;		
-				
-			  celpresenca[indexCol].childNodes[0].selectedIndex=0;
-			  
-			  for(i = 0;i <= celpresenca[0].childNodes[0].length;i++){
-				
-				if (celpresenca[indexCol].childNodes[0].options[i].text==flagPresenca){
-					celpresenca[indexCol].childNodes[0].value=flagPresenca;					
-					break;
-				}
-				
-				celpresenca[indexCol].childNodes[0].selectedIndex=i;
-			  }
-			  
-			  //var celtextojust = document.getElementById("tabela").rows[iLinhaTabela].cells;
-			  //alert(celtextojust[1].childNodes[0].value);
-		  }
-		  
-		}		
-		function realiza() {
-			
-		  var iLinhaTabela;
-		  
-		  for(iLinhaTabela = 1;iLinhaTabela <= 2;iLinhaTabela++){
-			  //document.getElementById("tabela").rows.length
-		  
-			  var cel = document.getElementById("tabela").rows[iLinhaTabela].cells;		
-			  
-			  //alert("../agenda/atualizagrupoatividadepaciente.php?id_agdmto_atvd_pts=" + cel[2].childNodes[0].value +"?fl_agdmto_atvd_rlzd_pts=" + cel[3].childNodes[0].value +"?id_jtfc_atvd_pts=" + cel[4].childNodes[1].value +"?ds_jtfc_atvd_pts=" + cel[5].childNodes[0].value);
-			  
-			  var sql='teste';
-			  
-			  var sendData = function() {
-				  $.post('test.php', {
-					data: sql
-				  }, function(response) {
-					console.log(response);
-				  });
-				}
-				sendData();			
-			  
-		  }
-		  
-		}	  -->
-
-	</html>		
+	
+</html>
+<div id="dataModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Detalhes do Paciente</h4>
+			</div>
+			<div class="modal-body" id="detalhe_paciente">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+			</div>
+		</div>
+	</div>
+</div>			
 <script>
-		
+	
+	$(document).ready(function(){	  
+		$('[data-toggle="tooltip"]').tooltip();		
+	});		
+	
 	$(document).ready(function(){
-	  $('[data-toggle="tooltip"]').tooltip();
+		$("#tabela").on('click', '.visualiza', function(){
+			
+			var currentRow=$(this).closest("tr"); 							
+			var nm_loc_nome_inteiro = currentRow.find("td:eq(0)").text();
+			var nm_loc_nome_trim = nm_loc_nome_inteiro.trim();			
+			var nm_loc_nome_replace = nm_loc_nome_trim.replace('LEITO ', '');			
+			var nm_loc_nome = nm_loc_nome_replace.trim();			
+												
+			$.ajax({
+				url:"../gestaoleitos/selecao_detalhe_paciente.php",
+				method:"POST",
+				data:{nm_loc_nome:nm_loc_nome},
+				success:function(data){
+					$('#detalhe_paciente').html(data);
+					$('#dataModal').modal('show');
+				}
+			});
+        });
 	});
 	
-	$(document).ready(function(){		  			
-		$("#aplicacao").on('click', '.realiza', function(){
-		
-		var iLinhaTabela=0;
-		var sql="";
-		
-		var sessionusua='<?php echo $_SESSION['usuario']; ?>';		
-		var id_atvd_pts='<?php echo $_SESSION['id_atvd_pts_text']; ?>';
-	  
-		for(iLinhaTabela = 1;iLinhaTabela < document.getElementById("tabela").rows.length;iLinhaTabela++){
-		
-			var cel = document.getElementById("tabela").rows[iLinhaTabela].cells;			
-			
-			var id_agdmto_atvd_pts = cel[2].childNodes[0].value;			
-			var fl_agdmto_atvd_rlzd_pts = cel[3].childNodes[0].value;			
-			var id_jtfc_atvd_pts = cel[4].childNodes[1].value;
-			var ds_jtfc_atvd_pts = cel[5].childNodes[0].value;
-			
-			if(id_jtfc_atvd_pts==""){
-				id_jtfc_atvd_pts="null";				
-			} 			
-			
-			if(id_jtfc_atvd_pts=="null"){				
-				ds_jtfc_atvd_pts="";
-			}
-			
-			if(fl_agdmto_atvd_rlzd_pts=="S"){
-				id_jtfc_atvd_pts="null";
-				ds_jtfc_atvd_pts="";
-			}
-			
-			sql += "update pts.tb_agdmto_atvd_pts set vl_meta_atvd_pts = (select vl_meta_atvd_pts from pts.tb_c_atvd_pts where id_atvd_pts = " + id_atvd_pts + "), ds_jtfc_atvd_pts= '" + ds_jtfc_atvd_pts + "' , id_jtfc_atvd_pts = " +id_jtfc_atvd_pts + ", fl_agdmto_atvd_rlzd_pts = '" + fl_agdmto_atvd_rlzd_pts + "', cd_usua_resp_atvd_pts = (select cd_usua_acesso from pts.tb_c_usua_acesso where nm_usua_acesso = '" + sessionusua + "'), cd_usua_altr = '" + sessionusua + "', dt_altr = current_timestamp where id_agdmto_atvd_pts = " + id_agdmto_atvd_pts + ";"
-			
-		}				
-		$.ajax({
-				url:"../agenda/atualizagrupoatividadepaciente.php",
-				method:"POST",
-				data:{sql:sql},
-				dataType : "text",			 
-				success : function(completeHtmlPage) {				
-					$("html").empty();
-					$("html").append(completeHtmlPage);
-				}
-		});
-		
-	});
-		
-});	
 </script>
 <?php ?>

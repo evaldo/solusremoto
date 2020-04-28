@@ -40,7 +40,8 @@
 			PAC_NOME as PAC_NOME, 		
 			PAC_SEXO as PAC_SEXO, 
 			convert(nvarchar, PAC_NASC, 103) as PAC_NASC,
-			CNV_NOME as CNV_NOME
+			CNV_NOME as CNV_NOME,
+			PAC_REG as PAC_REG
 	FROM dbo.view_db_gest_leitos ORDER BY 1";
 	
 	
@@ -56,9 +57,12 @@
 		echo "Erro de Conexão! Não foi possível conectar no Sistema de Prontuário Médico.";		
 		
 	}
-
+	
+	//Atualizar o campo data prevista de alta
+	
 	while($row = sqlsrv_fetch_array($retSqlServer, SQLSRV_FETCH_ASSOC)) {
-		$sqlPostgresql = "INSERT INTO integracao.tb_ctrl_leito_smart (LOC_LEITO_ID, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO) VALUES ('" . $row['LOC_LEITO_ID'] . "', '" . $row['LOC_NOME'] . "', '" . $row['DS_ANDAR'] . "', '" . $row['HSP_DTHRE'] . "', '" . $row['PAC_NOME'] . "', '" . $row['PAC_SEXO'] . "', '" . $row['PAC_NASC'] . "', '" . $row['CNV_NOME'] . "')";
+				
+		$sqlPostgresql = "INSERT INTO integracao.tb_ctrl_leito_smart (LOC_LEITO_ID, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS) VALUES ('" . $row['LOC_LEITO_ID'] . "', '" . $row['LOC_NOME'] . "', '" . $row['DS_ANDAR'] . "', '" . $row['HSP_DTHRE'] . "', '" . $row['PAC_NOME'] . "', '" . $row['PAC_SEXO'] . "', '" . $row['PAC_NASC'] . "', '" . $row['CNV_NOME'] . "', '" . $row['PAC_REG'] . "', '" . $row['HSP_DTHRE'] . "')";
 		
 		$result = pg_query($pdo, $sqlPostgresql);
 

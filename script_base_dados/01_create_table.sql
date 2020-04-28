@@ -39,7 +39,13 @@ COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.loc_leito_id
 	
 COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.nm_cnvo
     IS 'Nome do convênio';	
-    
+	
+ALTER TABLE integracao.tb_ctrl_leito_smart
+    ADD COLUMN pac_reg integer;
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.pac_reg
+    IS 'Identificador do paciente.';
+   
 ----------------------------------------------------------------------------------------------
 
 -- Table: integracao.tb_ctrl_leito
@@ -216,6 +222,13 @@ COMMENT ON COLUMN integracao.tb_ctrl_leito.tp_dia_leito_manut
 
 COMMENT ON COLUMN integracao.tb_ctrl_leito.loc_leito_id
     IS 'Id do Leito';
+	
+ALTER TABLE integracao.tb_ctrl_leito_smart
+    ADD COLUMN pac_reg integer;
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.pac_reg
+    IS 'Identificador do paciente.';
+
 ----------------------------------------------------------------------------------------------------------- Table: integracao.tb_c_usua_acesso
 -- DROP TABLE integracao.tb_c_usua_acesso;
 

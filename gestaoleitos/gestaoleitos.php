@@ -3,83 +3,72 @@
 	session_start();		
 	
     include '../database.php';
-	include '../conexao_sqlserver.php';
-	//include '../config.php';
-	error_reporting(0); 
-	$itens_por_pagina=35;
+    $pdo = database::connect();
+	
+	//error_reporting(0); 
+	
+	$itens_por_pagina=30;
 	$pagina=intval($_GET['pagina']);
-	
-    global $objConnSqlServer;	
-	
-	$objConnSqlServer = conexao_sqlserver::connectSqlServer();	
+		
 	$textoconsulta = "";
 	$retSqlServer = "";
 	$sql = '';
+		
+	$sql ="select count(1) AS QTDE_REG FROM integracao.tb_ctrl_leito; ";
 	
-	//if(isset($_POST['botaoconsultar'])){
-		
-		$sql ="select count(1) AS QTDE_REG FROM dbo.view_db_gest_leitos; ";
-		
-		if ($objConnSqlServer){			
-			$retSqlServer = sqlsrv_query($objConnSqlServer,$sql);		
-			if($retSqlServer === false) {
-				die( print_r( sqlsrv_errors(), true) );
-			}	
-		} else {			
-			echo "<div class=\"alert alert-warning alert-dismissible\">
-						<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
-						<strong>Erro de Conexão!</strong> Não foi possível conectar no Sistema de Prontuário Médico.</div>";			
-			//header(Config::$webLogin);
-		}
-		$row = sqlsrv_fetch_array($retSqlServer, SQLSRV_FETCH_ASSOC);		
-		$num_total = $row['QTDE_REG'];	
-		$num_paginas = ceil($num_total/$itens_por_pagina);
-		$num_reg_pagina = $pagina*$itens_por_pagina;
-		
-		$sql ="select LOC_NOME, 
-		        CASE WHEN LTRIM(RTRIM(REPLACE(LOC_NOME, 'LEITO',''))) NOT IN ('ECT1', 'ECT2') THEN
-					SUBSTRING(LTRIM(RTRIM(REPLACE(LOC_NOME, 'LEITO',''))), 1, 1) + ' ANDAR'
-				ELSE
-					LTRIM(RTRIM(REPLACE(LOC_NOME, 'LEITO','')))
-				END AS DS_ANDAR,
-				convert(nvarchar, hsp_dthre, 103) as HSP_DTHRE, 
-				PAC_NOME, 
-				'CARACTER DE INTERN' AS DS_CRTR_INTNC, 
-				PAC_SEXO, 
-				convert(nvarchar, PAC_NASC, 103) as PAC_NASC,
-				CNV_NOME,
-				'MEDICO' AS DS_MDCO,
-				'PSICOLOGO' AS DS_PSGO,
-				'TERAPEUTA' AS DS_TRPTA,
-				'FF-66' AS DS_CID,
-				'SIM' AS FL_FMNTE,
-				'Alergia Alimentar' AS DS_DIETA,
-				'CONSISTENCIA' AS DS_CONST,
-				'01/01/2020' AS DT_PRVS_ALTA,
-				', Teste...1, 2, 3..., Teste...1, 2, 3..., Teste...1, 2, 3..., Teste...1, 2, 3...' AS DS_OCORR,
-				'RET' as FL_RTGRD,
-				'ACM' as FL_ACMP,
-				'Em manutenção' as DS_STATUS
-		FROM dbo.view_db_gest_leitos ORDER BY 1, 3 ;";
-		
-		
-		if ($objConnSqlServer){
+	$ret = pg_query($pdo, $sql);
+	if(!$ret) {
+		echo pg_last_error($pdo);
+		header(Config::$webLogin);
+		exit;
+	}
+	
+	$row = pg_fetch_row($ret);		
+	$num_total = $row[1];	
+	$num_paginas = ceil($num_total/$itens_por_pagina);
+	$num_reg_pagina = $pagina*$itens_por_pagina;
+	
+	$sql ="select  
+		ds_leito,
+		ds_andar,
+		dt_admss,
+		nm_pcnt,
+		ds_crtr_intnc,
+		dt_nasc_pcnt,
+		nm_cnvo,
+		nm_mdco,
+		nm_psco,
+		nm_trpa,
+		ds_cid,
+		fl_fmnte,
+		ds_dieta,
+		ds_const,
+		dt_prvs_alta,
+		fl_rtgrd boolean,
+		fl_acmpte boolean,
+		fl_status_leito,
+		ds_apto_atvd_fisica,
+		ds_progra,
+		hr_progra,
+		fl_txclg_agndd,
+		dt_rlzd,
+		fl_rstc_visita,
+		ds_pssoa_rtrta ,
+		tp_dia_leito_manut,
+		pac_reg,
+		loc_leito_id,
+		cd_ctrl_leito
+		ds_ocorr,
+		ds_sexo
+		FROM integracao.tb_ctrl_leito
+		ORDER BY 1, 3 LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina ";
 			
-			$retSqlServer = sqlsrv_query($objConnSqlServer,$sql);
-		
-			if($retSqlServer === false) {
-				die( print_r( sqlsrv_errors(), true) );
-			}	
-		} else {
-			
-			echo "<div class=\"alert alert-warning alert-dismissible\">
-						<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
-						<strong>Erro de Conexão!</strong> Não foi possível conectar no Sistema de Prontuário Médico.</div>";
-			
-			//header(Config::$webLogin);
-		}	
-		
-	//}
+	$ret = pg_query($pdo, $sql);
+	if(!$ret) {
+		echo pg_last_error($pdo);
+		header(Config::$webLogin);
+		exit;
+	}
 		
 ?>	
 
@@ -155,47 +144,48 @@
 						while($row = sqlsrv_fetch_array($retSqlServer, SQLSRV_FETCH_ASSOC)) {
 						?>						
 							<tr>
-								<td data-toggle="tooltip" data-placement="top" title="Leito" style="font-weight:bold; color:red; background-color:#E0FFFF" id="loc_nome" value="<?php echo $row['LOC_NOME'];?>" ><?php echo $row['LOC_NOME'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Leito" style="font-weight:bold; color:red; background-color:#E0FFFF" id="loc_nome" value="<?php echo $row[1];?>" ><?php echo $row[1];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Andar" style="font-weight:bold; text-align:center" id="ds_andar" value="<?php echo $row['DS_ANDAR'];?>" ><?php echo $row['DS_ANDAR'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Andar" style="font-weight:bold; text-align:center" id="ds_andar" value="<?php echo $row[2];?>" ><?php echo $row[2];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Admissão" style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="hsp_dthre" value="<?php echo $row['HSP_DTHRE'];?>" ><?php echo $row['HSP_DTHRE'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Admissão" style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="hsp_dthre" value="<?php echo $row[3];?>" ><?php echo $row[3];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Paciente" id="pac_nome" value="<?php echo $row['PAC_NOME'];?>"><?php echo $row['PAC_NOME'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Paciente" id="pac_nome" value="<?php echo $row[4];?>"><?php echo $row[4];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Carater de Internação" id="ds_crtr_intnc" value="<?php echo $row['DS_CRTR_INTNC'];?>"><?php echo $row['DS_CRTR_INTNC'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Carater de Internação" id="ds_crtr_intnc" value="<?php echo $row[5];?>"><?php echo $row[5];?></td>
 								
 								<!--<td id="ds_crtr_intnc"><input type="text" value="<?php echo $row['DS_CRTR_INTNC'];?>" class="form-control"/></td>-->
 								
 								<!--<td data-toggle="tooltip" data-placement="top" title="Sexo" style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="pac_sexo" value="<?php echo $row['PAC_SEXO'];?>"><?php echo $row['PAC_SEXO'];?></td>-->
 								
-								<td data-toggle="tooltip" data-placement="top" title="Data de Nasc." style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="pac_nasc" value="<?php echo $row['PAC_NASC'];?>"><?php echo $row['PAC_NASC'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Data de Nasc." style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="pac_nasc" value="<?php echo $row[6];?>"><?php echo $row[6];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Convênio" style="font-weight:bold; background-color:#C0C0C0"id="cnv_nome" value="<?php echo $row['CNV_NOME'];?>"><?php echo $row['CNV_NOME'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Convênio" style="font-weight:bold; background-color:#C0C0C0"id="cnv_nome" value="<?php echo $row[7];?>"><?php echo $row[7];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Médico" id="ds_mdco" value="<?php echo $row['DS_MDCO'];?>"><input type="text" value="<?php echo $row['DS_MDCO'];?>" style="display:none"/><?php echo $row['DS_MDCO'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Médico" id="ds_mdco" value="<?php echo $row[8];?>"><input type="text" value="<?php echo $row[8];?>" style="display:none"/><?php echo $row[8];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Psicólogo" id="ds_psgo" value="<?php echo $row['DS_PSGO'];?>"><input type="text" value="<?php echo $row['DS_PSGO'];?>" style="display:none"/><?php echo $row['DS_PSGO'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Psicólogo" id="ds_psgo" value="<?php echo $row[9];?>"><input type="text" value="<?php echo $row[9];?>" style="display:none"/><?php echo $row[9];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Terapeuta" id="ds_trpta" value="<?php echo $row['DS_TRPTA'];?>"><input type="text" value="<?php echo $row['DS_TRPTA'];?>" style="display:none"/><?php echo $row['DS_TRPTA'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Terapeuta" id="ds_trpta" value="<?php echo $row[10];?>"><input type="text" value="<?php echo $row[10];?>" style="display:none"/><?php echo $row[10];?></td>
 								
-								<td  data-toggle="tooltip" data-placement="top" title="Grupo de CID" style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="ds_cid" value="<?php echo $row['DS_CID'];?>"><input type="text" value="<?php echo $row['DS_CID'];?>" style="display:none"/><?php echo $row['DS_CID'];?></td>
+								<td  data-toggle="tooltip" data-placement="top" title="Grupo de CID" style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="ds_cid" value="<?php echo $row[11];?>"><input type="text" value="<?php echo $row[11];?>" style="display:none"/><?php echo $row[11];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Fumante?" style="text-align:center" id="fl_fmnte" value="<?php echo $row['FL_FMNTE'];?>" style="width: 15px;"><input type="text" value="<?php echo $row['FL_FMNTE'];?>" style="display:none"/><?php echo $row['FL_FMNTE'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Fumante?" style="text-align:center" id="fl_fmnte" value="<?php echo $row[12];?>" style="width: 15px;"><input type="text" value="<?php echo $row[12];?>" style="display:none"/><?php echo $row[12];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Dieta/Consistência" style="font-weight:bold; background-color:#C0C0C0" id="ds_dieta" value="<?php echo $row['DS_DIETA'];?>"><input type="text" value="<?php echo $row['DS_DIETA'];?>" style="display:none"/><?php echo $row['DS_DIETA'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Dieta/Consistência" style="font-weight:bold; background-color:#C0C0C0" id="ds_dieta" value="<?php echo $row[13];?>"><input type="text" value="<?php echo $row[13];?>" style="display:none"/><?php echo $row[13];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Dieta/Consistência" style="font-weight:bold; background-color:#C0C0C0" id="ds_const" value="<?php echo $row['DS_CONST'];?>"><input type="text" value="<?php echo $row['DS_CONST'];?>" style="display:none"/><?php echo $row['DS_CONST'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Dieta/Consistência" style="font-weight:bold; background-color:#C0C0C0" id="ds_const" value="<?php echo $row[14];?>"><input type="text" value="<?php echo $row[14];?>" style="display:none"/><?php echo $row[14];?></td>
 												
-								<td data-toggle="tooltip" data-placement="top" title="Prvs. de Alta" style="text-align:center" id="dt_prvs_alta" value="<?php echo $row['DT_PRVS_ALTA'];?>"><input type="text" value="<?php echo $row['DT_PRVS_ALTA'];?>" style="display:none"/><?php echo $row['DT_PRVS_ALTA'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Prvs. de Alta" style="text-align:center" id="dt_prvs_alta" value="<?php echo $row[15];?>"><input type="text" value="<?php echo $row[15];?>" style="display:none"/><?php echo $row[15];?></td>
 								
 								<!--<td data-toggle="tooltip" data-placement="top" title="Ocorrências" style="text-align:center; font-weight:bold; background-color:#FFE4C4" id="ds_ocorr" value="<?php echo $row['DS_OCORR'];?>"><input type="text" value="<?php echo $row['DS_OCORR'];?>" style="display:none"/><?php echo $row['DS_OCORR'];?></td>-->
 								
-								<td data-toggle="tooltip" data-placement="top" title="Retaguarda?" style="text-align:center" id="fl_rtgrd" value="<?php echo $row['FL_RTGRD'];?>"><input type="text" value="<?php echo $row['FL_RTGRD'];?>" style="display:none"/><?php echo $row['FL_RTGRD'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Retaguarda?" style="text-align:center" id="fl_rtgrd" value="<?php echo $row[16];?>"><input type="text" value="<?php echo $row[16];?>" style="display:none"/><?php echo $row[16];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Acompanhante?" style="text-align:center" id="fl_acmp" value="<?php echo $row['FL_ACMP'];?>"><input type="text" value="<?php echo $row['FL_ACMP'];?>" style="display:none"/><?php echo $row['FL_ACMP'];?></td>
+								<td data-toggle="tooltip" data-placement="top" title="Acompanhante?" style="text-align:center" id="fl_acmp" value="<?php echo $row[17];?>"><input type="text" value="<?php echo $row[17];?>" style="display:none"/><?php echo $row[17];?></td>
 								
-								<td data-toggle="tooltip" data-placement="top" title="Status do Leito" style="text-align:center; font-weight:bold; background-color:red" id="ds_status" value="<?php echo $row['DS_STATUS'];?>"></td>
+								<!--Alterar aqui para condição de cores para o status-->
+								<td data-toggle="tooltip" data-placement="top" title="Status do Leito" style="text-align:center; font-weight:bold; background-color:red" id="ds_status" value="<?php echo $row[18];?>"></td>
 								
 								<td class="actions">
 									<input type="image" src="../img/lupa_1.png"  height="30" width="30" class="btn-xs visualiza"/>																		

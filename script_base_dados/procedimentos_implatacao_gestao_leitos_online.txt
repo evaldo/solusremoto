@@ -1,0 +1,18 @@
+--Procedimentos de implantação do Gestão de Leitos On-Line
+--Procedimento 1
+--Validação dos pacientes que existem na Gestão de Leitos atual em relação aos pacientes do Smart
+SELECT TRIM(nm_pcnt) FROM integracao.tb_ctrl_leito
+except
+select * from 
+(
+	SELECT TRIM(nm_pcnt) FROM integracao.tb_ctrl_leito
+	INTERSECT
+	SELECT TRIM(nm_pcnt) FROM integracao.tb_ctrl_leito_smart
+) as relacao
+--Analisar com o Daniel a situação do paciente MARCELO COSENZA RODRIGUES, está como "RETAGUARDA MARCELO..."
+--Deletar os pacientes excedentes
+--Criar o campo pac_reg na tabela tb_ctrl_leito
+--Atualizar o campo pac_reg em relação ao smart
+
+--Procedimento 2
+--Atualização do Gestão de Leitos no DW

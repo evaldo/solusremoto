@@ -4,6 +4,8 @@
 	
     include '../database.php';
 	
+	error_reporting(0); 	
+	
 	$itens_por_pagina=5;
 	$pagina=intval($_GET['pagina']);
 	

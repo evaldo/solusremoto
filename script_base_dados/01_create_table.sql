@@ -45,7 +45,35 @@ ALTER TABLE integracao.tb_ctrl_leito_smart
 
 COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.pac_reg
     IS 'Identificador do paciente.';
-   
+
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO administrativo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO alinediniz;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO bcorrea;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO farmacia;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO fcampos;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO flavia;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO gabriela;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO glaucodiretor;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO lamorim;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO mvilela;
+GRANT ALL ON TABLE integracao.tb_ctrl_leito_smart TO postgres;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO posto01;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO posto02;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO posto03;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO posto04;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO qualidade;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO tivilaverde;
+
+CREATE INDEX ix_ot_pac_reg_smart
+    ON integracao.tb_ctrl_leito_smart USING btree
+    (pac_reg ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+COMMENT ON INDEX integracao.ix_ot_pac_reg_smart
+    IS 'Índice de otimização do número do registro paciente.';
+
 ----------------------------------------------------------------------------------------------
 
 -- Table: integracao.tb_ctrl_leito
@@ -92,43 +120,25 @@ TABLESPACE pg_default;
 ALTER TABLE integracao.tb_ctrl_leito
     OWNER to postgres;
 
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO administrativo;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO alinediniz;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO bcorrea;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO camila;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO evaldo;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO farmacia;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO fcampos;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO flavia;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO gabriela;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO glaucodiretor;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO lamorim;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO mvilela;
-
-GRANT ALL ON TABLE integracao.tb_ctrl_leito TO postgres;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO posto01;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO posto02;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO posto03;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO posto04;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO qualidade;
-
-GRANT SELECT ON TABLE integracao.tb_ctrl_leito TO tivilaverde;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO administrativo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO alinediniz;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO bcorrea;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO farmacia;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO fcampos;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO flavia;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO gabriela;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO glaucodiretor;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO lamorim;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO mvilela;
+GRANT ALL ON TABLE integracao.tb_ctrl_leito_smart TO postgres;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO posto01;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO posto02;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO posto03;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO posto04;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO qualidade;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO tivilaverde;
 
 COMMENT ON TABLE integracao.tb_ctrl_leito
     IS 'Tabela de controle de leito';
@@ -220,15 +230,89 @@ COMMENT ON COLUMN integracao.tb_ctrl_leito.fl_rtgrd
 COMMENT ON COLUMN integracao.tb_ctrl_leito.tp_dia_leito_manut
     IS 'Tempo em dias de leitos em manutenção';
 
-COMMENT ON COLUMN integracao.tb_ctrl_leito.loc_leito_id
-    IS 'Id do Leito';
+CREATE INDEX ix_ot_pac_reg
+    ON integracao.tb_ctrl_leito USING btree
+    (pac_reg ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+COMMENT ON INDEX integracao.ix_ot_pac_reg
+    IS 'Índice de otimização do número do registro paciente.';
 	
-ALTER TABLE integracao.tb_ctrl_leito_smart
-    ADD COLUMN pac_reg integer;
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD COLUMN id_memb_equip_hosptr integer;
 
-COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.pac_reg
-    IS 'Identificador do paciente.';
+COMMENT ON COLUMN integracao.tb_ctrl_leito.id_memb_equip_hosptr
+    IS 'Identificador do membro da equipe hospitalar.';	
+	
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD COLUMN id_status_leito integer;
 
+COMMENT ON COLUMN integracao.tb_ctrl_leito.id_status_leito
+    IS 'Identificador do status da gestão de leitos.';	
+	
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD COLUMN id_memb_equip_hosptr_mdco integer;
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito.id_memb_equip_hosptr_mdco
+    IS 'Id do médico e membro da equipe hospitalar';
+	
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD COLUMN id_memb_equip_hosptr_psco integer;
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito.id_memb_equip_hosptr_psco
+    IS 'Id do psicólogo e membro da equipe hospitalar';
+
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD COLUMN id_memb_equip_hosptr_trpa integer;
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito.id_memb_equip_hosptr_trpa
+    IS 'Id do terapeuta e membro da equipe hospitalar';
+	
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD CONSTRAINT fk_memb_id_mdco FOREIGN KEY (id_memb_equip_hosptr_mdco)
+    REFERENCES integracao.tb_equip_hosptr (id_memb_equip_hosptr) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+COMMENT ON CONSTRAINT fk_memb_id_mdco ON integracao.tb_ctrl_leito
+    IS 'Foreign Key  para id_memb_equip_hosptr_mdco da tabela de membros hospitalares.';
+CREATE INDEX fki_fk_memb_id_mdco
+    ON integracao.tb_ctrl_leito(id_memb_equip_hosptr_mdco);
+
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD CONSTRAINT fk_memb_id_psco FOREIGN KEY (id_memb_equip_hosptr_psco)
+    REFERENCES integracao.tb_equip_hosptr (id_memb_equip_hosptr) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+COMMENT ON CONSTRAINT fk_memb_id_psco ON integracao.tb_ctrl_leito
+    IS 'Foreign Key  para id_memb_equip_hosptr_psco da tabela de membros hospitalares.';
+CREATE INDEX fki_fk_memb_id_psco
+    ON integracao.tb_ctrl_leito(id_memb_equip_hosptr_psco);
+	
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD CONSTRAINT fk_memb_id_trpa FOREIGN KEY (id_memb_equip_hosptr_trpa)
+    REFERENCES integracao.tb_equip_hosptr (id_memb_equip_hosptr) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+COMMENT ON CONSTRAINT fk_memb_id_trpa ON integracao.tb_ctrl_leito
+    IS 'Foreign Key  para id_memb_equip_hosptr_trpa da tabela de membros hospitalares.';
+CREATE INDEX fki_fk_memb_id_trpa
+    ON integracao.tb_ctrl_leito(id_memb_equip_hosptr_trpa);
+
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD CONSTRAINT fk_status_leito FOREIGN KEY (id_status_leito)
+    REFERENCES integracao.tb_status_leito (id_status_leito) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
+
+COMMENT ON CONSTRAINT fk_status_leito ON integracao.tb_ctrl_leito
+    IS 'Foreign Key da tabela de equipe hospitalar para o status de leito.';
+CREATE INDEX fki_fk_status_leito
+    ON integracao.tb_ctrl_leito(id_status_leito);
+	
+	
 ----------------------------------------------------------------------------------------------------------- Table: integracao.tb_c_usua_acesso
 -- DROP TABLE integracao.tb_c_usua_acesso;
 
@@ -541,7 +625,6 @@ COMMENT ON COLUMN integracao.tb_c_grupo_usua_menu_sist_integracao.dt_altr
     IS 'Data de alteração do registro.';
 	
 -- Table: integracao.tb_c_log_acesso
-
 -- DROP TABLE integracao.tb_c_log_acesso;
 
 CREATE TABLE integracao.tb_c_log_acesso
@@ -565,3 +648,99 @@ GRANT SELECT ON TABLE integracao.tb_c_log_acesso TO adrianasilva;
 GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tb_c_log_acesso TO evaldo;
 
 GRANT ALL ON TABLE integracao.tb_c_log_acesso TO postgres;	
+
+-- Table: integracao.tb_equip_hosptr
+-- DROP TABLE integracao.tb_equip_hosptr;
+
+create table integracao.tb_equip_hosptr(
+	 id_memb_equip_hosptr integer
+   , nm_memb_equip_hosptr character varying(255)
+   , tp_memb_equip_hosptr character varying(10)
+   , cd_usua_incs character varying(255) COLLATE pg_catalog."default" NOT NULL
+   , dt_incs timestamp without time zone NOT NULL
+   , cd_usua_altr character varying(255) COLLATE pg_catalog."default"
+   , dt_altr timestamp without time zone
+);
+
+alter table integracao.tb_equip_hosptr add constraint pk_equip_hosptr primary key(id_memb_equip_hosptr);
+
+COMMENT ON TABLE integracao.tb_equip_hosptr
+    IS 'Tabela de equipe hospitalar.';
+
+COMMENT ON COLUMN integracao.tb_equip_hosptr.id_memb_equip_hosptr
+    IS 'Identificador do membro da equipe hospitalar.';
+
+COMMENT ON COLUMN integracao.tb_equip_hosptr.nm_memb_equip_hosptr
+    IS 'Nome do membro da equipe hospitalar.';
+	
+COMMENT ON COLUMN integracao.tb_equip_hosptr.tp_memb_equip_hosptr
+    IS 'Tipo do membro da equipe hospitalar. MDCO - Medico, PSCO - Psicologo, TRPA - Terapeuta.';	
+
+
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO administrativo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO alinediniz;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO bcorrea;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO farmacia;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO fcampos;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO flavia;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO gabriela;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO glaucodiretor;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO lamorim;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO mvilela;
+GRANT ALL ON TABLE integracao.tb_equip_hosptr TO postgres;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO posto01;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO posto02;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO posto03;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO posto04;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO qualidade;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO tivilaverde;	
+
+	
+-- Table: integracao.tb_status_leito
+-- DROP TABLE integracao.tb_status_leito;
+
+create table integracao.tb_status_leito(
+	 id_status_leito integer
+   , ds_status_leito character varying(255) 
+   , fl_ativo character varying(100)
+   , cd_usua_incs character varying(255) COLLATE pg_catalog."default" NOT NULL
+   , dt_incs timestamp without time zone NOT NULL
+   , cd_usua_altr character varying(255) COLLATE pg_catalog."default"
+   , dt_altr timestamp without time zone   
+);
+
+alter table integracao.tb_status_leito add constraint pk_status_leito primary key(id_status_leito);
+
+COMMENT ON TABLE integracao.tb_status_leito
+    IS 'Tabela de equipe hospitalar.';
+
+COMMENT ON COLUMN integracao.tb_status_leito.id_status_leito
+    IS 'Identificador do status da gestão de leitos.';
+
+COMMENT ON COLUMN integracao.tb_status_leito.ds_status_leito
+    IS 'Nome do status da gestão de leitos.';
+
+COMMENT ON COLUMN integracao.tb_status_leito.fl_ativo
+    IS 'Flag se status ativo. Sim, Nao';
+	
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO administrativo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO alinediniz;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO bcorrea;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO farmacia;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO fcampos;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO flavia;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO gabriela;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO glaucodiretor;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO lamorim;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO mvilela;
+GRANT ALL ON TABLE integracao.tb_status_leito TO postgres;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO posto01;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO posto02;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO posto03;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO posto04;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO qualidade;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO tivilaverde;	

@@ -4,7 +4,7 @@
 	
     include '../database.php';
 	
-	error_reporting(0); 	
+	error_reporting(0); 
 	
 	$itens_por_pagina=5;
 	$pagina=intval($_GET['pagina']);
@@ -23,9 +23,9 @@
 		
 		$textoconsulta = strtoupper($_POST['textoconsulta']);
 		
-		$sql = "SELECT count(id_grupo_acesso)
-				from integracao.tb_c_grupo_acesso
-				where upper(nm_grupo_acesso) like '%" . $textoconsulta . "%'";
+		$sql = "SELECT count(id_status_leito)
+				from integracao.tb_status_leito
+				where upper(ds_status_leito) like '%" . $textoconsulta . "%'";
 			
 		if ($pdo==null){
 				header(Config::$webLogin);
@@ -39,14 +39,14 @@
 		$num_total = $row[0];	
 		$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-		$sql ="SELECT id_grupo_acesso, nm_grupo_acesso 
-				from integracao.tb_c_grupo_acesso 
-				where upper(nm_grupo_acesso) like '%" . $textoconsulta . "%' order by nm_grupo_acesso LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
+		$sql ="SELECT id_status_leito, ds_status_leito, fl_ativo
+				from integracao.tb_status_leito
+				where upper(ds_status_leito) like '%" . $textoconsulta . "%' order by ds_status_leito LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
 		
 	} else{
 		
-			$sql = "SELECT count(id_grupo_acesso)
-				from integracao.tb_c_grupo_acesso";
+			$sql = "SELECT count(id_status_leito)
+				from integracao.tb_status_leito";
 			
 			if ($pdo==null){
 					header(Config::$webLogin);
@@ -60,7 +60,8 @@
 			$num_total = $row[0];	
 			$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-			$sql ="SELECT id_grupo_acesso, nm_grupo_acesso from integracao.tb_c_grupo_acesso order by nm_grupo_acesso LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
+			$sql ="SELECT id_status_leito, ds_status_leito, fl_ativo
+				from integracao.tb_status_leito order by ds_status_leito LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
 	}
 	
 	if ($pdo==null){
@@ -81,9 +82,9 @@
 		try
 		{
 
-			$sql = "SELECT count(id_grupo_acesso)
-				from integracao.tb_c_grupo_usua_acesso
-				where id_grupo_acesso = ".$_SESSION['id_grupo_acesso']." ";
+			$sql = "SELECT count(id_memb_equip_hosptr)
+				from integracao.tb_ctrl_leito
+				where id_status_leito = " . $_SESSION['id_status_leito'] . "";
 			
 			if ($pdo==null){
 					header(Config::$webLogin);
@@ -100,7 +101,7 @@
 				
 				echo "<div class=\"alert alert-warning alert-dismissible\">
 					<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
-					<strong>Atenção!</strong> Exclusão recusada! Existem usuários cadastrados para este grupo.
+					<strong>Atenção!</strong> Exclusão recusada! Existe controle de leitos cadastrado para este status.
 				</div>";
 				
 				$secondsWait = 5;
@@ -109,7 +110,7 @@
 			} else {
 		
 				// remove do banco			
-				$sql = "DELETE FROM integracao.tb_c_grupo_acesso WHERE id_grupo_acesso = ".$_SESSION['id_grupo_acesso']."";			
+				$sql = "DELETE FROM integracao.tb_status_leito WHERE id_status_leito = ".$_SESSION['id_status_leito']."";			
 				$result = pg_query($pdo, $sql);
 
 				if($result){
@@ -136,12 +137,14 @@
 		
 		try
 		{	
-			$sql = "insert into integracao.tb_c_grupo_acesso values ((select NEXTVAL('integracao.sq_grupo_acesso')), '". $_POST['nm_grupo_acesso']."', '".$_SESSION['usuario']."', current_timestamp, null,null);";				
+			$sql = "insert into integracao.tb_status_leito values ((select NEXTVAL('integracao.sq_status_leito')), '". $_POST['ds_status_leito']."', '". $_POST['fl_ativo']."', '".$_SESSION['usuario']."', current_timestamp, null,null);";				
 			$result = pg_query($pdo, $sql);
 
 			if($result){
 				echo "";
 			}  
+			
+			//echo $sql;
 			
 			$secondsWait = 0;
 			header("Refresh:$secondsWait");
@@ -163,7 +166,7 @@
 		{	
 		
 			
-			$sql = "update integracao.tb_c_grupo_acesso set nm_grupo_acesso = '". $_POST['nm_grupo_acesso']."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_grupo_acesso = ". TRIM($_SESSION['id_grupo_acesso'])."";	
+			$sql = "update integracao.tb_status_leito set ds_status_leito = '". $_POST['ds_status_leito']."', fl_ativo = '". $_POST['fl_ativo']."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_status_leito = ". TRIM($_SESSION['id_status_leito'])."";	
 			
 			$result = pg_query($pdo, $sql);
 
@@ -189,7 +192,7 @@
 	 <meta charset="utf-8">
 	 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	 <meta name="viewport" content="width=device-width, initial-scale=1">
-	 <title>integracao de Grupos de Usuários</title>
+	 <title>Status de Leitos</title>
 
 	 <link href="../css/bootstrap.min.css" rel="stylesheet">
 	 <link href="../css/style.css" rel="stylesheet">
@@ -199,7 +202,7 @@
 	 <div id="main" class="container-fluid" style="margin-top: 50px"> 
 		<div class="container" style="margin-left: 0px">
 			<form class="form-inline" action="#" method="post" >				
-				<b>Consultar grupos de usuários:</b>:&nbsp;&nbsp													
+				<b>Consultar por status de leitos:</b>:&nbsp;&nbsp													
 				<input class="form-control" name="textoconsulta" type="text" placeholder="Pesquisar">&nbsp;&nbsp;&nbsp;&nbsp;
 				<input class="btn btn-primary" type="submit" value="Consultar" name="botaoconsultar">&nbsp;&nbsp;											
 				<input type="button" value="Novo Registro" class="btn btn-primary btn-xs insere"/>				
@@ -214,8 +217,9 @@
 			<table class="table table-striped" cellspacing="0" cellpadding="0" id="tabela">
 				<thead>
 					<tr>
-						<th>Id. Grupo de usuário</th>
-						<th>Nome do Grupo de Usuário</th>												
+						<th>Id. Status do Leito</th>
+						<th>Stauts de Leito</th>
+						<th>Ativo?</th>																		
 						<th class="actions">Ações</th>
 					</tr>
 				</thead>				
@@ -226,8 +230,9 @@
 					while($row = pg_fetch_row($ret)) {
 					?>						
 						<tr>
-							<td id="id_grupo_usua" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
-							<td id="nm_grupo_usua" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
+							<td id="id_status_leito" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
+							<td id="ds_status_leito" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
+							<td id="fl_ativo" value="<?php echo $row[2];?>"><?php echo $row[2];?></td>
 														
 							<td class="actions">								
 								<input type="button" value="Visualizar" class="btn btn-success btn-xs visualiza"/>
@@ -244,14 +249,14 @@
 		
 		<div>			
 			<ul class="pagination">
-				<li class="page-item"><a class="page-link" href="cadastro_grupo_acesso.php?pagina=0">Primeiro</a></li>
+				<li class="page-item"><a class="page-link" href="cadastro_membro_hospitalar.php?pagina=0">Primeiro</a></li>
 				<?php 				
 				for ($i=0; $i<$num_paginas;$i++){										
 				?>
-					<li class="page-item" ><a class="page-link" href="cadastro_grupo_acesso.php?pagina=<?php echo $i;?>">
+					<li class="page-item" ><a class="page-link" href="cadastro_membro_hospitalar.php?pagina=<?php echo $i;?>">
 						<?php echo $i+1;?></a></li>
 				<?php } ?>
-				<li class="page-item"><a class="page-link" href="cadastro_grupo_acesso.php?pagina=<?php echo $num_paginas-1; ?>">Último</a></li>
+				<li class="page-item"><a class="page-link" href="cadastro_membro_hospitalar.php?pagina=<?php echo $num_paginas-1; ?>">Último</a></li>
 			</ul>		
 		</div> <!-- /#bottom -->
 	 </div> <!-- /#main -->
@@ -282,14 +287,15 @@
 		
 			var currentRow=$(this).closest("tr"); 
 			
-			var id_grupo_acesso = currentRow.find("td:eq(0)").text();				
-			var nm_grupo_acesso = currentRow.find("td:eq(1)").text();			
+			var id_status_leito = currentRow.find("td:eq(0)").text();				
+			var ds_status_leito = currentRow.find("td:eq(1)").text();			
+			var fl_ativo = currentRow.find("td:eq(2)").text();	
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
-				 url: "../delecao/delecao_grupo_acesso.php", //
-				 data: {id_grupo_acesso:id_grupo_acesso, nm_grupo_acesso:nm_grupo_acesso},
+				 url: "../delecao/delecao_status_leito.php", //
+				 data: {id_status_leito:id_status_leito, ds_status_leito:ds_status_leito, fl_ativo:fl_ativo},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();
@@ -302,7 +308,7 @@
 			event.preventDefault();			
 			$.ajax({
 				type: "POST",
-				url:"../insercao/insercao_grupo_acesso.php",															
+				url:"../insercao/insercao_status_leito.php",															
 				success : function(completeHtmlPage) {				
 					$("html").empty();
 					$("html").append(completeHtmlPage);
@@ -314,14 +320,15 @@
 		
 			var currentRow=$(this).closest("tr"); 
 			
-			var id_grupo_acesso = currentRow.find("td:eq(0)").text();				
-			var nm_grupo_acesso = currentRow.find("td:eq(1)").text();	
+			var id_status_leito = currentRow.find("td:eq(0)").text();				
+			var ds_status_leito = currentRow.find("td:eq(1)").text();	
+			var fl_ativo = currentRow.find("td:eq(2)").text();
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
-				 url: "../alteracao/alteracao_grupo_acesso.php", //
-				 data: {id_grupo_acesso:id_grupo_acesso, nm_grupo_acesso:nm_grupo_acesso},
+				 url: "../alteracao/alteracao_status_leito.php", //
+				 data: {id_status_leito:id_status_leito, ds_status_leito:ds_status_leito, fl_ativo:fl_ativo},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();
@@ -334,13 +341,14 @@
 			
 			var currentRow=$(this).closest("tr"); 
 			
-			var id_grupo_acesso = currentRow.find("td:eq(0)").text();				
-			var nm_grupo_acesso = currentRow.find("td:eq(1)").text();						
+			var id_status_leito = currentRow.find("td:eq(0)").text();				
+			var ds_status_leito = currentRow.find("td:eq(1)").text();							
+			var fl_ativo = currentRow.find("td:eq(2)").text();
 						
 			$.ajax({
-				url:"../visualizacao/visualizacao_grupo_acesso.php",
+				url:"../visualizacao/visualizacao_status_leito.php",
 				method:"POST",
-				data:{id_grupo_acesso:id_grupo_acesso},
+				data: {id_status_leito:id_status_leito, ds_status_leito:ds_status_leito, fl_ativo:fl_ativo},
 				success:function(data){
 					$('#visualizacao').html(data);
 					$('#visualiza').modal('show');

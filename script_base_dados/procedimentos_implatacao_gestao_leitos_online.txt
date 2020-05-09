@@ -9,10 +9,39 @@ select * from
 	INTERSECT
 	SELECT TRIM(nm_pcnt) FROM integracao.tb_ctrl_leito_smart
 ) as relacao
---Analisar com o Daniel a situação do paciente MARCELO COSENZA RODRIGUES, está como "RETAGUARDA MARCELO..."
+
+--Analisar com o Daniel as situações dos pacientes como "RETAGUARDA..." e "ACOMPANHANTE..."
+
 --Deletar os pacientes excedentes
+DELETE from integracao.tb_ctrl_leito where nm_pcnt is null;
+
+DELETE FROM integracao.tb_ctrl_leito
+where trim(nm_pcnt) in 
+		(
+			SELECT TRIM(nm_pcnt) FROM integracao.tb_ctrl_leito
+			except
+			select * from 
+			(
+				SELECT TRIM(nm_pcnt) FROM integracao.tb_ctrl_leito
+				INTERSECT
+				SELECT TRIM(nm_pcnt) FROM integracao.tb_ctrl_leito_smart
+			) as relacao
+		)
+
+
 --Criar o campo pac_reg na tabela tb_ctrl_leito
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD COLUMN pac_reg integer;
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito.pac_reg
+    IS 'Identificador do paciente.';
+
 --Atualizar o campo pac_reg em relação ao smart
+SELECT 'UPDATE integracao.tb_ctrl_leito SET pac_reg = '||ctrl_smart.pac_reg||' where trim(nm_pcnt) = '''||trim(ctrl.nm_pcnt)||''';'
+from integracao.tb_ctrl_leito ctrl
+   , integracao.tb_ctrl_leito_smart ctrl_smart
+where trim(ctrl.nm_pcnt) = trim(ctrl_smart.nm_pcnt)
+
 
 --Procedimento 2
---Atualização do Gestão de Leitos no DW
+--Atualização do Gestão de Leitos no DW (PRÓXIMO PASSO)

@@ -80,8 +80,7 @@ COMMENT ON INDEX integracao.ix_ot_pac_reg_smart
 -- DROP TABLE integracao.tb_ctrl_leito;
 
 CREATE TABLE integracao.tb_ctrl_leito
-(
-    loc_leito_id character varying(255) COLLATE pg_catalog."default",
+(    
 	cd_ctrl_leito integer,
     dt_nasc_pcnt timestamp without time zone,
     nm_pcnt character varying(255) COLLATE pg_catalog."default",

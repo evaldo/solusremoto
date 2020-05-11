@@ -65,7 +65,7 @@
 		$sqlPostgresql = "INSERT INTO integracao.tb_ctrl_leito_smart (LOC_LEITO_ID, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS) VALUES ('" . $row['LOC_LEITO_ID'] . "', '" . $row['LOC_NOME'] . "', '" . $row['DS_ANDAR'] . "', '" . $row['HSP_DTHRE'] . "', '" . $row['PAC_NOME'] . "', '" . $row['PAC_SEXO'] . "', '" . $row['PAC_NASC'] . "', '" . $row['CNV_NOME'] . "', '" . $row['PAC_REG'] . "', '" . $row['HSP_DTHRE'] . "')";
 		
 		$result = pg_query($pdo, $sqlPostgresql);
-
+		
 		if($result){
 			echo "";
 		} 		

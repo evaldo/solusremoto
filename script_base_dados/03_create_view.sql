@@ -22,6 +22,11 @@ CREATE OR REPLACE VIEW integracao.vw_menu_princ_integracao AS
 
 ALTER TABLE integracao.vw_menu_princ_integracao
     OWNER TO postgres;
+
+GRANT SELECT ON TABLE integracao.vw_menu_princ_integracao TO administrativo;
+GRANT SELECT ON TABLE integracao.vw_menu_princ_integracao TO camila;
+GRANT SELECT ON TABLE integracao.vw_menu_princ_integracao TO evaldo;
+GRANT SELECT ON TABLE integracao.vw_menu_princ_integracao TO tivilaverde;
 	
 -- View: integracao.vw_menu_princ_integracao_usua
 -- DROP VIEW integracao.vw_menu_princ_integracao_usua;
@@ -52,7 +57,11 @@ CREATE OR REPLACE VIEW integracao.vw_menu_princ_integracao_usua AS
 ALTER TABLE integracao.vw_menu_princ_integracao_usua
     OWNER TO postgres;
 	
-	
+GRANT SELECT ON TABLE integracao.vw_menu_princ_integracao_usua TO administrativo;
+GRANT SELECT ON TABLE integracao.vw_menu_princ_integracao_usua TO camila;
+GRANT SELECT ON TABLE integracao.vw_menu_princ_integracao_usua TO evaldo;
+GRANT SELECT ON TABLE integracao.vw_menu_princ_integracao_usua TO tivilaverde;
+
 -- View: integracao.vw_menu_princ_usua
 -- DROP VIEW integracao.vw_menu_princ_usua;
 
@@ -73,5 +82,8 @@ CREATE OR REPLACE VIEW integracao.vw_menu_princ_usua AS
 
 ALTER TABLE integracao.vw_menu_princ_usua
     OWNER TO postgres;
-	
-	
+
+GRANT SELECT ON TABLE integracao.vw_menu_princ_usua TO administrativo;
+GRANT SELECT ON TABLE integracao.vw_menu_princ_usua TO camila;
+GRANT SELECT ON TABLE integracao.vw_menu_princ_usua TO evaldo;
+GRANT SELECT ON TABLE integracao.vw_menu_princ_usua TO tivilaverde;

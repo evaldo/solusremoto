@@ -46,24 +46,10 @@ ALTER TABLE integracao.tb_ctrl_leito_smart
 COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.pac_reg
     IS 'Identificador do paciente.';
 
+GRANT ALL ON TABLE integracao.tb_ctrl_leito_smart TO postgres;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO administrativo;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO alinediniz;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO bcorrea;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO camila;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO evaldo;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO farmacia;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO fcampos;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO flavia;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO gabriela;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO glaucodiretor;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO lamorim;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO mvilela;
-GRANT ALL ON TABLE integracao.tb_ctrl_leito_smart TO postgres;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO posto01;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO posto02;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO posto03;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO posto04;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO qualidade;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO tivilaverde;
 
 CREATE INDEX ix_ot_pac_reg_smart
@@ -119,24 +105,10 @@ TABLESPACE pg_default;
 ALTER TABLE integracao.tb_ctrl_leito
     OWNER to postgres;
 
+GRANT ALL ON TABLE integracao.tb_ctrl_leito_smart TO postgres;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO administrativo;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO alinediniz;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO bcorrea;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO camila;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO evaldo;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO farmacia;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO fcampos;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO flavia;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO gabriela;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO glaucodiretor;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO lamorim;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO mvilela;
-GRANT ALL ON TABLE integracao.tb_ctrl_leito_smart TO postgres;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO posto01;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO posto02;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO posto03;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO posto04;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO qualidade;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO tivilaverde;
 
 COMMENT ON TABLE integracao.tb_ctrl_leito
@@ -342,17 +314,12 @@ TABLESPACE pg_default;
 ALTER TABLE integracao.tb_c_usua_acesso
     OWNER to postgres;
 
-GRANT SELECT ON TABLE integracao.tb_c_usua_acesso TO adrianasilva;
 
 GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tb_c_usua_acesso TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_usua_acesso TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_usua_acesso TO tivilaverde;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_usua_acesso TO administrativo;
 
-GRANT UPDATE, DELETE, SELECT, INSERT ON TABLE integracao.tb_c_usua_acesso TO ftesta;
-
-GRANT INSERT, UPDATE, DELETE, SELECT ON TABLE integracao.tb_c_usua_acesso TO ldaibert;
-
-GRANT DELETE, SELECT, INSERT, UPDATE ON TABLE integracao.tb_c_usua_acesso TO mmattos;
-
-GRANT UPDATE, INSERT, SELECT, DELETE ON TABLE integracao.tb_c_usua_acesso TO mvilela;
 
 GRANT ALL ON TABLE integracao.tb_c_usua_acesso TO postgres;
 
@@ -468,6 +435,11 @@ COMMENT ON CONSTRAINT fk_menu_menu_supr ON integracao.tb_c_menu_sist_integracao
     IS 'Foreign key de autorelacionamento entre o menu e submenu.';
 
 	
+GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tb_c_menu_sist_integracao TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_menu_sist_integracao TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_menu_sist_integracao TO tivilaverde;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_menu_sist_integracao TO administrativo;
+	
 -- Index: fki_fk_menu_menu_supr
 -- DROP INDEX cadastro.fki_fk_menu_menu_supr;
 
@@ -516,7 +488,12 @@ COMMENT ON COLUMN integracao.tb_c_grupo_acesso.cd_usua_altr
 
 COMMENT ON COLUMN integracao.tb_c_grupo_acesso.dt_altr
     IS 'Data de alteração do registro.';
+
 	
+GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tb_c_grupo_acesso TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_acesso TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_acesso TO tivilaverde;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_acesso TO administrativo;
 ---------------------------------------------------------------------------------------------------------
 -- Table: integracao.tb_c_grupo_usua_acesso
 -- DROP TABLE integracao.tb_c_grupo_usua_acesso;
@@ -570,6 +547,11 @@ COMMENT ON COLUMN integracao.tb_c_grupo_usua_acesso.cd_usua_altr
 COMMENT ON COLUMN integracao.tb_c_grupo_usua_acesso.dt_altr
     IS 'Data de alteração do registro.';
 
+GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tb_c_grupo_usua_acesso TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_usua_acesso TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_usua_acesso TO tivilaverde;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_usua_acesso TO administrativo;
+	
 ---------------------------------------------------------------------------------------------------------
 -- Table: integracao.tb_c_grupo_usua_menu_sist_integracao
 -- DROP TABLE integracao.tb_c_grupo_usua_menu_sist_integracao;
@@ -623,6 +605,11 @@ COMMENT ON COLUMN integracao.tb_c_grupo_usua_menu_sist_integracao.cd_usua_altr
 COMMENT ON COLUMN integracao.tb_c_grupo_usua_menu_sist_integracao.dt_altr
     IS 'Data de alteração do registro.';
 	
+GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tb_c_grupo_usua_menu_sist_integracao TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_usua_menu_sist_integracao TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_usua_menu_sist_integracao TO tivilaverde;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_usua_menu_sist_integracao TO administrativo;
+	
 -- Table: integracao.tb_c_log_acesso
 -- DROP TABLE integracao.tb_c_log_acesso;
 
@@ -642,11 +629,14 @@ TABLESPACE pg_default;
 ALTER TABLE integracao.tb_c_log_acesso
     OWNER to postgres;
 
-GRANT SELECT ON TABLE integracao.tb_c_log_acesso TO adrianasilva;
 
 GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tb_c_log_acesso TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_log_acesso TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_log_acesso TO tivilaverde;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_log_acesso TO administrativo;
 
 GRANT ALL ON TABLE integracao.tb_c_log_acesso TO postgres;	
+
 
 -- Table: integracao.tb_equip_hosptr
 -- DROP TABLE integracao.tb_equip_hosptr;
@@ -676,25 +666,10 @@ COMMENT ON COLUMN integracao.tb_equip_hosptr.tp_memb_equip_hosptr
     IS 'Tipo do membro da equipe hospitalar. MDCO - Medico, PSCO - Psicologo, TRPA - Terapeuta.';	
 
 
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO administrativo;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO alinediniz;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO bcorrea;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO camila;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO evaldo;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO farmacia;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO fcampos;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO flavia;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO gabriela;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO glaucodiretor;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO lamorim;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO mvilela;
-GRANT ALL ON TABLE integracao.tb_equip_hosptr TO postgres;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO posto01;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO posto02;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO posto03;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO posto04;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO qualidade;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_equip_hosptr TO tivilaverde;	
+GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tp_memb_equip_hosptr TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tp_memb_equip_hosptr TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tp_memb_equip_hosptr TO tivilaverde;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tp_memb_equip_hosptr TO administrativo;	
 
 	
 -- Table: integracao.tb_status_leito
@@ -724,22 +699,7 @@ COMMENT ON COLUMN integracao.tb_status_leito.ds_status_leito
 COMMENT ON COLUMN integracao.tb_status_leito.fl_ativo
     IS 'Flag se status ativo. Sim, Nao';
 	
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO administrativo;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO alinediniz;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO bcorrea;
+GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tb_status_leito TO evaldo;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO camila;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO evaldo;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO farmacia;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO fcampos;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO flavia;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO gabriela;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO glaucodiretor;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO lamorim;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO mvilela;
-GRANT ALL ON TABLE integracao.tb_status_leito TO postgres;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO posto01;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO posto02;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO posto03;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO posto04;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO qualidade;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO tivilaverde;	
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO tivilaverde;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO administrativo;	

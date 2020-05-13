@@ -7,7 +7,7 @@
 	
 	$pdo = database::connect();
 
-	$sql = "select menu.*, (select nm_menu_sist_pts from integracao.tb_c_menu_sist_pts where id_menu_sist_pts = menu.id_menu_supr) from integracao.tb_c_menu_sist_pts menu where menu.id_menu_sist_pts = '".$_POST['id_menu_sist_pts']."'";
+	$sql = "select menu.*, (select nm_menu_sist_pts from integracao.tb_c_menu_sist_integracao where id_menu_sist_pts = menu.id_menu_supr) from integracao.tb_c_menu_sist_integracao menu where menu.id_menu_sist_pts = '".$_POST['id_menu_sist_pts']."'";
 
 	if ($pdo==null){
 			header(Config::$webLogin);
@@ -71,7 +71,7 @@
 										
 										<?php
 										
-										$sql = "SELECT nm_menu_sist_pts, id_menu_sist_pts from integracao.tb_c_menu_sist_pts order by 1";
+										$sql = "SELECT nm_menu_sist_pts, id_menu_sist_pts from integracao.tb_c_menu_sist_integracao order by 1";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);

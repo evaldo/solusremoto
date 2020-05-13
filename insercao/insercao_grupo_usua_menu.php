@@ -64,7 +64,7 @@
 										<td style="width:150px"><label>Menu:</label></td>  
 										<?php
 										
-										$sql = "SELECT id_menu_sist_pts, nm_menu_sist_pts from integracao.tb_c_menu_sist_pts order by 1";
+										$sql = "SELECT id_menu_sist_integracao, nm_menu_sist_integracao from integracao.tb_c_menu_sist_integracao order by 1";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -79,7 +79,7 @@
 											<select  class="form-control" id="macesso" onchange=" 
 														var selObj = document.getElementById('macesso');
 														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('id_menu_sist_pts').value = selValue;">
+														document.getElementById('id_menu_sist_integracao').value = selValue;">
 											<option value="N"></option>
 											<?php
 												$cont=1;										
@@ -100,7 +100,7 @@
 							</div>									
 						</div>
 						<input type="text" id="id_grupo_acesso" name="id_grupo_acesso" style="display:none"> 
-						<input type="text" id="id_menu_sist_pts" name="id_menu_sist_pts" style="display:none"> 
+						<input type="text" id="id_menu_sist_integracao" name="id_menu_sist_integracao" style="display:none"> 
 					</form>
 				</div>
 			</div>

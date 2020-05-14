@@ -168,12 +168,19 @@
 				$fl_acmpte = 'F';
 			}
 			
+			
 			$sql = "UPDATE integracao.tb_ctrl_leito SET 
 			fl_fmnte = '" . $fl_fmnte . "', 
 			fl_rtgrd = '" . $fl_rtgrd . "', 
-			fl_acmpte = '" . $fl_acmpte . "', 
-			fl_status_leito = (select ds_status_leito from integracao.tb_status_leito where id_status_leito = " . $_POST['id_status_leito'] . ") , 
-			id_status_leito = " . $_POST['id_status_leito'] . "  ,";
+			fl_acmpte = '" . $fl_acmpte . "', ";
+			
+			if ($_POST['id_status_leito']=='null' or $_POST['id_status_leito']=='' ) {
+				$_POST['id_status_leito']=5;				
+			}
+			
+			$sql.="fl_status_leito = (select ds_status_leito from integracao.tb_status_leito where id_status_leito = " . $_POST['id_status_leito'] . ") , 
+				id_status_leito = " . $_POST['id_status_leito'] . "  ,";
+			
 			if ($_POST['id_memb_equip_hosptr_mdco']=='null' or $_POST['id_memb_equip_hosptr_mdco']=='' ) {
 				$sql.="id_memb_equip_hosptr_mdco = null , 
 				nm_mdco = null  , ";

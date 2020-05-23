@@ -131,3 +131,19 @@ GRANT ALL ON SEQUENCE integracao.sq_status_leito TO administrativo;
 GRANT ALL ON SEQUENCE integracao.sq_status_leito TO camila;
 GRANT ALL ON SEQUENCE integracao.sq_status_leito TO evaldo;
 GRANT ALL ON SEQUENCE integracao.sq_status_leito TO tivilaverde;
+
+---------------------------------------------------	
+
+CREATE SEQUENCE integracao.sq_hstr_ocpa_leito_status
+INCREMENT 1
+    START 5000
+    MINVALUE 1
+    MAXVALUE 9999999999;
+
+ALTER SEQUENCE integracao.sq_hstr_ocpa_leito_status
+    OWNER TO postgres;
+	
+GRANT ALL ON SEQUENCE integracao.sq_hstr_ocpa_leito_status TO administrativo;
+GRANT ALL ON SEQUENCE integracao.sq_hstr_ocpa_leito_status TO camila;
+GRANT ALL ON SEQUENCE integracao.sq_hstr_ocpa_leito_status TO evaldo;
+GRANT ALL ON SEQUENCE integracao.sq_hstr_ocpa_leito_status TO tivilaverde;

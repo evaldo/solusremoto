@@ -42,6 +42,8 @@ from integracao.tb_ctrl_leito ctrl
    , integracao.tb_ctrl_leito_smart ctrl_smart
 where trim(ctrl.nm_pcnt) = trim(ctrl_smart.nm_pcnt)
 
-
 --Procedimento 2
+Atualizar a tabela integracao.tb_ctrl_leito_temp com todos os respectivos campos.
+
+--Procedimento 3
 --Atualização do Gestão de Leitos no DW (PRÓXIMO PASSO)

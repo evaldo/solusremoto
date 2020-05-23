@@ -1,3 +1,83 @@
+-- Table: integracao.tb_f_hstr_ocpa_leito_status
+-- DROP TABLE integracao.tb_f_hstr_ocpa_leito_status;
+
+CREATE TABLE integracao.tb_f_hstr_ocpa_leito_status
+(
+    id_hstr_status_leito integer NOT NULL,
+    ds_leito character varying(255) COLLATE pg_catalog."default",
+    dt_inicio_mvto timestamp without time zone,
+    ds_status character varying(255) COLLATE pg_catalog."default",
+    CONSTRAINT pk_hstr_status_leito PRIMARY KEY (id_hstr_status_leito)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE integracao.tb_f_hstr_ocpa_leito_status
+    OWNER to postgres;
+
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO administrativo;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO alinediniz;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO bcorrea;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO camila;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO evaldo;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO farmacia;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO fcampos;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO flavia;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO gabriela;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO glaucodiretor;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO lamorim;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO mvilela;
+GRANT ALL ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO postgres;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO posto01;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO posto02;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO posto03;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO posto04;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO qualidade;
+GRANT SELECT ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO tivilaverde;
+
+COMMENT ON TABLE integracao.tb_f_hstr_ocpa_leito_status
+    IS 'Tabela de histórico de ocupação de leito por status.';
+
+COMMENT ON COLUMN integracao.tb_f_hstr_ocpa_leito_status.id_hstr_status_leito
+    IS 'Identificador do histórico de status de ocupação de leito.';
+
+COMMENT ON COLUMN integracao.tb_f_hstr_ocpa_leito_status.ds_leito
+    IS 'Descrição do leito.';
+
+COMMENT ON COLUMN integracao.tb_f_hstr_ocpa_leito_status.dt_inicio_mvto
+    IS 'Data de início do motivo.';
+
+COMMENT ON COLUMN integracao.tb_f_hstr_ocpa_leito_status.ds_status
+    IS 'Descrição do leito.';
+	
+COMMENT ON CONSTRAINT pk_hstr_status_leito ON integracao.tb_f_hstr_ocpa_leito_status
+    IS 'Chave primária do histórico do status de leito.';
+
+-- Index: ix_ot_dt_inicio_mvto_status
+-- DROP INDEX integracao.ix_ot_dt_inicio_mvto_status;
+
+CREATE INDEX ix_ot_dt_inicio_mvto_status
+    ON integracao.tb_f_hstr_ocpa_leito_status USING btree
+    (dt_inicio_mvto)
+    TABLESPACE pg_default;
+
+COMMENT ON INDEX integracao.ix_ot_dt_inicio_mvto_status
+    IS 'Índice de otimização por data de início do motivo de status do leito.';
+
+-- Index: ix_ot_leito
+-- DROP INDEX integracao.ix_ot_leito;
+
+CREATE INDEX ix_ot_leito
+    ON integracao.tb_f_hstr_ocpa_leito_status USING btree
+    (ds_leito COLLATE pg_catalog."default")
+    TABLESPACE pg_default;
+
+COMMENT ON INDEX integracao.ix_ot_leito
+    IS 'Índice de otimização de consulta por descrição do leito.';
+
+
 -- Table: integracao.tb_ctrl_leito
 -- DROP TABLE integracao.tb_ctrl_leito;
 
@@ -70,12 +150,12 @@ CREATE TABLE integracao.tb_ctrl_leito
 	cd_ctrl_leito integer,
     dt_nasc_pcnt timestamp without time zone,
     nm_pcnt character varying(255) COLLATE pg_catalog."default",
-    ds_leito character varying(255) COLLATE pg_catalog."default",
+    dssco character varying(255) COLLATE pg_catalog."default",
+    nm_t_leito character varying(255) COLLATE pg_catalog."default",
     ds_andar character varying(255) COLLATE pg_catalog."default",
     nm_mdco character varying(255) COLLATE pg_catalog."default",
     nm_cnvo character varying(255) COLLATE pg_catalog."default",
-    nm_psco character varying(255) COLLATE pg_catalog."default",
-    nm_trpa character varying(255) COLLATE pg_catalog."default",
+    nm_prpa character varying(255) COLLATE pg_catalog."default",
     ds_ocorr text COLLATE pg_catalog."default",
     ds_cid character varying(255) COLLATE pg_catalog."default",
     dt_admss character varying(255) COLLATE pg_catalog."default",
@@ -283,6 +363,184 @@ COMMENT ON CONSTRAINT fk_status_leito ON integracao.tb_ctrl_leito
 CREATE INDEX fki_fk_status_leito
     ON integracao.tb_ctrl_leito(id_status_leito);
 	
+
+----------------------------------------------------------------------------------------------	
+-- Table: integracao.tb_ctrl_leito_temp
+-- DROP TABLE integracao.tb_ctrl_leito_temp;
+
+CREATE TABLE integracao.tb_ctrl_leito_temp
+(
+    ds_leito character varying(255) COLLATE pg_catalog."default",    
+    nm_mdco character varying(255) COLLATE pg_catalog."default",    
+    nm_psco character varying(255) COLLATE pg_catalog."default",
+    nm_trpa character varying(255) COLLATE pg_catalog."default",
+    ds_ocorr text COLLATE pg_catalog."default",
+    ds_cid character varying(255) COLLATE pg_catalog."default",    
+    ds_dieta character varying(255) COLLATE pg_catalog."default",    	
+    fl_fmnte boolean DEFAULT false,        
+    ds_const character varying(255) COLLATE pg_catalog."default",
+    ds_crtr_intnc character varying(100) COLLATE pg_catalog."default",
+    fl_status_leito character varying(255) COLLATE pg_catalog."default",
+    fl_acmpte boolean,
+    fl_rtgrd boolean,    
+    pac_reg integer,
+    id_status_leito integer,
+    id_memb_equip_hosptr_mdco integer,
+    id_memb_equip_hosptr_psco integer,
+    id_memb_equip_hosptr_trpa integer,
+    CONSTRAINT fk_memb_id_mdco FOREIGN KEY (id_memb_equip_hosptr_mdco)
+        REFERENCES integracao.tb_equip_hosptr (id_memb_equip_hosptr) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_memb_id_psco FOREIGN KEY (id_memb_equip_hosptr_psco)
+        REFERENCES integracao.tb_equip_hosptr (id_memb_equip_hosptr) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_memb_id_trpa FOREIGN KEY (id_memb_equip_hosptr_trpa)
+        REFERENCES integracao.tb_equip_hosptr (id_memb_equip_hosptr) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_status_leito FOREIGN KEY (id_status_leito)
+        REFERENCES integracao.tb_status_leito (id_status_leito) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE integracao.tb_ctrl_leito_temp
+    OWNER to postgres;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO administrativo;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO posto03;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO tivilaverde;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO posto01;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO posto02;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO gabriela;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO camila;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO evaldo;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO flavia;
+GRANT ALL ON TABLE integracao.tb_ctrl_leito_temp TO postgres;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO glaucodiretor;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO mvilela;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO farmacia;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO fcampos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO alinediniz;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO posto04;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO lamorim;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO qualidade;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_ctrl_leito_temp TO bcorrea;
+
+COMMENT ON TABLE integracao.tb_ctrl_leito_temp
+    IS 'Tabela temporária de controle de leito para servir para auxiliar na troca de informações do paciente quando é trocado de leito.';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.ds_leito
+    IS 'Descrição do leito';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.nm_mdco
+    IS 'Nome do médico';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.nm_psco
+    IS 'Nome do psicólogo';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.nm_trpa
+    IS 'Nome do terapeuta';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.ds_ocorr
+    IS 'Descrição da ocorrência';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.ds_cid
+    IS 'Descrição da cidade';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.ds_dieta
+    IS 'Descrição da dieta';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.fl_fmnte
+    IS 'Flag se o paciente é fumante';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.ds_const
+    IS 'Descrição da consistência';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.ds_crtr_intnc
+    IS 'Carater de Internação';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.fl_status_leito
+    IS 'Stauts Leito';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.fl_acmpte
+    IS 'Flag do Acompanhante';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.fl_rtgrd
+    IS 'Flag do Retaguarda';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.pac_reg
+    IS 'Identificador do paciente.';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.id_status_leito
+    IS 'Identificador do status da gestão de leitos.';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.id_memb_equip_hosptr_mdco
+    IS 'Id do médico e membro da equipe hospitalar';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.id_memb_equip_hosptr_psco
+    IS 'Id do psicólogo e membro da equipe hospitalar';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_temp.id_memb_equip_hosptr_trpa
+    IS 'Id do terapeuta e membro da equipe hospitalar';
+
+COMMENT ON CONSTRAINT fk_memb_id_mdco ON integracao.tb_ctrl_leito_temp
+    IS 'Foreign Key  para id_memb_equip_hosptr_mdco da tabela de membros hospitalares.';
+COMMENT ON CONSTRAINT fk_memb_id_psco ON integracao.tb_ctrl_leito_temp
+    IS 'Foreign Key  para id_memb_equip_hosptr_psco da tabela de membros hospitalares.';
+COMMENT ON CONSTRAINT fk_memb_id_trpa ON integracao.tb_ctrl_leito_temp
+    IS 'Foreign Key  para id_memb_equip_hosptr_trpa da tabela de membros hospitalares.';
+COMMENT ON CONSTRAINT fk_status_leito ON integracao.tb_ctrl_leito_temp
+    IS 'Foreign Key da tabela de equipe hospitalar para o status de leito.';
+
+-- Index: fki_fk_memb_id_mdco_temp
+-- DROP INDEX integracao.fki_fk_memb_id_mdco_temp;
+
+CREATE INDEX fki_fk_memb_id_mdco_temp
+    ON integracao.tb_ctrl_leito_temp USING btree
+    (id_memb_equip_hosptr_mdco)
+    TABLESPACE pg_default;
+
+-- Index: fki_fk_memb_id_psco_temp
+-- DROP INDEX integracao.fki_fk_memb_id_psco_temp;
+
+CREATE INDEX fki_fk_memb_id_psco_temp
+    ON integracao.tb_ctrl_leito_temp USING btree
+    (id_memb_equip_hosptr_psco)
+    TABLESPACE pg_default;
+
+-- Index: fki_fk_memb_id_trpa_temp
+-- DROP INDEX integracao.fki_fk_memb_id_trpa_temp;
+
+CREATE INDEX fki_fk_memb_id_trpa_temp
+    ON integracao.tb_ctrl_leito_temp USING btree
+    (id_memb_equip_hosptr_trpa)
+    TABLESPACE pg_default;
+
+-- Index: fki_fk_status_leito_temp
+-- DROP INDEX integracao.fki_fk_status_leito_temp;
+
+CREATE INDEX fki_fk_status_leito_temp
+    ON integracao.tb_ctrl_leito_temp USING btree
+    (id_status_leito)
+    TABLESPACE pg_default;
+
+-- Index: ix_ot_pac_reg_temp
+-- DROP INDEX integracao.ix_ot_pac_reg_temp;
+
+CREATE INDEX ix_ot_pac_reg_temp
+    ON integracao.tb_ctrl_leito_temp USING btree
+    (pac_reg)
+    TABLESPACE pg_default;
+
+COMMENT ON INDEX integracao.ix_ot_pac_reg_temp
+    IS 'Índice de otimização do número do registro paciente.';
 	
 ----------------------------------------------------------------------------------------------------------- Table: integracao.tb_c_usua_acesso
 -- DROP TABLE integracao.tb_c_usua_acesso;

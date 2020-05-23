@@ -22,6 +22,7 @@
 			, id_memb_equip_hosptr_psco
 			, id_memb_equip_hosptr_trpa
 			, id_status_leito
+			, pac_reg
 	FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '". $_SESSION['nm_loc_nome'] ."'";
 		
 	$ret = pg_query($pdo, $sql);
@@ -44,6 +45,7 @@
 	$_SESSION['id_memb_equip_hosptr_mdco'] = $row[12];
 	$_SESSION['id_memb_equip_hosptr_psco'] = $row[13];
 	$_SESSION['id_memb_equip_hosptr_trpa'] = $row[14];
+	$_SESSION['pac_reg'] = $row[16];
 	
 	
 	$_SESSION['id_status_leito'] = $row[15];
@@ -288,6 +290,7 @@
 												exit;
 											}
 											?>
+											
 											<td style="width:150px">
 												<select  id="sl_status_leito" class="form-control" onchange=" 
 															var selObj = document.getElementById('sl_status_leito');

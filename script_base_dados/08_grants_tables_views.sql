@@ -63,6 +63,18 @@ GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO 
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO evaldo;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_smart TO tivilaverde;
 
+GRANT ALL ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO postgres;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO administrativo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_f_hstr_ocpa_leito_status TO tivilaverde;
+
+GRANT ALL ON TABLE integracao.tb_ctrl_leito_temp TO postgres;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_temp TO administrativo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_temp TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_temp TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito_temp TO tivilaverde;
+
 GRANT ALL ON TABLE integracao.tb_ctrl_leito_smart TO postgres;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO administrativo;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_ctrl_leito TO camila;

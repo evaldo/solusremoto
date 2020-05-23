@@ -1,0 +1,9 @@
+--Procedimentos de implantação do Gestão de Leitos On-Line
+--Procedimento 1, após atualização no Pentaho. Atualizar MDCO, PSCO e TRPA
+
+select 'UPDATE integracao.tb_ctrl_leito SET id_memb_equip_hosptr_trpa = (SELECT id_memb_equip_hosptr FROM integracao.tb_equip_hosptr WHERE nm_memb_equip_hosptr = '''||nm_trpa||''') where cd_ctrl_leito = '||cd_ctrl_leito||';'
+
+--Analisar com o Daniel as situações dos pacientes como "RETAGUARDA..." e "ACOMPANHANTE..."
+
+--Procedimento 2
+--Atualização do Gestão de Leitos no DW (PRÓXIMO PASSO). CTRL_LEITO E VIEWS, STATUS E COLUNA DE CÁLCULO DE TEMPO.

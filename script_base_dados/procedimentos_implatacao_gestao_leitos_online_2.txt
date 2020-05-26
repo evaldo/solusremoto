@@ -1,9 +1,238 @@
 --Procedimentos de implantação do Gestão de Leitos On-Line
---Procedimento 1, após atualização no Pentaho. Atualizar MDCO, PSCO e TRPA
+--Procedimento 1. 
+-> Rodar as atualizações de carga de dados no pentaho (Implantação).
+-> Substistiuir a conexão (para vila verde transacional) da carga data atualizacao tb_f_gestao_leito_smart_risco no arquivo atualiza_data_risco_smart.ktr
 
+--ATENÇÃO
+-> Após atualização no Pentaho. Atualizar MDCO, PSCO e TRPA (TEMP Também)
 select 'UPDATE integracao.tb_ctrl_leito SET id_memb_equip_hosptr_trpa = (SELECT id_memb_equip_hosptr FROM integracao.tb_equip_hosptr WHERE nm_memb_equip_hosptr = '''||nm_trpa||''') where cd_ctrl_leito = '||cd_ctrl_leito||';'
+from integracao.tb_ctrl_leito
+
+select 'UPDATE integracao.tb_ctrl_leito_temp SET id_memb_equip_hosptr_trpa = (SELECT id_memb_equip_hosptr FROM integracao.tb_equip_hosptr WHERE nm_memb_equip_hosptr = '''||nm_trpa||''') where cd_ctrl_leito = '||cd_ctrl_leito||';'
+from integracao.tb_ctrl_leito_temp
+
+--> Atualizar o Status (TEMP Também)
+select 'UPDATE integracao.tb_ctrl_leito SET id_status_leito = (SELECT id_status_leito FROM integracao.tb_status_leito WHERE ds_status_leito = '''||fl_status_leito||''') where cd_ctrl_leito = '||cd_ctrl_leito||';'
+from integracao.tb_ctrl_leito
+
+select 'UPDATE integracao.tb_ctrl_leito_temp SET id_status_leito = (SELECT id_status_leito FROM integracao.tb_status_leito WHERE ds_status_leito = '''||fl_status_leito||''') where ds_leito = '''||ds_leito||''';'
+from integracao.tb_ctrl_leito
 
 --Analisar com o Daniel as situações dos pacientes como "RETAGUARDA..." e "ACOMPANHANTE..."
 
 --Procedimento 2
---Atualização do Gestão de Leitos no DW (PRÓXIMO PASSO). CTRL_LEITO E VIEWS, STATUS E COLUNA DE CÁLCULO DE TEMPO.
+
+==> NA BASE VILA VERDE DW
+
+Apagar e recriar as views abaixo na sequencia
+--Views que devem ser alteradas para a view vw_f_risco_leito
+SELECT distinct dependent_ns.nspname as dependent_schema
+, dependent_view.relname as dependent_view 
+, source_ns.nspname as source_schema
+, source_table.relname as source_table
+--, pg_attribute.attname as column_name
+FROM pg_depend 
+JOIN pg_rewrite ON pg_depend.objid = pg_rewrite.oid 
+JOIN pg_class as dependent_view ON pg_rewrite.ev_class = dependent_view.oid 
+JOIN pg_class as source_table ON pg_depend.refobjid = source_table.oid 
+JOIN pg_attribute ON pg_depend.refobjid = pg_attribute.attrelid 
+    AND pg_depend.refobjsubid = pg_attribute.attnum 
+JOIN pg_namespace dependent_ns ON dependent_ns.oid = dependent_view.relnamespace
+JOIN pg_namespace source_ns ON source_ns.oid = source_table.relnamespace
+WHERE 
+source_ns.nspname = 'ocupacao'
+AND source_table.relname = 'tb_f_ctrl_leito'
+--AND pg_attribute.attnum > 0 
+--AND pg_attribute.attname = 'my_column'
+ORDER BY 1,2;
+
+--Procedures que devem ser alteradas para a view vw_f_risco_leito
+select *
+from (
+    select proname, row_number() over (partition by proname) as line, textline, nspname
+    from (
+        select proname, unnest(string_to_array(prosrc, chr(10))) textline, nspname
+        from pg_proc p
+        join pg_namespace n on n.oid = p.pronamespace
+        where nspname = 'ocupacao'
+        --and prosrc ilike 'tb_f_ctrl_leito'
+        ) lines
+    ) x
+    where textline ilike '%tb_f_ctrl_leito%';
+
+
+-- View: ocupacao.vw_hstr_tp_ocpa_leito_status
+-- DROP VIEW ocupacao.vw_hstr_tp_ocpa_leito_status;
+
+CREATE OR REPLACE VIEW ocupacao.vw_hstr_tp_ocpa_leito_status AS
+ SELECT vw_hstr_ocpa_leito_status.ds_leito,
+    vw_hstr_ocpa_leito_status.dt_inicio_mvto,
+    vw_hstr_ocpa_leito_status.dt_fim_mvto,
+    vw_hstr_ocpa_leito_status.ds_status,
+    date_part('day'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto) * 1440::double precision + date_part('hour'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto) * 60::double precision + date_part('minute'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto) AS tp_ocpa_leito_status_minu,
+    round(((date_part('day'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto) * 1440::double precision + date_part('hour'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto) * 60::double precision + date_part('minute'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto)) / 1440::double precision)::numeric, 2) AS tp_ocpa_leito_status_dia
+   FROM ocupacao.vw_hstr_ocpa_leito_status
+  ORDER BY vw_hstr_ocpa_leito_status.ds_leito, vw_hstr_ocpa_leito_status.dt_inicio_mvto;
+
+ALTER TABLE ocupacao.vw_hstr_tp_ocpa_leito_status
+    OWNER TO postgres;
+
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO gabriela;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO posto02;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO posto03;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO bcorrea;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO evaldo;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO alinediniz;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO fcampos;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO posto04;
+GRANT ALL ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO postgres;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO lamorim;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO mvilela;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status TO posto01;
+
+
+-- View: ocupacao.vw_hstr_ocpa_leito_status
+-- DROP VIEW ocupacao.vw_hstr_ocpa_leito_status;
+
+CREATE OR REPLACE VIEW ocupacao.vw_hstr_ocpa_leito_status AS
+ SELECT hstr_dt_1.ds_leito,
+    hstr_dt_1.dt_inicio_mvto,
+    COALESCE(( SELECT min(tb_f_hstr_ocpa_leito_status.dt_inicio_mvto) AS min
+           FROM ocupacao.tb_f_hstr_ocpa_leito_status
+          WHERE tb_f_hstr_ocpa_leito_status.dt_inicio_mvto > hstr_dt_1.dt_inicio_mvto AND tb_f_hstr_ocpa_leito_status.ds_leito::text = hstr_dt_1.ds_leito::text), CURRENT_TIMESTAMP::timestamp(0) without time zone - '01:00:00'::time without time zone::interval) AS dt_fim_mvto,
+    hstr_dt_1.ds_status
+   FROM ocupacao.vw_hstr_tp_ocpa_leito_status_integracao hstr_dt_1
+  ORDER BY hstr_dt_1.ds_leito, hstr_dt_1.dt_inicio_mvto;
+
+ALTER TABLE ocupacao.vw_hstr_ocpa_leito_status
+    OWNER TO postgres;
+
+GRANT SELECT ON TABLE ocupacao.vw_hstr_ocpa_leito_status TO gabriela;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_ocpa_leito_status TO posto02;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_ocpa_leito_status TO posto03;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_ocpa_leito_status TO bcorrea;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_ocpa_leito_status TO alinediniz;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_ocpa_leito_status TO fcampos;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_ocpa_leito_status TO posto04;
+GRANT ALL ON TABLE ocupacao.vw_hstr_ocpa_leito_status TO postgres;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_ocpa_leito_status TO lamorim;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_ocpa_leito_status TO mvilela;
+GRANT SELECT ON TABLE ocupacao.vw_hstr_ocpa_leito_status TO posto01;
+
+==> NA BASE DE VILA VERDE TRANSACIONAL
+-- View: integracao.vw_hstr_ocpa_leito_status
+-- DROP VIEW integracao.vw_hstr_ocpa_leito_status;
+
+CREATE OR REPLACE VIEW integracao.vw_hstr_ocpa_leito_status AS
+ SELECT hstr_dt_1.ds_leito,
+    hstr_dt_1.dt_inicio_mvto,
+    COALESCE(( SELECT min(tb_f_hstr_ocpa_leito_status.dt_inicio_mvto) AS min
+           FROM integracao.tb_f_hstr_ocpa_leito_status
+          WHERE tb_f_hstr_ocpa_leito_status.dt_inicio_mvto > hstr_dt_1.dt_inicio_mvto AND tb_f_hstr_ocpa_leito_status.ds_leito::text = hstr_dt_1.ds_leito::text), CURRENT_TIMESTAMP::timestamp(0) without time zone - '01:00:00'::time without time zone::interval) AS dt_fim_mvto,
+    hstr_dt_1.ds_status
+   FROM integracao.tb_f_hstr_ocpa_leito_status hstr_dt_1
+  ORDER BY hstr_dt_1.ds_leito, hstr_dt_1.dt_inicio_mvto;
+
+ALTER TABLE integracao.vw_hstr_ocpa_leito_status
+    OWNER TO postgres;
+	
+-- View: integracao.vw_hstr_tp_ocpa_leito_status
+-- DROP VIEW integracao.vw_hstr_tp_ocpa_leito_status;
+
+CREATE OR REPLACE VIEW integracao.vw_hstr_tp_ocpa_leito_status AS
+ SELECT vw_hstr_ocpa_leito_status.ds_leito,
+    vw_hstr_ocpa_leito_status.dt_inicio_mvto,
+    vw_hstr_ocpa_leito_status.dt_fim_mvto,
+    vw_hstr_ocpa_leito_status.ds_status,
+    date_part('day'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto) * 1440::double precision + date_part('hour'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto) * 60::double precision + date_part('minute'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto) AS tp_ocpa_leito_status_minu,
+    round(((date_part('day'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto) * 1440::double precision + date_part('hour'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto) * 60::double precision + date_part('minute'::text, vw_hstr_ocpa_leito_status.dt_fim_mvto - vw_hstr_ocpa_leito_status.dt_inicio_mvto)) / 1440::double precision)::numeric, 2) AS tp_ocpa_leito_status_dia
+   FROM integracao.vw_hstr_ocpa_leito_status
+  ORDER BY vw_hstr_ocpa_leito_status.ds_leito, vw_hstr_ocpa_leito_status.dt_inicio_mvto;
+
+ALTER TABLE integracao.vw_hstr_tp_ocpa_leito_status
+    OWNER TO postgres;
+
+
+-- FUNCTION: integracao.prc_atualiza_dias_manutencao()
+-- DROP FUNCTION integracao.prc_atualiza_dias_manutencao();
+
+CREATE OR REPLACE FUNCTION integracao.prc_atualiza_dias_manutencao(
+	)
+    RETURNS character
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+DECLARE 
+
+	cur_tp_leito_manut REFCURSOR;
+	rec_tp_leito_manut RECORD;
+		
+	rows_affected int;
+	tp_leito_manut decimal;
+	ds_leito_antr character varying(255);
+	
+BEGIN
+
+	rows_affected := 0;		
+	
+	OPEN cur_tp_leito_manut FOR 
+		 SELECT ds_leito
+			   , dt_inicio_mvto
+			   , dt_fim_mvto
+			   , ds_status
+			   , tp_ocpa_leito_status_minu
+			   , tp_ocpa_leito_status_dia
+		  FROM integracao.vw_hstr_tp_ocpa_leito_status
+  		ORDER BY ds_leito;
+	
+	LOOP
+		FETCH cur_tp_leito_manut INTO rec_tp_leito_manut;			
+		EXIT WHEN NOT FOUND;
+			
+			if ds_leito_antr = '' then
+				ds_leito_antr = rec_tp_leito_manut.ds_leito;
+			end if;
+			
+			if ds_leito_antr <> rec_tp_leito_manut.ds_leito then				
+				update integracao.tb_f_ctrl_leito set tp_dia_leito_manut = tp_leito_manut::integer where ds_leito = ds_leito_antr;
+				ds_leito_antr = rec_tp_leito_manut.ds_leito;
+				tp_leito_manut = 0;
+			else			
+				if rec_tp_leito_manut.ds_status <> 'Em Manutenção' then			
+					tp_leito_manut = tp_leito_manut + rec_tp_leito_manut.tp_ocpa_leito_status_dia;				
+				else
+					update integracao.tb_f_ctrl_leito set tp_dia_leito_manut = tp_leito_manut::integer where ds_leito = ds_leito_antr;
+					tp_leito_manut = 0;
+				end if;			
+			end if;
+			
+			rows_affected := rows_affected + 1;	
+			ds_leito_antr = rec_tp_leito_manut.ds_leito;
+	
+	END LOOP;
+
+	
+	CLOSE cur_tp_leito_manut;	
+
+	RETURN 'Proc. Ok. QtRegProcessados: '||rows_affected;
+
+EXCEPTION WHEN OTHERS THEN 
+	RAISE;
+END;
+$BODY$;
+
+ALTER FUNCTION integracao.prc_atualiza_dias_manutencao()
+    OWNER TO postgres;
+
+	
+==> ALTERAR A ROTINA DE ENVIO DE EMAIL
+select ds_leito
+	 , tp_dia_leito_manut 
+	 , (select nu_dia_limite_manu_leito from cadastro.tb_c_prmt_geral) nu_dias
+from ocupacao.vw_ctrl_leito 
+where tp_dia_leito_manut >= (select nu_dia_limite_manu_leito from cadastro.tb_c_prmt_geral)
+order by 1
+
+--> Atualizar o código PHP de envio de email na LocaWeb.

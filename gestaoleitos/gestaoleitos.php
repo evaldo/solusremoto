@@ -104,8 +104,12 @@
 				fl_fmnte = '". $rowCtrlLeitoTemp['fl_fmnte'] . "', 
 				fl_rtgrd = '". $rowCtrlLeitoTemp['fl_rtgrd'] . "', 
 				fl_acmpte = '". $rowCtrlLeitoTemp['fl_acmpte'] . "', 
-				fl_status_leito = '" . $rowCtrlLeitoTemp['fl_status_leito'] . "'  , 
-				id_status_leito = " . $rowCtrlLeitoTemp['id_status_leito'] . "  , ";				
+				fl_status_leito = '" . $rowCtrlLeitoTemp['fl_status_leito'] . "', " ;
+				if ($rowCtrlLeitoTemp['id_status_leito']==null){
+					$sqlUpdateCtrlTemp.=" id_status_leito = null , ";				
+				} else {
+					$sqlUpdateCtrlTemp.="id_status_leito = " . $rowCtrlLeitoTemp['id_status_leito'] . " ,";
+				}
 				if ($rowCtrlLeitoTemp['id_memb_equip_hosptr_mdco']==null){
 					$sqlUpdateCtrlTemp.=" id_memb_equip_hosptr_mdco = null, ";
 				} else {

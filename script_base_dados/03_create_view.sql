@@ -87,3 +87,25 @@ GRANT SELECT ON TABLE integracao.vw_menu_princ_usua TO administrativo;
 GRANT SELECT ON TABLE integracao.vw_menu_princ_usua TO camila;
 GRANT SELECT ON TABLE integracao.vw_menu_princ_usua TO evaldo;
 GRANT SELECT ON TABLE integracao.vw_menu_princ_usua TO tivilaverde;
+
+
+-- View: ocupacao.vw_hstr_tp_ocpa_leito_status_integracao
+-- DROP VIEW ocupacao.vw_hstr_tp_ocpa_leito_status_integracao;
+
+CREATE OR REPLACE VIEW ocupacao.vw_hstr_tp_ocpa_leito_status_integracao AS
+ SELECT data.id_hstr_status_leito,
+    data.ds_leito,
+    data.dt_inicio_mvto,
+    data.ds_status
+   FROM dblink('vila_verde'::text, '
+    SELECT id_hstr_status_leito,
+		   ds_leito,
+		   dt_inicio_mvto,
+		   ds_status  
+     from vila_verde.integracao.tb_f_hstr_ocpa_leito_status'::text) data(id_hstr_status_leito integer, ds_leito character varying(255), dt_inicio_mvto timestamp without time zone, ds_status character varying(255));
+
+ALTER TABLE ocupacao.vw_hstr_tp_ocpa_leito_status_integracao
+    OWNER TO postgres;
+
+GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status_integracao TO rl_consulta_ctrl_leito;
+GRANT ALL ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status_integracao TO postgres;

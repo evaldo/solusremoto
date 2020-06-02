@@ -31,8 +31,13 @@
 		$ip_2 = $row[1];
 		$fl_acesso_ip = $row[2];
 		
+		
+		//echo substr($user_ip, 0, 9);
+		//echo substr($ip_1, 0, 9); 
+		//echo substr($ip_2, 0, 9); 
+
 		if ($fl_acesso_ip != 'S'){
-			if (substr($user_ip, 1, 10)==substr($ip_1, 1, 10) or substr($user_ip, 1, 10)==substr($ip_2, 1, 10)){
+			if (substr($user_ip, 0, 9)==substr($ip_1, 0, 9) or substr($user_ip, 0, 9)==substr($ip_2, 0, 9)){
 				echo "<div class=\"alert alert-sucess alert-dismissible\">
 						<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
 						<strong>Sucesso!</strong>  Login realizado.</div>";
@@ -55,7 +60,7 @@
 			}else{
 				echo "<div class=\"alert alert-warning alert-dismissible\">
 						<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
-						<strong>Atenção!</strong>  Tentativa de acesso negada. Por favor, utilize uma rede de dados habilitada para consulta dos dados.</div>";
+						<strong>Atenção!</strong>  Tentativa de acesso negada. <?php echo $user_ip; echo $ip_2;?> Por favor, utilize uma rede de dados habilitada para consulta dos dados.</div>";
 						
 				$secondsWait = 5;
 				header("Refresh:$secondsWait");	

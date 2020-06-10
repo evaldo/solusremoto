@@ -1,3 +1,32 @@
+-- Table: integracao.tb_c_grupo_cid
+-- DROP TABLE integracao.tb_c_grupo_cid;
+
+
+CREATE TABLE integracao.tb_c_grupo_cid
+(
+    cd_grupo_cid character varying(255) COLLATE pg_catalog."default" not null,
+    ds_grupo_cid character varying(255) COLLATE pg_catalog."default" not null,  
+	cd_usua_incs character varying(255) not null,
+    dt_incs timestamp without time zone not null,
+    cd_usua_altr character varying(255) ,
+    dt_altr timestamp without time zone,
+    CONSTRAINT pk_grupo_cid PRIMARY KEY (cd_grupo_cid)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE integracao.tb_c_grupo_cid
+    OWNER to postgres;
+
+GRANT ALL ON TABLE integracao.tb_c_grupo_cid TO postgres;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_cid TO administrativo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_cid TO camila;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_cid TO evaldo;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_c_grupo_cid TO tivilaverde;
+
+
 -- Table: integracao.tb_f_hstr_ocpa_leito_status
 -- DROP TABLE integracao.tb_f_hstr_ocpa_leito_status;
 
@@ -363,7 +392,9 @@ COMMENT ON CONSTRAINT fk_status_leito ON integracao.tb_ctrl_leito
 CREATE INDEX fki_fk_status_leito
     ON integracao.tb_ctrl_leito(id_status_leito);
 	
-
+alter table integracao.tb_ctrl_leito add column cd_usua_altr character varying(255);
+alter table integracao.tb_ctrl_leito add column dt_altr timestamp without time zone;
+	
 ----------------------------------------------------------------------------------------------	
 -- Table: integracao.tb_ctrl_leito_temp
 -- DROP TABLE integracao.tb_ctrl_leito_temp;

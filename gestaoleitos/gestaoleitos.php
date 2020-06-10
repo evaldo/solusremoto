@@ -128,7 +128,7 @@
 					$sqlUpdateCtrlTemp.="id_memb_equip_hosptr_trpa = " . $rowCtrlLeitoTemp['id_memb_equip_hosptr_trpa'] . " ,";				}				
 				$sqlUpdateCtrlTemp.="nm_trpa = '" . $rowCtrlLeitoTemp['nm_trpa'] . "'  ,				
 				ds_cid = '" . $rowCtrlLeitoTemp['ds_cid'] . "'	,
-				ds_dieta = '" . $rowCtrlLeitoTemp['ds_cid'] . "',
+				ds_dieta = '" . $rowCtrlLeitoTemp['ds_dieta'] . "',
 				ds_const = '" . $rowCtrlLeitoTemp['ds_const'] . "',
 				ds_ocorr = '" . $rowCtrlLeitoTemp['ds_ocorr'] . "', 
 				ds_crtr_intnc = '" . $rowCtrlLeitoTemp['ds_crtr_intnc'] . "'				 
@@ -285,7 +285,9 @@
 			ds_dieta = '" . $_POST['ds_dieta'] . "',
 			ds_const = '" . $_POST['ds_const'] . "',
 			ds_ocorr = '" . $_POST['ds_ocorr'] . "', 
-			ds_crtr_intnc = '" . $_POST['ds_crtr_intnc'] . "' 
+			ds_crtr_intnc = '" . $_POST['ds_crtr_intnc'] . "', 
+			cd_usua_altr = '" . $_SESSION['usuario'] . "', 
+            dt_altr = current_timestamp
 			WHERE trim(ds_leito) = '". $_SESSION['nm_loc_nome'] ."'";
 			
 			//echo $sql;
@@ -514,7 +516,8 @@
 				<br>
 				<label style="font-weight:bold; font-size: 11px"> Nome do paciente: <input style="width: 300px; font-size: 11px" type="text" id="buscapac" onkeyup="Busca(3, 'buscapac')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>
 				<label style="font-weight:bold; font-size: 11px"> Andar: <input style="width: 300px; font-size: 11px" type="text" id="buscaandar" onkeyup="Busca(1, 'buscaandar')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<input class="btn btn-primary" type="button" value="Legenda do Status" name="legenda" data-toggle="modal" data-target="#modallegenda">
+				<input class="btn btn-primary" type="button" value="Legenda do Status" name="legenda" data-toggle="modal" data-target="#modallegenda">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input class="btn btn-primary" type="submit" value="Impressão de Leitos" id="impressao">
 			</div> <!-- /#top -->
 			
 			<div id="list" class="row" style="margin-left: 2px; margin-right: 2px">
@@ -734,7 +737,23 @@
 	$(document).ready(function(){	  
 		$('[data-toggle="tooltip"]').tooltip();		
 	});
-
+	
+	$('#impressao').click(function(){
+		
+		var impressao = "sim";
+		
+		$.ajax({
+			url : '../gestaoleitos/relatorioleitos.php', // give complete url here
+			type : 'post',
+			data:{impressao:impressao},
+			success : function(completeHtmlPage) {
+				alert("Faça o download do arquivo de impressão. Abra no Excel e peça para Salvar Como");
+				$("html").empty();
+				$("html").append(completeHtmlPage);
+			}
+		});
+	});
+	
 	$(document).ready(function(){
 		$("#tabela").on('click', '.loader', function(){
 			

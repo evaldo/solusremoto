@@ -23,7 +23,9 @@ if(isset($_POST["nm_loc_nome"]))
 			nm_trpa,		
 			ds_ocorr,
 			ds_crtr_intnc,
-			fl_status_leito			
+			fl_status_leito,
+			cd_usua_altr,
+			dt_altr
 			FROM integracao.tb_ctrl_leito WHERE TRIM(replace(ds_leito, 'LEITO', '')) = '". $_POST["nm_loc_nome"] ."' ";
 		
     $ret = pg_query($pdo, $query);
@@ -104,6 +106,14 @@ if(isset($_POST["nm_loc_nome"]))
       <tr>  
         <td width="30%"><label><b>Status do Leito</b></label></td>  
         <td width="200%">'.$row[16].'</td>  
+      </tr>
+	  <tr>  
+        <td width="30%"><label><b>Usuário que alterou:</b></label></td>  
+        <td width="200%">'.$row[17].'</td>  
+      </tr>
+	  <tr>  
+        <td width="30%"><label><b>Data da Alteração:</b></label></td>  
+        <td width="200%">'.$row[18].'</td>  
       </tr>
     ';
     $output .= '</table></div>';

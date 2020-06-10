@@ -195,9 +195,47 @@
 										
 										</td> 							
 									   </tr>
-									   <tr>  				
+									   <tr>  
+
+									   
 											<td><label>Grupo de CID:</label></td>
-											<td><input type="text" name="ds_cid" id="ds_cid" value="<?php echo $_SESSION['ds_cid']; ?>" class="form-control" /></td>
+											<?php
+										
+												$sql = "SELECT cd_grupo_cid from integracao.tb_c_grupo_cid order by 1";
+												
+												if ($pdo==null){
+														header(Config::$webLogin);
+												}	
+												$ret = pg_query($pdo, $sql);
+												if(!$ret) {
+													echo pg_last_error($pdo);
+													exit;
+												}
+											?>
+																						
+											<td style="width:150px">
+												<select  id="sl_cid" class="form-control" onchange="
+														var selObj = document.getElementById('sl_cid');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('ds_cid').value = selValue;">
+												<option value="null"></option>
+															
+												<?php
+													$cont=1;																											
+													while($row = pg_fetch_row($ret)) {
+														if($row[0]==$_SESSION['ds_cid']){														
+													?>												
+														<option value="<?php echo $row[0]; ?>" selected><?php echo $row[0]; ?></option>
+													<?php																		
+														} else {
+													?>
+														<option value="<?php echo $row[0]; ?>"><?php echo $row[0]; ?></option>												
+														<?php } 
+													$cont=$cont+1;} ?>	
+												</select>
+										
+											</td> 													
+											
 										</tr>
 										<tr>  				
 											<td><label>Fumante?</label></td>
@@ -325,6 +363,8 @@
 										<input type="text" id="fl_rtgrd" name="fl_rtgrd" value="<?php echo$_SESSION['fl_rtgrd']; ?>" style="display:none"> 
 										<input type="text" id="fl_acmpte" name="fl_acmpte" value="<?php echo$_SESSION['fl_acmpte']; ?>" style="display:none"> 
 										<input type="text" id="id_status_leito" name="id_status_leito" value="<?php echo$_SESSION['id_status_leito']; ?>" style="display:none">
+										
+										<input type="text" id="ds_cid" name="ds_cid" value="<?php echo$_SESSION['ds_cid']; ?>" style="display:none">
 								 								 
 								</table>								
 							</div>

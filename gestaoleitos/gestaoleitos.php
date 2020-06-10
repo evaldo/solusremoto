@@ -747,7 +747,7 @@
 			type : 'post',
 			data:{impressao:impressao},
 			success : function(completeHtmlPage) {
-				alert("Faça o download do arquivo de impressão. Abra no Excel e peça para Salvar Como");
+				alert("Faça o download do arquivo de impressão. Abra no Excel e solicite para Salvar Como com o nome desejado.");
 				$("html").empty();
 				$("html").append(completeHtmlPage);
 			}

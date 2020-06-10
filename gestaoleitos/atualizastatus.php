@@ -14,10 +14,15 @@
 		try
 		{	
 		
-			$sql = "UPDATE integracao.tb_ctrl_leito SET id_status_leito = ".$_POST['id_status_leito'].", fl_status_leito = (select ds_status_leito from integracao.tb_status_leito where id_status_leito = " . $_POST['id_status_leito'] . "), cd_usua_altr = '" . $_SESSION['usuario'] . "', dt_altr = current_timestamp WHERE ds_leito = '".$_POST['ds_leito']."'";
-			
+			$sql = "UPDATE integracao.tb_ctrl_leito SET id_status_leito = ".$_POST['id_status_leito'].", fl_status_leito = (select ds_status_leito from integracao.tb_status_leito where id_status_leito = " . $_POST['id_status_leito'] . "), cd_usua_altr = '" . $_SESSION['usuario'] . "', dt_altr = current_timestamp WHERE ds_leito = '".$_POST['ds_leito']."'";			
 			$result = pg_query($pdo, $sql);
 
+			if($result){
+				echo "";
+			}
+
+			$sql = "UPDATE integracao.tb_ctrl_leito_temp SET id_status_leito = ".$_POST['id_status_leito'].", fl_status_leito = (select ds_status_leito from integracao.tb_status_leito where id_status_leito = " . $_POST['id_status_leito'] . ") WHERE ds_leito = '".$_POST['ds_leito']."'";			
+			$result = pg_query($pdo, $sql);
 			if($result){
 				echo "";
 			}

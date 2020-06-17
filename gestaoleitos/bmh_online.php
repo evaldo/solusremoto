@@ -11,8 +11,8 @@
 		
 		$sql = "SELECT pac_reg
 			 , nm_pcnt	 
-			 , to_char(dt_admss, 'dd/mm/yyyy hh24:mi:ss') dt_admss
-			 , to_char(dt_alta, 'dd/mm/yyyy hh24:mi:ss') dt_alta
+			 , to_char(dt_admss, 'dd/mm/yyyy hh24:mi') dt_admss
+			 , to_char(dt_alta, 'dd/mm/yyyy hh24:mi') dt_alta
 			FROM integracao.tb_bmh_online
 		where dt_alta is not null
 		  and id_mtvo_alta is null
@@ -37,7 +37,7 @@
 			try
 			{	
 			
-				$sql = "UPDATE integracao.tb_bmh_online SET id_mtvo_alta = ".$_POST['id_mtvo_alta'].", cd_usua_altr = '" . $_SESSION['usuario'] . "', dt_altr = current_timestamp WHERE pac_reg = " . $_POST['pac_reg'] . " and to_char(dt_admss, 'dd/mm/yyyy hh24:mi:ss') = '" . $_SESSION['dt_admss'] . "'";			
+				$sql = "UPDATE integracao.tb_bmh_online SET id_mtvo_alta = ".$_POST['id_mtvo_alta'].", cd_usua_altr = '" . $_SESSION['usuario'] . "', dt_altr = current_timestamp WHERE pac_reg = " . $_POST['pac_reg'] . " and to_char(dt_admss, 'dd/mm/yyyy hh24:mi') = '" . $_SESSION['dt_admss'] . "'";			
 				$result = pg_query($pdo, $sql);
 
 				if($result){

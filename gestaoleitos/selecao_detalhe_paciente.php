@@ -8,10 +8,10 @@ if(isset($_POST["nm_loc_nome"]))
     $pdo = database::connect();
     $query = "select 
 			ds_leito,		
-			dt_admss,
+			to_char(dt_admss, 'dd/mm/yyyy hh24:mi') as dt_admss,
 			nm_pcnt,
 			ds_sexo,		
-			dt_nasc_pcnt,			
+			to_char(dt_nasc_pcnt, 'dd/mm/yyyy') as dt_nasc_pcnt,			
 			nm_cnvo,
 			ds_cid,
 			case when fl_fmnte = 'T' then 'Fumante' else 'Não Fumante' end,
@@ -25,7 +25,7 @@ if(isset($_POST["nm_loc_nome"]))
 			ds_crtr_intnc,
 			fl_status_leito,
 			cd_usua_altr,
-			dt_altr
+			to_char(dt_altr, 'dd/mm/yyyy hh24:mi') as dt_altr
 			FROM integracao.tb_ctrl_leito WHERE TRIM(replace(ds_leito, 'LEITO', '')) = '". $_POST["nm_loc_nome"] ."' ";
 		
     $ret = pg_query($pdo, $query);

@@ -7,9 +7,9 @@
 		
 		$sql ="select  
 			replace(ds_leito, 'LEITO', '') as ds_leito,			
-			to_char(to_date(substring(dt_admss, 1, 16),'yyyy/mm/dd hh24:mi:ss'), 'dd/mm/yyyy') as dt_admss,
+			to_char(dt_admss,'dd/mm/yyyy hh24:mi') as dt_admss,
 			nm_pcnt,			
-			dt_nasc_pcnt,
+			to_char(dt_nasc_pcnt,'dd/mm/yyyy') as dt_nasc_pcnt,
 			nm_cnvo,
 			nm_mdco,
 			nm_psco,

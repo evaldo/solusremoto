@@ -1,8 +1,9 @@
 -- FUNCTION: integracao.prc_processa_bmh_online()
+
 -- DROP FUNCTION integracao.prc_processa_bmh_online();
 
-CREATE OR REPLACE FUNCTION integracao.prc_processa_bmh_online()
-	
+CREATE OR REPLACE FUNCTION integracao.prc_processa_bmh_online(
+	)
     RETURNS character
     LANGUAGE 'plpgsql'
 
@@ -23,6 +24,9 @@ DECLARE
 	rows_affected int;	
 	qtde_reg_smart int;
 	
+	dt_alta_smart timestamp without time zone;
+	ds_cidade_smart character varying(255);
+	
 BEGIN
 
 	rows_affected := 0;		
@@ -34,7 +38,7 @@ BEGIN
 		   , ds_sexo
 		   , dt_nasc_pcnt
 		   , nm_cnvo		   
-	FROM integracao.tb_ctrl_leito_smart;
+	FROM integracao.tb_ctrl_leito_smart order by 1;
 	
 	LOOP
 	
@@ -109,32 +113,46 @@ BEGIN
 				
 				close cur_leito;
 				
-				open cur_smart_alta for
-					SELECT pac_reg, dt_admss, dt_alta, ds_cidade
-						FROM integracao.tb_ctrl_leito_smart_alta
-					where pac_reg = rec_smart.pac_reg
-		   			  and dt_admss = rec_smart.dt_admss;
-				
-					FETCH cur_smart_alta INTO rec_smart_alta;			
-					EXIT WHEN NOT FOUND;
-
-					UPDATE integracao.tb_bmh_online SET
-						dt_alta = rec_smart_alta.dt_alta ,
-						ds_cidade = rec_smart_alta.ds_cidade
-					WHERE pac_reg = rec_leito.pac_reg
-					  and dt_admss = rec_smart.dt_admss;
-				
-				close cur_smart_alta;
-				
 		end if;
 		
 		rows_affected := rows_affected + 1;		
 	
 	END LOOP;
 
+	open cur_smart_alta for
+	
+		SELECT pac_reg, dt_admss			
+		from integracao.tb_bmh_online
+		WHERE dt_alta is null;
+		
+	LOOP
+		FETCH cur_smart_alta INTO rec_smart_alta;			
+			EXIT WHEN NOT FOUND;
+
+		SELECT dt_alta, ds_cidade
+		into dt_alta_smart, ds_cidade_smart
+			FROM integracao.tb_ctrl_leito_smart_alta
+		where pac_reg = rec_smart_alta.pac_reg
+		  and dt_admss = rec_smart_alta.dt_admss;
+
+		if dt_alta_smart is not null then
+			UPDATE integracao.tb_bmh_online SET
+				dt_alta = dt_alta_smart ,
+				ds_cidade = ds_cidade_smart
+			WHERE pac_reg =rec_smart_alta.pac_reg
+			  and dt_admss = rec_smart_alta.dt_admss;
+			  
+			 qtde_reg_smart:=qtde_reg_smart + 1;
+			 
+		end if;		
+		
+	end loop;
+	
+	close cur_smart_alta;	
+
 	CLOSE cur_smart;	
 
-	RETURN 'Proc. Ok. QtRegProcessados: '||rows_affected;
+	RETURN 'Proc. Ok. QtRegProcessados do BMHOnline: '||rows_affected||' QtRegProcessados de Alta: :'||rows_affected;
 
 EXCEPTION WHEN OTHERS THEN 
 	RAISE;

@@ -27,7 +27,7 @@
 			nm_trpa,
 			ds_ocorr,
 			ds_crtr_intnc,
-			fl_status_leito FROM integracao.tb_ctrl_leito";
+			fl_status_leito FROM integracao.tb_ctrl_leito order by 1";
 				
 		if ($pdo==null){
 			header(Config::$webLogin);

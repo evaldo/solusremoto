@@ -7,23 +7,36 @@
 	
 	error_reporting(0); 
 	
-	$itens_por_pagina=20;
-	$pagina=intval($_GET['pagina']);
+	//$itens_por_pagina=20;
+	//$pagina=intval($_GET['pagina']);
 		
 	$textoconsulta = "";
 	$retSqlServer = "";
 	$sql = '';
 	
-	$sql ="SELECT trim(ds_leito) as ds_leito
-				, ds_andar
-				, dt_prvs_alta
-				, nm_pcnt
-				, ds_sexo
-				, dt_nasc_pcnt
-				, nm_cnvo
-				, pac_reg
-				, dt_admss
-	FROM integracao.tb_ctrl_leito_smart order by 1 ";
+	$sql ="SELECT trim(smart.ds_leito) ds_leito
+			, smart.ds_andar
+			, smart.dt_prvs_alta
+			, smart.nm_pcnt
+			, smart.ds_sexo
+			, smart.dt_nasc_pcnt
+			, smart.nm_cnvo
+			, smart.pac_reg
+			, smart.dt_admss
+		FROM  integracao.tb_ctrl_leito_smart smart
+		union
+		select leito.ds_leito
+			, substring(leito.loc_leito_id, 1,1) as ds_andar
+			, null
+			, null
+			, null
+			, null
+			, null
+			, 0
+			, null
+		from integracao.tb_leito leito
+		where leito.ds_leito not in (select trim(ds_leito) from integracao.tb_ctrl_leito_smart)
+		order by 1";
 	
 	$retSmart = pg_query($pdo, $sql);
 	
@@ -144,21 +157,88 @@
 				
 			}
 		}
+		
 	}
 	
-	$sql ="select count(1) AS QTDE_REG FROM integracao.tb_ctrl_leito; ";
 	
-	$ret = pg_query($pdo, $sql);
-	if(!$ret) {
+	$sql = "select ds_leito from integracao.vw_ctrl_leito where pac_reg=0";		
+	$retSmart = pg_query($pdo, $sql);	
+	if(!$retSmart) {
 		echo pg_last_error($pdo);
-		header(Config::$webLogin);
+		//header(Config::$webLogin);
 		exit;
+	}			
+	//$rowSmart = pg_fetch_row($retSmart);	
+	
+	while($rowSmart = pg_fetch_row($retSmart)) {
+
+		$sqlUpdateCtrl = "UPDATE integracao.tb_ctrl_leito SET 
+		dt_prvs_alta = null,
+		nm_pcnt = null,
+		ds_sexo = null,
+		dt_nasc_pcnt = null,
+		nm_cnvo = null,
+		pac_reg = null,
+		dt_admss = null,
+		fl_fmnte = null, 
+		fl_rtgrd = null, 
+		fl_acmpte = null, 
+		fl_status_leito = 'Livre', 
+		id_status_leito = 6, 
+		id_memb_equip_hosptr_mdco = null, 
+		id_memb_equip_hosptr_psco = null, 
+		id_memb_equip_hosptr_trpa = null,
+		ds_cid = null	,
+		ds_dieta = null,
+		ds_const = null,
+		ds_ocorr = null, 
+		ds_crtr_intnc = null				 
+		WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
+
+		$resultUpdateCtrl = pg_query($pdo, $sqlUpdateCtrl);
+	
+		if($resultUpdateCtrl){
+			echo "";
+		}
+
+	
+		$sqlUpdateCtrlTemp = "UPDATE integracao.tb_ctrl_leito_temp SET 
+		fl_fmnte = null, 
+		fl_rtgrd = null, 
+		fl_acmpte = null, 
+		fl_status_leito = 'Livre', 
+		id_status_leito = 6, 
+		id_memb_equip_hosptr_mdco = null, 
+		id_memb_equip_hosptr_psco = null, 
+		id_memb_equip_hosptr_trpa = null,
+		ds_cid = null	,
+		ds_dieta = null,
+		ds_const = null,
+		ds_ocorr = null, 
+		ds_crtr_intnc = null				 
+		WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
+
+		$resultUpdateCtrlTemp = pg_query($pdo, $sqlUpdateCtrlTemp);
+	
+		if($resultUpdateCtrlTemp){
+			echo "";
+		}
 	}
 	
-	$row = pg_fetch_row($ret);		
-	$num_total = $row[0];	
-	$num_paginas = ceil($num_total/$itens_por_pagina);
-	$num_reg_pagina = $pagina*$itens_por_pagina;
+	
+	//$sql ="select count(1) AS QTDE_REG FROM integracao.tb_ctrl_leito; ";
+	
+	//$ret = pg_query($pdo, $sql);
+	//if(!$ret) {
+	//	echo pg_last_error($pdo);
+	//	header(Config::$webLogin);
+	//	exit;
+	//}
+	
+	//$row = pg_fetch_row($ret);		
+	//$num_total = $row[0];	
+	//$num_paginas = ceil($num_total/$itens_por_pagina);
+	//$num_reg_pagina = $pagina*$itens_por_pagina;
 		
 	$sql ="select  
 		ds_leito,
@@ -191,7 +271,7 @@
 		ds_ocorr,
 		ds_sexo
 		FROM integracao.tb_ctrl_leito
-		ORDER BY 1, 4 LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina ";
+		ORDER BY 1, 3 ";//"LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina"
 			
 	$ret = pg_query($pdo, $sql);
 	
@@ -514,10 +594,19 @@
 			<div class="container" style="margin-left: 0px; margin-right: 0px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 120px; border: 1px solid #E6E6E6;">
 				<h2>Gestão de Leitos</h2>
 				<br>
-				<label style="font-weight:bold; font-size: 11px"> Nome do paciente: <input style="width: 300px; font-size: 11px" type="text" id="buscapac" onkeyup="Busca(3, 'buscapac')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>
-				<label style="font-weight:bold; font-size: 11px"> Andar: <input style="width: 300px; font-size: 11px" type="text" id="buscaandar" onkeyup="Busca(1, 'buscaandar')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<input class="btn btn-primary" type="button" value="Legenda do Status" name="legenda" data-toggle="modal" data-target="#modallegenda">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-				<input class="btn btn-primary" type="submit" value="Impressão de Leitos" id="impressao">
+				<label style="font-weight:bold; font-size: 11px"> Nome do paciente: <input style="width: 250px; font-size: 11px" type="text" id="buscapac" onkeyup="Busca(3, 'buscapac')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>&nbsp;&nbsp;
+				<input class="btn btn-primary" type="submit" value="1 Andar" id="1andar" onclick="BuscaAndar( '1')">
+				&nbsp;&nbsp;
+				<input class="btn btn-primary" type="submit" value="2 Andar" id="2andar" onclick="BuscaAndar( '2')">
+				&nbsp;&nbsp;
+				<input class="btn btn-primary" type="submit" value="3 Andar" id="3andar" onclick="BuscaAndar( '3')">
+				&nbsp;&nbsp;
+				<input class="btn btn-primary" type="submit" value="4 Andar" id="4andar" onclick="BuscaAndar( '4')">
+				<!--<label style="font-weight:bold; font-size: 11px"> Andar: <input style="width: 50px; font-size: 11px" type="text" id="buscaandar" onkeyup="Busca(1, 'buscaandar')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>-->&nbsp;&nbsp;	
+				<input class="btn btn-primary" type="submit" value="Exportar" id="impressao">&nbsp;&nbsp;
+				<input class="btn btn-primary" type="button" value="Legenda do Status" name="legenda" data-toggle="modal" data-target="#modallegenda">&nbsp;&nbsp;
+				
+				<!--<input class="btn btn-primary" type="submit" value="BMHOnline" id="bmhonline">-->
 			</div> <!-- /#top -->
 			
 			<div id="list" class="row" style="margin-left: 2px; margin-right: 2px">
@@ -545,7 +634,7 @@
 							<th style="text-align:center">Retagd.</th>
 							<th style="text-align:center">Acomp.</th>
 							<th style="text-align:center">Status</th>
-							<th colspan="2" style="text-align:center">Ações</th>
+							<th colspan="3" style="text-align:center">Ações</th>
 							
 						</tr>
 						
@@ -625,11 +714,16 @@
 									<td data-toggle="tooltip" data-placement="top" title="Status do Leito" style="text-align:center; font-weight:bold; background-color:<?php echo $corStatus;?>" id="ds_status" value="<?php echo $row[17];?>"></td>
 									
 									<td class="actions">
-										<input type="image" src="../img/lupa_1.png"  height="30" width="30" class="btn-xs visualiza"/>
+										<input type="image" src="../img/lupa_1.png"  height="23" width="23" class="btn-xs visualiza"/>
 									</td>
 									
 									<td class="actions">
-										<input type="image" src="../img/Update_2.ico"  height="30" width="30" name="atualizaleito" data-toggle="modal" data-target="#atualizaleito" class="btn-xs classatualizaleito"/>
+										<input type="image" src="../img/Update_2.ico"  height="23" width="23" name="atualizaleito" data-toggle="modal" data-target="#atualizaleito" class="btn-xs classatualizaleito"/>
+										
+									</td>
+									
+									<td class="actions">
+										<input type="image" src="../img/imprimileito.png"  height="23" width="23"  class="btn-xs imprimileito"/>
 										
 									</td>
 									
@@ -643,18 +737,18 @@
 				</div>
 				
 			</div> <!-- /#list -->				
-			<div>			
+			<!--<div>			
 				<ul class="pagination">
 					<li class="page-item"><a class="page-link" href="gestaoleitos.php?pagina=0">Primeiro</a></li>
 					<?php 				
-					for ($i=0; $i<$num_paginas;$i++){										
-					?>
-						<li class="page-item" ><a class="page-link" href="gestaoleitos.php?pagina=<?php echo $i;?>">
-							<?php echo $i+1;?></a></li>
-					<?php } ?>
-					<li class="page-item"><a class="page-link" href="gestaoleitos.php?pagina=<?php echo $num_paginas-1; ?>">Último</a></li>
+					//for ($i=0; $i<$num_paginas;$i++){										
+					//?>
+						<li class="page-item" ><a class="page-link" href="gestaoleitos.php?pagina=<?php //echo $i;?>">
+					//		<?php //echo $i+1;?></a></li>
+					//<?php //} ?>
+					<li class="page-item"><a class="page-link" href="gestaoleitos.php?pagina=<?php //echo $num_paginas-1; ?>">Último</a></li>
 				</ul>		
-			</div>
+			</div>-->
 			 <script src="../js/jquery.min.js"></script>
 			 <script src="../js/bootstrap.min.js"></script>
 			 <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
@@ -667,6 +761,23 @@
 					  tr = table.getElementsByTagName("tr");
 					  for (i = 0; i < tr.length; i++) {
 						td = tr[i].getElementsByTagName("td")[col];
+						if (td) {
+						  txtValue = td.textContent || td.innerText;
+						  if (txtValue.toUpperCase().indexOf(filter) > -1) {
+							tr[i].style.display = "";
+						  } else {
+							tr[i].style.display = "none";
+						  }
+						}       
+					  }
+					}
+					function BuscaAndar(andar) {
+					  var input, filter, table, tr, td, i, txtValue;					  
+					  filter = andar;					  
+					  table = document.getElementById("tabela");
+					  tr = table.getElementsByTagName("tr");
+					  for (i = 0; i < tr.length; i++) {
+						td = tr[i].getElementsByTagName("td")[1];
 						if (td) {
 						  txtValue = td.textContent || td.innerText;
 						  if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -753,6 +864,22 @@
 			}
 		});
 	});
+		
+	
+	$('#bmhonline').click(function(){
+		
+		var bmhonline = "sim";
+		
+		$.ajax({
+			url : '../gestaoleitos/bmh_online.php', // give complete url here
+			type : 'post',
+			data:{bmhonline:bmhonline},
+			success : function(completeHtmlPage) {				
+				$("html").empty();
+				$("html").append(completeHtmlPage);
+			}
+		});
+	});
 	
 	$(document).ready(function(){
 		$("#tabela").on('click', '.loader', function(){
@@ -776,6 +903,25 @@
 	});
 	
 	$(document).ready(function(){
+		$("#tabela").on('click', '.imprimileito', function(){
+			
+			var currentRow=$(this).closest("tr"); 							
+			var ds_andar = currentRow.find("td:eq(1)").text();
+			var nm_pcnt = currentRow.find("td:eq(3)").text();
+						
+			$.ajax({
+				url : '../gestaoleitos/relatorioporandar.php', // give complete url here
+				method:"POST",
+				data:{ds_andar:ds_andar, nm_pcnt:nm_pcnt},
+				success : function(completeHtmlPage) {				
+					$("html").empty();
+					$("html").append(completeHtmlPage);
+				}
+			});
+        });
+	});
+	
+	$(document).ready(function(){
 		$("#tabela").on('click', '.visualiza', function(){
 			
 			var currentRow=$(this).closest("tr"); 							
@@ -783,7 +929,7 @@
 			var nm_loc_nome_trim = nm_loc_nome_inteiro.trim();			
 			var nm_loc_nome_replace = nm_loc_nome_trim.replace('LEITO ', '');			
 			var nm_loc_nome = nm_loc_nome_replace.trim();			
-												
+			
 			$.ajax({
 				url:"../gestaoleitos/selecao_detalhe_paciente.php",
 				method:"POST",
@@ -795,6 +941,8 @@
 			});
         });
 	});
+	
+	
 	
 	$(document).ready(function(){
 		$(document).on('click', '.classatualizaleito', function(){

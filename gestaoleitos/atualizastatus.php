@@ -26,7 +26,16 @@
 			if($result){
 				echo "";
 			}
-				
+			
+			$sqlHstrStatusLeito = "INSERT INTO integracao.tb_f_hstr_ocpa_leito_status VALUES ((select NEXTVAL('integracao.sq_hstr_ocpa_leito_status')), '". $_POST['ds_leito']."', current_timestamp, (select ds_status_leito from integracao.tb_status_leito where id_status_leito = " . $_POST['id_status_leito'] . "))";
+						
+			$resultHstrStatusLeito = pg_query($pdo, $sqlHstrStatusLeito);
+			
+			if($resultHstrStatusLeito){
+				echo "";
+			}
+			
+			
 			$secondsWait = 0;
 			header("Refresh:$secondsWait");
 

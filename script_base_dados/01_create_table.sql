@@ -1,3 +1,371 @@
+CREATE TABLE integracao.tb_mtvo_alta
+(
+    id_mtvo_alta integer NOT NULL,
+    ds_mtvo_alta character varying(255) NOT NULL,
+    CONSTRAINT pk_mtvo_alta PRIMARY KEY (id_mtvo_alta)
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE integracao.tb_mtvo_alta
+    OWNER to postgres;
+COMMENT ON TABLE integracao.tb_mtvo_alta
+    IS 'Tabela dos motivos de alta.';
+COMMENT ON CONSTRAINT pk_mtvo_alta ON integracao.tb_mtvo_alta
+    IS 'Motivo de alta';
+
+
+
+-- Table: integracao.tb_bmh_online
+-- DROP TABLE integracao.tb_bmh_online;
+
+CREATE TABLE integracao.tb_bmh_online
+(
+	pac_reg integer DEFAULT 0,
+	dt_admss  timestamp without time zone,
+	dt_alta timestamp without time zone,
+	nm_pcnt character varying(255) COLLATE pg_catalog."default",
+	ds_cidade character varying(255) COLLATE pg_catalog."default",
+	ds_sexo character varying(255) COLLATE pg_catalog."default",
+	dt_nasc_pcnt timestamp without time zone,
+	nm_cnvo character varying(255) COLLATE pg_catalog."default",
+    ds_leito character varying(255) COLLATE pg_catalog."default",
+    nm_mdco character varying(255) COLLATE pg_catalog."default",
+    nm_psco character varying(255) COLLATE pg_catalog."default",
+    nm_trpa character varying(255) COLLATE pg_catalog."default",
+    ds_ocorr text COLLATE pg_catalog."default",
+    ds_cid character varying(255) COLLATE pg_catalog."default",
+    ds_dieta character varying(255) COLLATE pg_catalog."default",
+    fl_fmnte boolean DEFAULT false,
+    ds_const character varying(255) COLLATE pg_catalog."default",
+    ds_crtr_intnc character varying(100) COLLATE pg_catalog."default",
+    fl_status_leito character varying(255) COLLATE pg_catalog."default",
+    fl_acmpte boolean,
+    fl_rtgrd boolean,    
+    id_status_leito integer,
+    id_memb_equip_hosptr_mdco integer,
+    id_memb_equip_hosptr_psco integer,
+    id_memb_equip_hosptr_trpa integer,
+	id_mtvo_alta integer,
+	cd_usua_altr character varying(255) COLLATE pg_catalog."default",
+	dt_altr timestamp without time zone,
+    CONSTRAINT fk_memb_id_mdco_bmh_online FOREIGN KEY (id_memb_equip_hosptr_mdco)
+        REFERENCES integracao.tb_equip_hosptr (id_memb_equip_hosptr) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_memb_id_psco_bmh_online FOREIGN KEY (id_memb_equip_hosptr_psco)
+        REFERENCES integracao.tb_equip_hosptr (id_memb_equip_hosptr) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_memb_id_trpa_bmh_online FOREIGN KEY (id_memb_equip_hosptr_trpa)
+        REFERENCES integracao.tb_equip_hosptr (id_memb_equip_hosptr) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT fk_mtvo_alta_bmh_online FOREIGN KEY (id_mtvo_alta)
+        REFERENCES integracao.tb_mtvo_alta (id_mtvo_alta) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_status_leito_bmh_online FOREIGN KEY (id_status_leito)
+        REFERENCES integracao.tb_status_leito (id_status_leito) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE integracao.tb_bmh_online
+    OWNER to postgres;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO emenezes;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO simone;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO bcorrea;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO qualidade;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO dayane;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO aoliveira;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO lmaria;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO dalves;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO mrezende;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO grazielle;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO vlucia;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO gcassia;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO administrativo;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO posto03;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO tivilaverde;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO ronan;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO mmattos;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO posto01;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO fernandazeferino;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO gabriela;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO posto02;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO camila;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO ftesta;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO woliveira;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO evaldo;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO vrodrigues;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO wquetz;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO flavia;
+
+GRANT ALL ON TABLE integracao.tb_bmh_online TO postgres;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO glaucodiretor;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO mvilela;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO mariabethania;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO vsilva;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO farmacia;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO alinediniz;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO fcampos;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO posto04;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO clovismelo;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO tsilva;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO lvieira;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.tb_bmh_online TO lamorim;
+
+COMMENT ON TABLE integracao.tb_bmh_online
+    IS 'Tabela temporária de controle de leito para servir para auxiliar na troca de informações do paciente quando é trocado de leito.';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.ds_leito
+    IS 'Descrição do leito';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.nm_mdco
+    IS 'Nome do médico';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.nm_psco
+    IS 'Nome do psicólogo';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.nm_trpa
+    IS 'Nome do terapeuta';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.ds_ocorr
+    IS 'Descrição da ocorrência';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.ds_cid
+    IS 'Descrição da cidade';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.ds_dieta
+    IS 'Descrição da dieta';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.fl_fmnte
+    IS 'Flag se o paciente é fumante';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.ds_const
+    IS 'Descrição da consistência';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.ds_crtr_intnc
+    IS 'Carater de Internação';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.fl_status_leito
+    IS 'Stauts Leito';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.fl_acmpte
+    IS 'Flag do Acompanhante';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.fl_rtgrd
+    IS 'Flag do Retaguarda';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.pac_reg
+    IS 'Identificador do paciente.';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.id_status_leito
+    IS 'Identificador do status da gestão de leitos.';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.id_memb_equip_hosptr_mdco
+    IS 'Id do médico e membro da equipe hospitalar';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.id_memb_equip_hosptr_psco
+    IS 'Id do psicólogo e membro da equipe hospitalar';
+
+COMMENT ON COLUMN integracao.tb_bmh_online.id_memb_equip_hosptr_trpa
+    IS 'Id do terapeuta e membro da equipe hospitalar';
+
+COMMENT ON CONSTRAINT fk_memb_id_mdco_bmh_online ON integracao.tb_bmh_online
+    IS 'Foreign Key  para id_memb_equip_hosptr_mdco da tabela de membros hospitalares.';
+COMMENT ON CONSTRAINT fk_memb_id_psco_bmh_online ON integracao.tb_bmh_online
+    IS 'Foreign Key  para id_memb_equip_hosptr_psco da tabela de membros hospitalares.';
+COMMENT ON CONSTRAINT fk_memb_id_trpa_bmh_online ON integracao.tb_bmh_online
+    IS 'Foreign Key  para id_memb_equip_hosptr_trpa da tabela de membros hospitalares.';
+COMMENT ON CONSTRAINT fk_status_leito_bmh_online ON integracao.tb_bmh_online
+    IS 'Foreign Key da tabela de equipe hospitalar para o status de leito.';
+
+-- Index: fki_fk_memb_id_mdco_bmh_online
+-- DROP INDEX integracao.fki_fk_memb_id_mdco_bmh_online;
+
+CREATE INDEX fki_fk_memb_id_mdco_bmh_online
+    ON integracao.tb_bmh_online USING btree
+    (id_memb_equip_hosptr_mdco)
+    TABLESPACE pg_default;
+
+-- Index: fki_fk_memb_id_psco_bmh_online
+-- DROP INDEX integracao.fki_fk_memb_id_psco_bmh_online;
+
+CREATE INDEX fki_fk_memb_id_psco_bmh_online
+    ON integracao.tb_bmh_online USING btree
+    (id_memb_equip_hosptr_psco)
+    TABLESPACE pg_default;
+
+-- Index: fki_fk_memb_id_trpa_bmh_online
+-- DROP INDEX integracao.fki_fk_memb_id_trpa_bmh_online;
+
+CREATE INDEX fki_fk_memb_id_trpa_bmh_online
+    ON integracao.tb_bmh_online USING btree
+    (id_memb_equip_hosptr_trpa)
+    TABLESPACE pg_default;
+
+-- Index: fki_fk_status_leito_bmh_online
+-- DROP INDEX integracao.fki_fk_status_leito_bmh_online;
+
+CREATE INDEX fki_fk_status_leito_bmh_online
+    ON integracao.tb_bmh_online USING btree
+    (id_status_leito)
+    TABLESPACE pg_default;
+
+-- Index: ix_ot_pac_reg_bmh_online
+-- DROP INDEX integracao.ix_ot_pac_reg_temp;
+
+CREATE INDEX ix_ot_pac_reg_bmh_online
+    ON integracao.tb_bmh_online USING btree
+    (pac_reg)
+    TABLESPACE pg_default;
+
+COMMENT ON INDEX integracao.ix_ot_pac_reg_bmh_online
+    IS 'Índice de otimização do número do registro paciente.';
+	
+alter table integracao.tb_bmh_online add constraint pk_bmh_online primary key (pac_reg, dt_admss)
+
+
+
+
+
+-- Table: integracao.tb_ctrl_leito_smart_alta
+-- DROP TABLE integracao.tb_ctrl_leito_smart_alta;
+
+CREATE TABLE integracao.tb_ctrl_leito_smart_alta
+(
+    pac_reg integer NOT NULL,
+    nm_pcnt character varying(255) COLLATE pg_catalog."default",
+    dt_admss timestamp without time zone,
+    dt_alta timestamp without time zone, 
+	ds_cidade character varying(255) COLLATE pg_catalog."default"
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE integracao.tb_ctrl_leito_smart_alta
+    OWNER to postgres;
+COMMENT ON TABLE integracao.tb_ctrl_leito_smart_alta
+    IS 'Tabela de controle de leito com cópia dos dados do sistema Smart';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart_alta.nm_pcnt
+    IS 'Nome do paciente';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart_alta.dt_admss
+    IS 'Data de admissão';
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart_alta.dt_alta
+    IS 'Data da Alta';
+
+-- Index: ix_ot_pac_reg_smart_alta
+
+-- DROP INDEX integracao.ix_ot_pac_reg_smart_alta;
+
+CREATE INDEX ix_ot_pac_reg_smart_alta
+    ON integracao.tb_ctrl_leito_smart_alta USING btree
+    (pac_reg)
+    TABLESPACE pg_default;
+
+COMMENT ON INDEX integracao.ix_ot_pac_reg_smart_alta
+    IS 'Índice de otimização do número do registro paciente.';
+
+-- Index: ix_ot_pac_reg_smart_alta_02
+
+-- DROP INDEX integracao.ix_ot_pac_reg_smart_alta_02;
+
+CREATE INDEX ix_ot_pac_reg_smart_alta_02
+    ON integracao.tb_ctrl_leito_smart_alta USING btree
+    (dt_admss)
+    TABLESPACE pg_default;
+
+COMMENT ON INDEX integracao.ix_ot_pac_reg_smart_alta_02
+    IS 'Índice de otimização pela data de alta.';
+
+-- Index: ix_ot_pac_reg_smart_alta_03
+
+-- DROP INDEX integracao.ix_ot_pac_reg_smart_alta_03;
+
+CREATE INDEX ix_ot_pac_reg_smart_alta_03
+    ON integracao.tb_ctrl_leito_smart_alta USING btree
+    (dt_alta)
+    TABLESPACE pg_default;
+	
+
+	
+-- Table: integracao.tb_leito
+-- DROP TABLE integracao.tb_leito;
+
+CREATE TABLE integracao.tb_leito
+(
+    ds_leito character varying(255),
+    CONSTRAINT pk_leito PRIMARY KEY (ds_leito)
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE integracao.tb_leito
+    OWNER to postgres;
+COMMENT ON TABLE integracao.tb_leito
+    IS 'Armazena todos os leitos do hospital.';
+COMMENT ON CONSTRAINT pk_leito ON integracao.tb_leito
+    IS 'Chave primaria da tabela de leitos do hospital.';
+
+ALTER TABLE integracao.tb_leito
+    ADD COLUMN loc_leito_id character varying(255);
+
+COMMENT ON COLUMN integracao.tb_leito.loc_leito_id
+    IS 'Loc Leito ID da base do Smart (LOC)';
+	
 -- Table: integracao.tb_c_grupo_cid
 -- DROP TABLE integracao.tb_c_grupo_cid;
 
@@ -395,6 +763,10 @@ CREATE INDEX fki_fk_status_leito
 alter table integracao.tb_ctrl_leito add column cd_usua_altr character varying(255);
 alter table integracao.tb_ctrl_leito add column dt_altr timestamp without time zone;
 	
+
+ALTER TABLE integracao.tb_ctrl_leito
+    ALTER COLUMN pac_reg SET DEFAULT 0;
+	
 ----------------------------------------------------------------------------------------------	
 -- Table: integracao.tb_ctrl_leito_temp
 -- DROP TABLE integracao.tb_ctrl_leito_temp;
@@ -572,7 +944,10 @@ CREATE INDEX ix_ot_pac_reg_temp
 
 COMMENT ON INDEX integracao.ix_ot_pac_reg_temp
     IS 'Índice de otimização do número do registro paciente.';
+
 	
+ALTER TABLE integracao.tb_ctrl_leito
+    ALTER COLUMN pac_reg SET DEFAULT 0;
 ----------------------------------------------------------------------------------------------------------- Table: integracao.tb_c_usua_acesso
 -- DROP TABLE integracao.tb_c_usua_acesso;
 

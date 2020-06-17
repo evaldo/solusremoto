@@ -109,3 +109,29 @@ ALTER TABLE ocupacao.vw_hstr_tp_ocpa_leito_status_integracao
 
 GRANT SELECT ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status_integracao TO rl_consulta_ctrl_leito;
 GRANT ALL ON TABLE ocupacao.vw_hstr_tp_ocpa_leito_status_integracao TO postgres;
+
+
+create or replace view integracao.vw_ctrl_leito as
+SELECT trim(smart.ds_leito) ds_leito
+	, smart.ds_andar
+	, smart.dt_prvs_alta
+	, smart.nm_pcnt
+	, smart.ds_sexo
+	, smart.dt_nasc_pcnt
+	, smart.nm_cnvo
+	, smart.pac_reg
+	, smart.dt_admss
+FROM  integracao.tb_ctrl_leito_smart smart
+union
+select leito.ds_leito
+	, substring(leito.loc_leito_id, 1,1) as ds_andar
+	, null
+	, null
+	, null
+	, null
+	, null
+	, 0
+	, null
+from integracao.tb_leito leito
+where leito.ds_leito not in (select trim(ds_leito) from integracao.tb_ctrl_leito_smart)
+order by 1

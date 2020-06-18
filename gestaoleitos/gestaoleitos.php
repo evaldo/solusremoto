@@ -172,6 +172,9 @@
 	
 	while($rowSmart = pg_fetch_row($retSmart)) {
 
+		//fl_status_leito = 'Livre', 
+		//id_status_leito = 6, 
+	
 		$sqlUpdateCtrl = "UPDATE integracao.tb_ctrl_leito SET 
 		dt_prvs_alta = null,
 		nm_pcnt = null,
@@ -180,15 +183,17 @@
 		nm_cnvo = null,
 		pac_reg = null,
 		dt_admss = null,
-		fl_fmnte = null, 
-		fl_rtgrd = null, 
-		fl_acmpte = null, 
-		fl_status_leito = 'Livre', 
-		id_status_leito = 6, 
+		fl_fmnte = false, 
+		fl_rtgrd = false, 
+		fl_acmpte = false, 		
 		id_memb_equip_hosptr_mdco = null, 
 		id_memb_equip_hosptr_psco = null, 
 		id_memb_equip_hosptr_trpa = null,
-		ds_cid = null	,
+		nm_mdco=null, 
+		nm_cnvo=null,
+		nm_psco=null,
+		nm_trpa=null,
+		ds_cid = null,	
 		ds_dieta = null,
 		ds_const = null,
 		ds_ocorr = null, 
@@ -201,17 +206,22 @@
 			echo "";
 		}
 
+		//fl_status_leito = 'Livre', 
+		//id_status_leito = 6, 
 	
 		$sqlUpdateCtrlTemp = "UPDATE integracao.tb_ctrl_leito_temp SET 
-		fl_fmnte = null, 
-		fl_rtgrd = null, 
-		fl_acmpte = null, 
-		fl_status_leito = 'Livre', 
-		id_status_leito = 6, 
+		fl_fmnte = false, 
+		fl_rtgrd = false, 
+		fl_acmpte = false, 		
 		id_memb_equip_hosptr_mdco = null, 
 		id_memb_equip_hosptr_psco = null, 
 		id_memb_equip_hosptr_trpa = null,
-		ds_cid = null	,
+		nm_mdco=null, 
+		nm_cnvo=null,
+		nm_psco=null,
+		nm_trpa=null,
+		ds_cid = null,	
+		ds_cid = null,
 		ds_dieta = null,
 		ds_const = null,
 		ds_ocorr = null, 
@@ -591,27 +601,169 @@
 	  
 		</head>
 		<body id="aplicacao" onload="removeDivsEtapasCarga();">			
-			<div class="container" style="margin-left: 0px; margin-right: 0px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 120px; border: 1px solid #E6E6E6;">
-				<h2>Gestão de Leitos</h2>
+			<div class="container" style="margin-left: 0px; margin-right: 0px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 130px; border: 1px solid #E6E6E6;">
 				<br>
-				<label style="font-weight:bold; font-size: 11px"> Nome do paciente: <input style="width: 250px; font-size: 11px" type="text" id="buscapac" onkeyup="Busca(3, 'buscapac')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>&nbsp;&nbsp;
-				<input class="btn btn-primary" type="submit" value="1 Andar" id="1andar" onclick="BuscaAndar( '1')">
-				&nbsp;&nbsp;
+				<label style="font-weight:bold;">Nome:</label>&nbsp;
+				<input style="width: 300px;" type="text" id="buscapac" onkeyup="Busca(3, 'buscapac')" placeholder="Texto da Busca..." title="Texto da Busca"> &nbsp;&nbsp;
+				<!--<input class="btn btn-primary" type="submit" value="1 Andar" id="1andar" onclick="BuscaAndar( '1')">
+				&nbsp;
 				<input class="btn btn-primary" type="submit" value="2 Andar" id="2andar" onclick="BuscaAndar( '2')">
-				&nbsp;&nbsp;
+				&nbsp;
 				<input class="btn btn-primary" type="submit" value="3 Andar" id="3andar" onclick="BuscaAndar( '3')">
-				&nbsp;&nbsp;
-				<input class="btn btn-primary" type="submit" value="4 Andar" id="4andar" onclick="BuscaAndar( '4')">
+				&nbsp;
+				<input class="btn btn-primary" type="submit" value="4 Andar" id="4andar" onclick="BuscaAndar( '4')">-->
 				<!--<label style="font-weight:bold; font-size: 11px"> Andar: <input style="width: 50px; font-size: 11px" type="text" id="buscaandar" onkeyup="Busca(1, 'buscaandar')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>-->&nbsp;&nbsp;	
-				<input class="btn btn-primary" type="submit" value="Exportar" id="impressao">&nbsp;&nbsp;
-				<input class="btn btn-primary" type="button" value="Legenda do Status" name="legenda" data-toggle="modal" data-target="#modallegenda">&nbsp;&nbsp;
+								
+				<br>
+				<br>				
+				
+				<label style="font-weight:bold;">Andar:</label>&nbsp;				
+										
+				<?php
+				
+					$sqlandar = "select '1'
+							union
+							select '2'
+							union
+							select '3'
+							union
+							select '4'
+							order by 1";				
+				
+					if ($pdo==null){
+							header(Config::$webLogin);
+					}	
+					$retandar = pg_query($pdo, $sqlandar);
+					if(!$retandar) {
+						echo pg_last_error($pdo);
+						exit;
+					}
+				?>
+						<select id="sl_tp_andar" style="width: 50px;" onchange="Busca(1, 'sl_tp_andar')">
+					<option value=""></option>
+								
+					<?php
+						$cont=1;	
+						while($rowandar = pg_fetch_row($retandar)) {													
+						?>
+							<option value="<?php echo $rowandar[0]; ?>"><?php echo $rowandar[0]; ?></option>												
+						<?php 
+							$cont=$cont+1;
+						}
+						 ?>	
+						
+				</select>&nbsp;	
+				
+				
+				<label style="font-weight:bold;">Médico:</label>&nbsp;				
+										
+				<?php
+				
+					$sqlmdco = "SELECT nm_memb_equip_hosptr FROM integracao.tb_equip_hosptr where tp_memb_equip_hosptr = 'MDCO' order by 1";				
+				
+					if ($pdo==null){
+							header(Config::$webLogin);
+					}	
+					$retmdco = pg_query($pdo, $sqlmdco);
+					if(!$retmdco) {
+						echo pg_last_error($pdo);
+						exit;
+					}
+				?>
+						<select id="sl_tp_mdco" style="width: 100px;" onchange="Busca(7, 'sl_tp_mdco')">
+					<option value=""></option>
+								
+					<?php
+						$cont=1;	
+						while($rowmdco = pg_fetch_row($retmdco)) {													
+						?>
+							<option value="<?php echo $rowmdco[0]; ?>"><?php echo $rowmdco[0]; ?></option>												
+						<?php 
+							$cont=$cont+1;
+						}
+						 ?>	
+						
+				</select>&nbsp;	
+				
+				
+				<label style="font-weight:bold;">Psicólogo:</label>&nbsp;				
+										
+				<?php
+				
+					$sqlrel = "SELECT nm_memb_equip_hosptr FROM integracao.tb_equip_hosptr where tp_memb_equip_hosptr = 'PSCO' order by 1";					
+				
+					if ($pdo==null){
+							header(Config::$webLogin);
+					}	
+					$retrel = pg_query($pdo, $sqlrel);
+					if(!$retrel) {
+						echo pg_last_error($pdo);
+						exit;
+					}
+				?>
+						<select id="sl_tp_psco" style="width: 100px;" onchange="Busca(8, 'sl_tp_psco')">
+					<option value=""></option>
+								
+					<?php
+						$cont=1;	
+						while($rowrel = pg_fetch_row($retrel)) {													
+						?>
+							<option value="<?php echo $rowrel[0]; ?>"><?php echo $rowrel[0]; ?></option>												
+						<?php 
+							$cont=$cont+1;
+						}
+						 ?>	
+						
+				</select>&nbsp;	
+				<label style="font-weight:bold;">Terapeuta:</label>&nbsp;				
+										
+				<?php
+				
+					$sqltrpa = "SELECT nm_memb_equip_hosptr FROM integracao.tb_equip_hosptr where tp_memb_equip_hosptr = 'TRPA' order by 1";				
+				
+					if ($pdo==null){
+							header(Config::$webLogin);
+					}	
+					$rettrpa = pg_query($pdo, $sqltrpa);
+					if(!$rettrpa) {
+						echo pg_last_error($pdo);
+						exit;
+					}
+				?>
+						<select id="sl_tp_trpa" style="width: 100px;" onchange="Busca(9, 'sl_tp_trpa')">
+					<option value=""></option>
+								
+					<?php
+						$cont=1;	
+						while($rowtrpa = pg_fetch_row($rettrpa)) {													
+						?>
+							<option value="<?php echo $rowtrpa[0]; ?>"><?php echo $rowtrpa[0]; ?></option>												
+						<?php 
+							$cont=$cont+1;
+						}
+						 ?>	
+						
+				</select>&nbsp;	
+				
+				<label style="font-weight:bold;">Relat. da consulta:</label>&nbsp;
+				<select  name="tprelatorio" id="tprelatorio">
+				  <option value="andar" selected>Andar</option>
+				  <option value="medico">Médico</option>
+				  <option value="psicologo">Psicólogo</option>
+				  <option value="terapeuta">Terapeuta</option>
+				  <option value="mapa">Mapa</option>
+				</select>
+				
+				<input class="btn btn-primary" type="button" value="Imprimir" id="imprimir">&nbsp;
+				<input class="btn btn-primary" type="submit" value="Exportar" id="exportar">&nbsp;
+				<input class="btn btn-primary" type="button" value="Cores do Status" name="legenda" data-toggle="modal" data-target="#modallegenda">
 				
 				<!--<input class="btn btn-primary" type="submit" value="BMHOnline" id="bmhonline">-->
 			</div> <!-- /#top -->
 			
 			<div id="list" class="row" style="margin-left: 2px; margin-right: 2px">
 				
-				<div class="table-responsive" style="margin-top: 120px">				
+				<div class="table-responsive" style="margin-top: 130px">				
 					<table id="tabela" class="display table table-responsive table-striped table-bordered table-sm table-condensed">
 					
 						<tr style="font-size: 11px">
@@ -771,6 +923,7 @@
 						}       
 					  }
 					}
+					
 					function BuscaAndar(andar) {
 					  var input, filter, table, tr, td, i, txtValue;					  
 					  filter = andar;					  
@@ -849,7 +1002,7 @@
 		$('[data-toggle="tooltip"]').tooltip();		
 	});
 	
-	$('#impressao').click(function(){
+	$('#exportar').click(function(){
 		
 		var impressao = "sim";
 		
@@ -864,7 +1017,26 @@
 			}
 		});
 	});
+	
+	
+	$('#imprimir').click(function(){
 		
+		var tpimpressao = document.getElementById("tprelatorio").value;
+		var varsl_tp_psco = document.getElementById("sl_tp_psco").value;
+		var varsl_tp_mdco = document.getElementById("sl_tp_mdco").value;
+		var varsl_tp_trpa = document.getElementById("sl_tp_trpa").value;
+		var varsl_tp_andar = document.getElementById("sl_tp_andar").value;
+		
+		$.ajax({
+			url : '../gestaoleitos/relatorioportipo.php', // give complete url here
+			type : 'post',
+			data:{tpimpressao:tpimpressao, varsl_tp_psco:varsl_tp_psco, varsl_tp_mdco:varsl_tp_mdco, varsl_tp_trpa:varsl_tp_trpa, varsl_tp_andar:varsl_tp_andar},
+			success : function(completeHtmlPage) {				
+				$("html").empty();
+				$("html").append(completeHtmlPage);
+			}
+		});
+	});
 	
 	$('#bmhonline').click(function(){
 		

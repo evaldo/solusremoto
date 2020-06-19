@@ -189,8 +189,7 @@
 		id_memb_equip_hosptr_mdco = null, 
 		id_memb_equip_hosptr_psco = null, 
 		id_memb_equip_hosptr_trpa = null,
-		nm_mdco=null, 
-		nm_cnvo=null,
+		nm_mdco=null, 		
 		nm_psco=null,
 		nm_trpa=null,
 		ds_cid = null,	
@@ -207,32 +206,60 @@
 		}
 
 		//fl_status_leito = 'Livre', 
-		//id_status_leito = 6, 
-	
-		$sqlUpdateCtrlTemp = "UPDATE integracao.tb_ctrl_leito_temp SET 
-		fl_fmnte = false, 
-		fl_rtgrd = false, 
-		fl_acmpte = false, 		
-		id_memb_equip_hosptr_mdco = null, 
-		id_memb_equip_hosptr_psco = null, 
-		id_memb_equip_hosptr_trpa = null,
-		nm_mdco=null, 
-		nm_cnvo=null,
-		nm_psco=null,
-		nm_trpa=null,
-		ds_cid = null,	
-		ds_cid = null,
-		ds_dieta = null,
-		ds_const = null,
-		ds_ocorr = null, 
-		ds_crtr_intnc = null				 
-		WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
-
-		$resultUpdateCtrlTemp = pg_query($pdo, $sqlUpdateCtrlTemp);
-	
-		if($resultUpdateCtrlTemp){
-			echo "";
+		//id_status_leito = 6,
+		
+		$sqlsmarttemp = "select trim(leito_smart.ds_leito) as leito, leito_smart.pac_reg as pac_reg
+				from integracao.tb_ctrl_leito_temp leito_temp
+					LEFT JOIN integracao.tb_ctrl_leito_smart leito_smart 
+					ON leito_temp.ds_leito = trim(leito_smart.ds_leito)
+			where trim(leito_smart.ds_leito) = trim('" . $rowSmart[0] . "')";
+			
+		$retSmarttemp = pg_query($pdo, $sqlsmarttemp);	
+		if(!$retSmarttemp) {
+			echo pg_last_error($pdo);
+			//header(Config::$webLogin);
+			exit;
 		}
+		
+		$retSmarttemp = pg_query($pdo, $sqlsmarttemp);
+		$rowSmarttemp = pg_fetch_assoc($retSmarttemp);		
+		
+		if (pg_numrows($retSmarttemp)>0) {
+			
+			$sqlUpdateCtrlTemp = "UPDATE integracao.tb_ctrl_leito_temp SET pac_reg = ". $rowSmarttemp['pac_reg'] ." WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
+			
+			$resultUpdateCtrlTemp = pg_query($pdo, $sqlUpdateCtrlTemp);
+		
+			if($resultUpdateCtrlTemp){
+				echo "";
+			}
+		
+		} 
+		//else {
+		
+		//	$sqlUpdateCtrlTemp = "UPDATE integracao.tb_ctrl_leito_temp SET 
+		//	fl_fmnte = false, 
+		//	fl_rtgrd = false, 
+		//	fl_acmpte = false, 		
+		//	id_memb_equip_hosptr_mdco = null, 
+		//	id_memb_equip_hosptr_psco = null, 
+		//	id_memb_equip_hosptr_trpa = null,
+		//	nm_mdco=null, 		
+		//	nm_psco=null,
+		//	nm_trpa=null,
+		//	ds_cid = null,			
+		//	ds_dieta = null,
+		//	ds_const = null,
+		//	ds_ocorr = null, 
+		//	ds_crtr_intnc = null				 
+		//	WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
+
+		//	$resultUpdateCtrlTemp = pg_query($pdo, $sqlUpdateCtrlTemp);
+		
+		//	if($resultUpdateCtrlTemp){
+		//		echo "";
+		//	}
+		//}
 	}
 	
 	
@@ -604,7 +631,11 @@
 			<div class="container" style="margin-left: 0px; margin-right: 0px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 130px; border: 1px solid #E6E6E6;">
 				<br>
 				<label style="font-weight:bold;">Nome:</label>&nbsp;
-				<input style="width: 300px;" type="text" id="buscapac" onkeyup="Busca(3, 'buscapac')" placeholder="Texto da Busca..." title="Texto da Busca"> &nbsp;&nbsp;
+				<input style="width: 300px;" type="text" id="buscapac" onkeyup="Busca(3, 'buscapac')" placeholder="Paciente..." title="Texto da Busca"> &nbsp;&nbsp;
+				<label style="font-weight:bold;">Carater de Internação:</label>&nbsp;
+				<input style="width: 300px;" type="text" id="buscacarcterint" onkeyup="Busca(4, 'buscacarcterint')" placeholder="Carater Int..." title="Texto da Busca"> &nbsp;&nbsp;
+				<label style="font-weight:bold;">Dieta:</label>&nbsp;
+				<input style="width: 300px;" type="text" id="buscadieta" onkeyup="Busca(12, 'buscadieta')" placeholder="Dieta..." title="Texto da Busca"> &nbsp;&nbsp;
 				<!--<input class="btn btn-primary" type="submit" value="1 Andar" id="1andar" onclick="BuscaAndar( '1')">
 				&nbsp;
 				<input class="btn btn-primary" type="submit" value="2 Andar" id="2andar" onclick="BuscaAndar( '2')">

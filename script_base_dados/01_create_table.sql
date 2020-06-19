@@ -1,3 +1,57 @@
+CREATE TABLE integracao.tb_const
+(
+    id_const integer,
+    ds_const character varying(255),
+    CONSTRAINT pk_const PRIMARY KEY (id_const)
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE integracao.tb_const
+    OWNER to postgres;
+COMMENT ON TABLE integracao.tb_const
+    IS 'Tabela de consistência';
+COMMENT ON CONSTRAINT pk_const ON integracao.tb_const
+    IS 'Chave primária da consistência';
+
+CREATE TABLE integracao.tb_crtr_intnc
+(
+    id_crtr_intnc integer,
+    ds_crtr_intnc character varying(255),
+    CONSTRAINT pk_crtr_intnc PRIMARY KEY (id_crtr_intnc)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE integracao.tb_crtr_intnc
+    OWNER to postgres;
+COMMENT ON TABLE integracao.tb_crtr_intnc
+    IS 'Carater de Internação';
+COMMENT ON CONSTRAINT pk_crtr_intnc ON integracao.tb_crtr_intnc
+    IS 'Chave Primária do carater de internação';
+	
+
+CREATE TABLE integracao.tb_dieta
+(
+    id_dieta integer,
+    ds_dieta character varying(255),
+    CONSTRAINT pk_dieta PRIMARY KEY (id_dieta)
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE integracao.tb_dieta
+    OWNER to postgres;
+COMMENT ON TABLE integracao.tb_dieta
+    IS 'Tabela de dieta';
+COMMENT ON CONSTRAINT pk_dieta ON integracao.tb_dieta
+    IS 'Chave primária de dieta';
+
+
 CREATE TABLE integracao.tb_mtvo_alta
 (
     id_mtvo_alta integer NOT NULL,

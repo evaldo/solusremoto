@@ -23,6 +23,7 @@
 			, id_memb_equip_hosptr_trpa
 			, id_status_leito
 			, pac_reg
+			, nm_pcnt
 	FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '". $_SESSION['nm_loc_nome'] ."'";
 		
 	$ret = pg_query($pdo, $sql);
@@ -46,6 +47,7 @@
 	$_SESSION['id_memb_equip_hosptr_psco'] = $row[13];
 	$_SESSION['id_memb_equip_hosptr_trpa'] = $row[14];
 	$_SESSION['pac_reg'] = $row[16];
+	$_SESSION['nm_pcnt'] = $row[17];
 	
 	
 	$_SESSION['id_status_leito'] = $row[15];
@@ -62,16 +64,55 @@
 		  <div class="modal-dialog">
 				<div class="modal-content" style="width:800px">
 					<div class="container">						
-						<h4 class="modal-title">Alteração da Gestão de Leitos</h4>
+						<h5 class="modal-title">Alteração da Gestão de Leitos - <?php echo $_SESSION['nm_pcnt'];?> - em - <?php echo $_SESSION['nm_loc_nome'];?></h5>
 					</div>						
 					<form class="form-inline" method="post" >
 						<div class="modal-body">
 							<div class="table-responsive">  							
 								<table class="table table-bordered">
+								
+								
 									<tr>  				
 										<td><label>Carater de Internação:</label></td>
-										<td><input style="width:600px" type="text" name="ds_crtr_intnc" id="ds_crtr_intnc" value="<?php echo $_SESSION['ds_crtr_intnc']; ?>" class="form-control" /></td>
+
+											<?php
+												$sql = "SELECT ds_crtr_intnc FROM integracao.tb_crtr_intnc order by 1";
+												
+												if ($pdo==null){
+														header(Config::$webLogin);
+												}	
+												$ret = pg_query($pdo, $sql);
+												if(!$ret) {
+													echo pg_last_error($pdo);
+													exit;
+													}
+											?>
+										<td style="width:150px">
+											<select  id="sl_crtr_intnc" class="form-control" onchange=" 
+														var selObj = document.getElementById('sl_crtr_intnc');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('ds_crtr_intnc').value = selValue;">
+											<option value=" "></option>
+														
+											<?php
+												$cont=1;																
+											
+												while($row = pg_fetch_row($ret)) {
+													if($row[0]==$_SESSION['ds_crtr_intnc']){														
+												?>												
+													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[0]; ?></option>
+												<?php																		
+													} else {
+												?>
+													<option value="<?php echo $row[0]; ?>"><?php echo $row[0]; ?></option>												
+													<?php } 
+												$cont=$cont+1;} ?>	
+											</select>
+									
+										</td>
 									</tr>									 
+									
+									
 									<tr>  
 										<td style="width:150px"><label>Médico:</label></td>  
 										
@@ -260,11 +301,86 @@
 										</tr>
 										<tr>  				
 											<td><label>Dieta:</label></td>
-											<td><input style="width:600px" type="text" name="ds_dieta" id="ds_dieta" value="<?php echo $_SESSION['ds_dieta']; ?>" class="form-control" /></td>
+											
+											
+											
+											<?php
+												$sql = "SELECT ds_dieta FROM integracao.tb_dieta order by 1";
+												
+												if ($pdo==null){
+														header(Config::$webLogin);
+												}	
+												$ret = pg_query($pdo, $sql);
+												if(!$ret) {
+													echo pg_last_error($pdo);
+													exit;
+													}
+											?>
+										<td style="width:150px">
+											<select  id="sl_dieta" class="form-control" onchange=" 
+														var selObj = document.getElementById('sl_dieta');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('ds_dieta').value = selValue;">
+											<option value=" "></option>
+														
+											<?php
+												$cont=1;																
+											
+												while($row = pg_fetch_row($ret)) {
+													if($row[0]==$_SESSION['ds_dieta']){														
+												?>												
+													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[0]; ?></option>
+												<?php																		
+													} else {
+												?>
+													<option value="<?php echo $row[0]; ?>"><?php echo $row[0]; ?></option>												
+													<?php } 
+												$cont=$cont+1;} ?>	
+											</select>
+											
+											</td>
+																						
 										</tr>
 										<tr>  				
 											<td><label>Consistência:</label></td>
-											<td><input style="width:600px" type="text" name="ds_const" id="ds_const" value="<?php echo $_SESSION['ds_const']; ?>" class="form-control" /></td>
+											
+											
+											<?php
+												$sql = "SELECT ds_const FROM integracao.tb_const order by 1";
+												
+												if ($pdo==null){
+														header(Config::$webLogin);
+												}	
+												$ret = pg_query($pdo, $sql);
+												if(!$ret) {
+													echo pg_last_error($pdo);
+													exit;
+													}
+											?>
+										<td style="width:150px">
+											<select  id="sl_const" class="form-control" onchange=" 
+														var selObj = document.getElementById('sl_const');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('ds_const').value = selValue;">
+											<option value=" "></option>
+														
+											<?php
+												$cont=1;																
+											
+												while($row = pg_fetch_row($ret)) {
+													if($row[0]==$_SESSION['ds_const']){														
+												?>												
+													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[0]; ?></option>
+												<?php																		
+													} else {
+												?>
+													<option value="<?php echo $row[0]; ?>"><?php echo $row[0]; ?></option>												
+													<?php } 
+												$cont=$cont+1;} ?>	
+											</select>
+											
+											</td>											
+											
 										</tr>
 										<tr>  				
 											<td><label>Retaguarda?</label></td>
@@ -353,6 +469,16 @@
 										</tr>
 										
 										<!--style="display:none"-->
+										
+										
+										
+										<input type="text" name="ds_crtr_intnc" id="ds_crtr_intnc" value="<?php echo $_SESSION['ds_crtr_intnc']; ?>" style="display:none">
+										
+										<input type="text" name="ds_dieta" id="ds_dieta" value="<?php echo $_SESSION['ds_dieta']; ?>" style="display:none">
+										
+										<input type="text" name="ds_const" id="ds_const" value="<?php echo $_SESSION['ds_const']; ?>" style="display:none">
+										
+										
 										<input type="text" id="id_memb_equip_hosptr_mdco" name="id_memb_equip_hosptr_mdco" value="<?php echo$_SESSION['id_memb_equip_hosptr_mdco']; ?>" style="display:none"> 
 										
 										<input type="text" id="id_memb_equip_hosptr_psco" name="id_memb_equip_hosptr_psco" value="<?php echo $_SESSION['id_memb_equip_hosptr_psco']; ?>" style="display:none">

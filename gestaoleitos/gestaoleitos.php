@@ -23,6 +23,8 @@
 			, smart.nm_cnvo
 			, smart.pac_reg
 			, smart.dt_admss
+			, smart.id_memb_equip_hosptr_mdco
+			, trim(smart.nm_memb_equip_hosptr) as nm_memb_equip_hosptr
 		FROM  integracao.tb_ctrl_leito_smart smart
 		union
 		select leito.ds_leito
@@ -33,6 +35,8 @@
 			, null
 			, null
 			, 0
+			, null
+			, null
 			, null
 		from integracao.tb_leito leito
 		where leito.ds_leito not in (select trim(ds_leito) from integracao.tb_ctrl_leito_smart)
@@ -66,13 +70,11 @@
 			
 			if ($rowSmart[2]==null){
 			
-				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', null, '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .
-				$rowSmart[7] . ", '" . $rowSmart[8] . "')";	
+				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS, id_memb_equip_hosptr_mdco, nm_mdco) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', null, '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .$rowSmart[7] . ", '" . $rowSmart[8] . "', " .$rowSmart[9] . ", '".$rowSmart[10]."')";	
 				
 			} else {
 				
-				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', '" . $rowSmart[2] . "', '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .
-				$rowSmart[7] . ", '" . $rowSmart[8] . "')";
+				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS, id_memb_equip_hosptr_mdco, nm_mdco) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', '" . $rowSmart[2] . "', '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .$rowSmart[7] . ", '" . $rowSmart[8] . "', " .$rowSmart[9] . ", '".$rowSmart[10]."')";	
 				
 			}
 			
@@ -85,11 +87,11 @@
 			
 			if ($rowSmart[2]==null){
 			
-				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = null, NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "'  WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
+				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = null, NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "', id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."' WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
 				
 			} else {
 				
-				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = '" . $rowSmart[2] . "', NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "'  WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
+				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = '" . $rowSmart[2] . "', NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "' , id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."' WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
 				
 			}
 							
@@ -630,12 +632,44 @@
 		<body id="aplicacao" onload="removeDivsEtapasCarga();">			
 			<div class="container" style="margin-left: 0px; margin-right: 0px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 130px; border: 1px solid #E6E6E6;">
 				<br>
-				<label style="font-weight:bold;">Nome:</label>&nbsp;
-				<input style="width: 300px;" type="text" id="buscapac" onkeyup="Busca(3, 'buscapac')" placeholder="Paciente..." title="Texto da Busca"> &nbsp;&nbsp;
-				<label style="font-weight:bold;">Carater de Internação:</label>&nbsp;
-				<input style="width: 300px;" type="text" id="buscacarcterint" onkeyup="Busca(4, 'buscacarcterint')" placeholder="Carater Int..." title="Texto da Busca"> &nbsp;&nbsp;
-				<label style="font-weight:bold;">Dieta:</label>&nbsp;
-				<input style="width: 300px;" type="text" id="buscadieta" onkeyup="Busca(12, 'buscadieta')" placeholder="Dieta..." title="Texto da Busca"> &nbsp;&nbsp;
+				<label style="font-weight:bold; font-size: 11px;">Nome:</label>&nbsp;
+				<input style="width: 200px; font-size: 11px;" type="text" id="buscapac" onkeyup="Busca(3, 'buscapac')" placeholder="Paciente..." title="Texto da Busca"> &nbsp;
+				<label style="font-weight:bold; font-size: 11px;">Car. de Inter.:</label>&nbsp;
+								
+				<!--<input style="width: 300px;" type="text" id="buscacarcterint" onkeyup="Busca(4, 'buscacarcterint')" placeholder="Carater Int..." title="Texto da Busca"> -->				
+				
+				<?php
+				
+					$sqlcrtrintnc = "SELECT ds_crtr_intnc FROM integracao.tb_crtr_intnc order by 1";				
+				
+					if ($pdo==null){
+							header(Config::$webLogin);
+					}	
+					$retcrtrintnc = pg_query($pdo, $sqlcrtrintnc);
+					if(!$retcrtrintnc) {
+						echo pg_last_error($pdo);
+						exit;
+					}
+				?>
+					<select id="sl_tp_carater_inter" style="width: 150px;" onchange="Busca(4, 'sl_tp_carater_inter')">
+					<option value=""></option>
+								
+					<?php
+						$cont=1;	
+						while($rowcrtrintnc = pg_fetch_row($retcrtrintnc)) {													
+						?>
+							<option value="<?php echo $rowcrtrintnc[0]; ?>"><?php echo $rowcrtrintnc[0]; ?></option>												
+						<?php 
+							$cont=$cont+1;
+						}
+						 ?>	
+						
+				</select>&nbsp;	
+				
+				
+				&nbsp;&nbsp;
+				<label style="font-weight:bold; font-size: 11px;">Dieta:</label>&nbsp;
+				<input style="width: 150px; font-size: 11px;" type="text" id="buscadieta" onkeyup="Busca(12, 'buscadieta')" placeholder="Dieta..." title="Texto da Busca"> &nbsp;
 				<!--<input class="btn btn-primary" type="submit" value="1 Andar" id="1andar" onclick="BuscaAndar( '1')">
 				&nbsp;
 				<input class="btn btn-primary" type="submit" value="2 Andar" id="2andar" onclick="BuscaAndar( '2')">
@@ -643,12 +677,9 @@
 				<input class="btn btn-primary" type="submit" value="3 Andar" id="3andar" onclick="BuscaAndar( '3')">
 				&nbsp;
 				<input class="btn btn-primary" type="submit" value="4 Andar" id="4andar" onclick="BuscaAndar( '4')">-->
-				<!--<label style="font-weight:bold; font-size: 11px"> Andar: <input style="width: 50px; font-size: 11px" type="text" id="buscaandar" onkeyup="Busca(1, 'buscaandar')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>-->&nbsp;&nbsp;	
-								
-				<br>
-				<br>				
+				<!--<label style="font-weight:bold; font-size: 11px"> Andar: <input style="width: 50px; font-size: 11px" type="text" id="buscaandar" onkeyup="Busca(1, 'buscaandar')" placeholder="Texto da Busca..." title="Texto da Busca"> </label>-->&nbsp;	
 				
-				<label style="font-weight:bold;">Andar:</label>&nbsp;				
+				<label style="font-weight:bold; font-size: 11px;">Andar:</label>&nbsp;				
 										
 				<?php
 				
@@ -670,7 +701,7 @@
 						exit;
 					}
 				?>
-						<select id="sl_tp_andar" style="width: 50px;" onchange="Busca(1, 'sl_tp_andar')">
+						<select id="sl_tp_andar" style="width: 50px; font-size: 11px;" onchange="Busca(1, 'sl_tp_andar')">
 					<option value=""></option>
 								
 					<?php
@@ -686,7 +717,7 @@
 				</select>&nbsp;	
 				
 				
-				<label style="font-weight:bold;">Médico:</label>&nbsp;				
+				<label style="font-weight:bold; font-size: 11px;">Médico:</label>&nbsp;				
 										
 				<?php
 				
@@ -701,7 +732,7 @@
 						exit;
 					}
 				?>
-						<select id="sl_tp_mdco" style="width: 100px;" onchange="Busca(7, 'sl_tp_mdco')">
+						<select id="sl_tp_mdco" style="width: 90px; font-size: 11px;" onchange="Busca(7, 'sl_tp_mdco')">
 					<option value=""></option>
 								
 					<?php
@@ -717,7 +748,7 @@
 				</select>&nbsp;	
 				
 				
-				<label style="font-weight:bold;">Psicólogo:</label>&nbsp;				
+				<label style="font-weight:bold; font-size: 11px;">Psicólogo:</label>&nbsp;				
 										
 				<?php
 				
@@ -732,7 +763,7 @@
 						exit;
 					}
 				?>
-						<select id="sl_tp_psco" style="width: 100px;" onchange="Busca(8, 'sl_tp_psco')">
+						<select id="sl_tp_psco" style="width: 90px; font-size: 11px;" onchange="Busca(8, 'sl_tp_psco')">
 					<option value=""></option>
 								
 					<?php
@@ -746,7 +777,7 @@
 						 ?>	
 						
 				</select>&nbsp;	
-				<label style="font-weight:bold;">Terapeuta:</label>&nbsp;				
+				<label style="font-weight:bold; font-size: 11px;">Terapeuta:</label>&nbsp;				
 										
 				<?php
 				
@@ -761,7 +792,7 @@
 						exit;
 					}
 				?>
-						<select id="sl_tp_trpa" style="width: 100px;" onchange="Busca(9, 'sl_tp_trpa')">
+						<select id="sl_tp_trpa" style="width: 90px; font-size: 11px;" onchange="Busca(9, 'sl_tp_trpa')">
 					<option value=""></option>
 								
 					<?php
@@ -776,8 +807,11 @@
 						
 				</select>&nbsp;	
 				
-				<label style="font-weight:bold;">Relat. da consulta:</label>&nbsp;
-				<select  name="tprelatorio" id="tprelatorio">
+				<br>
+				<br>
+				
+				<label style="font-weight:bold; font-size: 11px;">Imprimir consulta do último filtro por:</label>&nbsp;
+				<select  style="font-weight:bold; font-size: 11px;" name="tprelatorio" id="tprelatorio">
 				  <option value="andar" selected>Andar</option>
 				  <option value="medico">Médico</option>
 				  <option value="psicologo">Psicólogo</option>
@@ -785,9 +819,19 @@
 				  <option value="mapa">Mapa</option>
 				</select>
 				
-				<input class="btn btn-primary" type="button" value="Imprimir" id="imprimir">&nbsp;
-				<input class="btn btn-primary" type="submit" value="Exportar" id="exportar">&nbsp;
-				<input class="btn btn-primary" type="button" value="Cores do Status" name="legenda" data-toggle="modal" data-target="#modallegenda">
+				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Imprimir" id="imprimir">&nbsp;				
+				
+				
+				<label style="font-weight:bold; font-size: 11px;">Imprimir BMHOnline - </label>&nbsp;			
+				<label style="font-weight:bold; font-size: 11px;">Data Inicial:</label>&nbsp;
+				<input style="font-weight:bold; font-size: 11px;" type="date" id="dataInicio" name="dataInicio"> &nbsp;&nbsp;
+				<label style="font-weight:bold; font-size: 11px;">a</label>&nbsp;
+				<label style="font-weight:bold; font-size: 11px;">Data Final:</label>&nbsp;
+				<input style="font-weight:bold; font-size: 11px;" type="date" id="dataFim" name="dataFim">&nbsp;&nbsp;
+				<input style="font-size: 11px;" class="btn btn-primary" type="button" value="Gerar Relatório" id="imprimirbmh">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				
+				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Exp Excel" id="exportar">&nbsp;
+				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Legenda" name="legenda" data-toggle="modal" data-target="#modallegenda">
 				
 				<!--<input class="btn btn-primary" type="submit" value="BMHOnline" id="bmhonline">-->
 			</div> <!-- /#top -->
@@ -1033,6 +1077,22 @@
 		$('[data-toggle="tooltip"]').tooltip();		
 	});
 	
+	$('#imprimirbmh').click(function(){
+			
+			var dataInicio = document.getElementById("dataInicio").value;		
+			var dataFim = document.getElementById("dataFim").value;		
+			
+			$.ajax({
+				url : '../gestaoleitos/relatorio_bmhonline.php', // give complete url here
+				type : 'post',
+				data:{dataInicio:dataInicio, dataFim:dataFim},
+				success : function(completeHtmlPage) {				
+					$("html").empty();
+					$("html").append(completeHtmlPage);
+				}
+			});
+		});
+	
 	$('#exportar').click(function(){
 		
 		var impressao = "sim";
@@ -1159,9 +1219,9 @@
 				type: "POST",
 				url:"../gestaoleitos/atualizadadosleitoatualizacao.php",
 				data:{nm_loc_nome:nm_loc_nome},				
-				success : function(completeHtmlPage) {				
-					$("html").empty();
-					$("html").append(completeHtmlPage);
+				success : function(completeHtmlPage) {									
+					$("html").empty();					
+					$("html").append(completeHtmlPage);										
 				}
 			});			
 		});	

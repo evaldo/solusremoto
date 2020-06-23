@@ -41,7 +41,7 @@
 		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">   
 		<script src="http://metabase.example.com/app/iframeResizer.js"></script>					
 		<script>		
-	
+			
 			var v_iframeselecionado = "";
 			var iframes;
 			var i=0;
@@ -594,7 +594,7 @@
 	</style>
 		<title>integracao</title>
 	</head>
-	<body  bgcolor="#cfc" id="bd">
+	<body  bgcolor="#cfc" id="bd">		
 		<div class="container" id="divcabec">			
 			<div class="left">
 				<img src="./img/vilaverde_fundo.png" style="width:15%;opacity:0.5" onclick="recarregar()">

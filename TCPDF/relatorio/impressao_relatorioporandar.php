@@ -18,7 +18,10 @@
 			case when fl_fmnte = 'T' then 'Sim' else 'Não' end  ,
 			to_char(dt_prvs_alta, 'dd/mm/yyyy hh24:mi:ss') as dt_prvs_alta,			
 			case when fl_rtgrd = 'T' then 'Sim' else 'Não' end  ,
-			case when fl_acmpte = 'T' then 'Sim' else 'Não' end ,						
+			case when fl_acmpte = 'T' then 'Sim' else 'Não' end ,
+			ds_crtr_intnc,
+			ds_dieta,
+			ds_const,			
 			ds_ocorr			
 			FROM integracao.tb_ctrl_leito			
 			where ds_andar = '". $_SESSION['numeroandar'] ."'
@@ -123,6 +126,9 @@ date_default_timezone_set('America/Sao_Paulo');
 				<th>Prvs. de Alta</th>					
 				<th>Retagd.</th>
 				<th>Acomp.</th>
+				<th>Cart. Inter.</th>
+				<th>Dieta</th>
+				<th>Consist.</th>
 				<th>Ocorrências</th>						
 			</tr>
 			<hr>';
@@ -142,7 +148,10 @@ date_default_timezone_set('America/Sao_Paulo');
 				<td>'.$row[10].'</td>					
 				<td>'.$row[11].'</td>
 				<td>'.$row[12].'</td>
-				<td>'.$row[13].'</td>							
+				<td>'.$row[13].'</td>
+				<td>'.$row[14].'</td>
+				<td>'.$row[15].'</td>							
+				<td>'.$row[16].'</td>
 			</tr>
 			<hr>';
 			//echo $row[0];

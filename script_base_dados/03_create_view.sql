@@ -135,3 +135,155 @@ select leito.ds_leito
 from integracao.tb_leito leito
 where leito.ds_leito not in (select trim(ds_leito) from integracao.tb_ctrl_leito_smart)
 order by 1
+
+
+-- View: integracao.vw_bmh_online
+
+-- DROP VIEW integracao.vw_bmh_online;
+
+CREATE OR REPLACE VIEW integracao.vw_bmh_online AS
+ SELECT 'Admissão'::text AS tipo_bmh_online,
+    to_char(tb_bmh_online.dt_admss, 'dd/mm/yyyy hh24:mi'::text) AS dt_admss,
+    tb_bmh_online.nm_pcnt,
+    to_char(tb_bmh_online.dt_nasc_pcnt, 'dd/mm/yyyy'::text) AS dt_nasc_pcnt,
+    tb_bmh_online.nm_cnvo,
+    tb_bmh_online.nm_mdco,
+    tb_bmh_online.nm_psco,
+    tb_bmh_online.nm_trpa,
+    tb_bmh_online.ds_cid,
+        CASE
+            WHEN tb_bmh_online.fl_fmnte = true THEN 'Sim'::text
+            ELSE 'Não'::text
+        END AS fl_fmnte,
+        CASE
+            WHEN tb_bmh_online.fl_rtgrd = true THEN 'Sim'::text
+            ELSE 'Não'::text
+        END AS fl_rtgrd,
+        CASE
+            WHEN tb_bmh_online.fl_acmpte = true THEN 'Sim'::text
+            ELSE 'Não'::text
+        END AS fl_acmpte,
+    tb_bmh_online.ds_crtr_intnc,
+    tb_bmh_online.ds_dieta,
+    tb_bmh_online.ds_const,
+    tb_bmh_online.ds_ocorr,	
+    ''::character varying AS destino_alta,
+	dt_alta
+   FROM integracao.tb_bmh_online
+UNION ALL
+ SELECT 'Alta'::text AS tipo_bmh_online,
+    to_char(bmh.dt_admss, 'dd/mm/yyyy hh24:mi'::text) AS dt_admss,
+    bmh.nm_pcnt,
+    to_char(bmh.dt_nasc_pcnt, 'dd/mm/yyyy'::text) AS dt_nasc_pcnt,
+    bmh.nm_cnvo,
+    bmh.nm_mdco,
+    bmh.nm_psco,
+    bmh.nm_trpa,
+    bmh.ds_cid,
+        CASE
+            WHEN bmh.fl_fmnte = true THEN 'Sim'::text
+            ELSE 'Não'::text
+        END AS fl_fmnte,
+        CASE
+            WHEN bmh.fl_rtgrd = true THEN 'Sim'::text
+            ELSE 'Não'::text
+        END AS fl_rtgrd,
+        CASE
+            WHEN bmh.fl_acmpte = true THEN 'Sim'::text
+            ELSE 'Não'::text
+        END AS fl_acmpte,
+    bmh.ds_crtr_intnc,
+    bmh.ds_dieta,
+    bmh.ds_const,
+    bmh.ds_ocorr,
+    alta.ds_mtvo_alta AS destino_alta,
+	dt_alta	
+   FROM integracao.tb_bmh_online bmh,
+    integracao.tb_mtvo_alta alta
+  WHERE bmh.id_mtvo_alta = alta.id_mtvo_alta;
+
+ALTER TABLE integracao.vw_bmh_online
+    OWNER TO postgres;
+
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO emenezes;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO simone;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO bcorrea;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO dayane;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO aoliveira;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO dchinelato;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO lmaria;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO dalves;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO tnovaes;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO mrezende;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO grazielle;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO pferreira;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO vlucia;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO gcassia;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO administrativo;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO bsouza;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO amonteiro;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO tivilaverde;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO deliza;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO ronan;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO axavier;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO poliveira;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO soliveira;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO mmattos;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO jmiguel;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO fmedeiros;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO fernandazeferino;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO sbhering;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO camila;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO ftesta;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO woliveira;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO evaldo;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO vrodrigues;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO vandrade;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO wquetz;
+GRANT ALL ON TABLE integracao.vw_bmh_online TO postgres;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO ralmeida;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO mvilela;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO mariabethania;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO vsilva;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO farmacia;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO dfajardo;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO fcampos;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO amorais;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO clovismelo;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO coliveira;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO tsilva;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO lvieira;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO ldelgado;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO opacheco;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO lamorim;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO aalbino;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO mliberato;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO greis;
+
+--SQLServer -> Smart
+create view dbo.view_medico_leito_pac as
+	SELECT hsp_pac
+	, hsp.hsp_dthre
+	, loc.loc_nome 
+	, psv_a.psv_cod psv_cod_a
+	, psv_b.psv_cod psv_cod_b
+	, psv_a.psv_apel psv_apel_a
+	, psv_b.psv_apel psv_apel_b
+	FROM hsp 
+	, loc 
+	, str 
+	, cnv 
+	, psv psv_a 
+	, psv psv_b 
+	, smk WHERE ( hsp.hsp_mde *= psv_a.psv_cod) 
+	and ( hsp.hsp_mda *= psv_b.psv_cod) 
+	and ( hsp.hsp_smk_tipo *= smk.smk_tipo) 
+	and ( hsp.hsp_proc1 *= smk.smk_cod) 
+	and ( loc.loc_cod = hsp.hsp_loc ) 
+	and ( str.str_cod = loc.loc_str ) 
+	and ( cnv.cnv_cod = hsp.hsp_cnv ) 
+	and  (( hsp.hsp_trat_int is null or ( hsp.hsp_trat_int <> 'T' ) ) 
+	and ( hsp.hsp_stat not in ( 'X', 'C' ) ) ) 
+	and loc.loc_str = '1H'
+	and hsp.hsp_dthra  is null;
+

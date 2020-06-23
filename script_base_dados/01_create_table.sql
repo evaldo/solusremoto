@@ -590,6 +590,18 @@ CREATE INDEX ix_ot_pac_reg_smart
 
 COMMENT ON INDEX integracao.ix_ot_pac_reg_smart
     IS 'Índice de otimização do número do registro paciente.';
+	
+ALTER TABLE integracao.tb_ctrl_leito_smart
+    ADD COLUMN id_memb_equip_hosptr_mdco integer;
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.id_memb_equip_hosptr_mdco
+    IS 'Identificador de membro médico hospitalar ';
+	
+ALTER TABLE integracao.tb_ctrl_leito_smart
+    ADD COLUMN nm_memb_equip_hosptr character varying(255);
+
+COMMENT ON COLUMN integracao.tb_ctrl_leito_smart.nm_memb_equip_hosptr
+    IS 'Nome do membro da equipe hospitalar';	
 
 ----------------------------------------------------------------------------------------------
 

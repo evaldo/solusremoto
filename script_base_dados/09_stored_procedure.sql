@@ -1,3 +1,74 @@
+-- FUNCTION: integracao.prc_atualiza_medico()
+
+-- DROP FUNCTION integracao.prc_atualiza_medico();
+
+CREATE OR REPLACE FUNCTION integracao.prc_atualiza_medico(
+	)
+    RETURNS character
+    LANGUAGE 'plpgsql'
+
+    COST 100
+    VOLATILE 
+AS $BODY$
+DECLARE 
+
+	cur_smart_medico REFCURSOR;
+	rec_smart_medico RECORD;
+		
+	rows_affected int;	
+	qtde_reg_smart int;
+	
+BEGIN
+
+	rows_affected := 0;		
+	
+	OPEN cur_smart_medico FOR 
+	  SELECT distinct smart.id_memb_equip_hosptr_mdco
+		   , trim(smart.nm_memb_equip_hosptr) as nm_memb_equip_hosptr	   
+	FROM integracao.tb_ctrl_leito_smart smart 
+	where smart.id_memb_equip_hosptr_mdco is not null order by 2;
+	
+	LOOP
+	
+		FETCH cur_smart_medico INTO rec_smart_medico;			
+		EXIT WHEN NOT FOUND;
+		
+		SELECT count(1) into qtde_reg_smart 
+			from integracao.tb_equip_hosptr
+		where id_memb_equip_hosptr = rec_smart_medico.id_memb_equip_hosptr_mdco;
+		
+		if qtde_reg_smart = 0 then		
+			INSERT INTO integracao.tb_equip_hosptr(
+				id_memb_equip_hosptr
+			  , nm_memb_equip_hosptr
+			  , tp_memb_equip_hosptr
+			  , cd_usua_incs
+			  , dt_incs)
+				VALUES (rec_smart_medico.id_memb_equip_hosptr_mdco
+					  , rec_smart_medico.nm_memb_equip_hosptr
+					  , 'MDCO'
+					  , 'carga_medico'
+					  , current_timestamp);
+					  
+			rows_affected := rows_affected + 1;		
+		end if;
+	
+	END LOOP;
+
+	CLOSE cur_smart_medico;	
+
+	RETURN 'Proc. Ok. QtRegProcessados: '||rows_affected;
+
+EXCEPTION WHEN OTHERS THEN 
+	RAISE;
+END;
+$BODY$;
+
+ALTER FUNCTION integracao.prc_atualiza_medico()
+    OWNER TO postgres;
+
+
+
 -- FUNCTION: integracao.prc_processa_bmh_online()
 
 -- DROP FUNCTION integracao.prc_processa_bmh_online();

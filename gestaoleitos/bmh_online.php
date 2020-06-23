@@ -71,21 +71,22 @@
 		  
 			</head>
 			<body id="aplicacao">
-			 <div id="main" class="container-fluid" style="margin-top: 50px"> 
-				<div class="container" style="margin-left: 0px ">								
-					
-					<form class="form-inline" id="formulario" action="#" method="post" >				
-						<div class="container" style="margin-left: 0px">
-						</div>					
-					</form>
-				</div>			
-			</div> <!-- /#top -->
 			
-			<br>		
-
+			<div class="container" style="margin-left: 0px; margin-right: 0px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 135px; border: 1px solid #E6E6E6;">
+				<h3>BMHOnLine</h3>
+				<br>
+				<label style="font-weight:bold;">Filtros para emissão do Relatório</label>
+				<br>
+				<label style="font-weight:bold;">Data Inicial:</label>&nbsp;
+				<input type="date" id="dataInicio" name="dataInicio"> &nbsp;&nbsp;
+				<label style="font-weight:bold;">a</label>&nbsp;
+				<label style="font-weight:bold;">Data Final:</label>&nbsp;
+				<input type="date" id="dataFim" name="dataFim">&nbsp;&nbsp;
+				<input class="btn btn-primary" type="button" value="Gerar Relatório" id="imprimir">&nbsp;
+			</div>			
 			<div id="list" class="row" style="margin-left: 20px; margin-right: 20px; ">
 			
-				<div class="table-responsive">
+				<div class="table-responsive" style="margin-top: 135px">
 					<table class="table table-striped" cellspacing="0" cellpadding="0" id="tabela">
 						<thead>
 							<tr>
@@ -148,6 +149,22 @@
 			</div>
 		</div>			
 	<script>	
+	
+		$('#imprimir').click(function(){
+			
+			var dataInicio = document.getElementById("dataInicio").value;		
+			var dataFim = document.getElementById("dataFim").value;		
+			
+			$.ajax({
+				url : '../gestaoleitos/relatorio_bmhonline.php', // give complete url here
+				type : 'post',
+				data:{dataInicio:dataInicio, dataFim:dataFim},
+				success : function(completeHtmlPage) {				
+					$("html").empty();
+					$("html").append(completeHtmlPage);
+				}
+			});
+		});
 	
 		$(document).ready(function(){
 			$("#tabela").on('click', '.visualiza', function(){

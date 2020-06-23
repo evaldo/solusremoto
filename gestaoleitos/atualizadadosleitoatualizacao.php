@@ -57,10 +57,11 @@
 	<head>
 		<meta charset="utf-8">
 		<link href="../css/bootstrap.min.css" rel="stylesheet">
-		<link href="../css/style.css" rel="stylesheet">		
+		<link href="../css/style.css" rel="stylesheet">
+		
 	</head>
-	<body style="margin-right: 0; margin-left: 0">	
-		<div class="container" style="width: 100%;  margin-right: 0; margin-left: 0; position: relative;">
+	<body style="margin-right: 0; margin-left: 0">			
+		<div class="container" style="width: 100%;  margin-right: 0; margin-left: 0; position: relative;">		  
 		  <div class="modal-dialog">
 				<div class="modal-content" style="width:800px">
 					<div class="container">						
@@ -114,47 +115,6 @@
 									
 									
 									<tr>  
-										<td style="width:150px"><label>Médico:</label></td>  
-										
-										<?php
-										
-										$sql = "SELECT id_memb_equip_hosptr, nm_memb_equip_hosptr
-										from integracao.tb_equip_hosptr where tp_memb_equip_hosptr = 'MDCO' order by 2";
-										
-										if ($pdo==null){
-												header(Config::$webLogin);
-										}	
-										$ret = pg_query($pdo, $sql);
-										if(!$ret) {
-											echo pg_last_error($pdo);
-											exit;
-										}
-										?>
-										<td style="width:150px">
-											<select  id="sl_memb_equip_hosptr_mdco" class="form-control" onchange=" 
-														var selObj = document.getElementById('sl_memb_equip_hosptr_mdco');
-														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('id_memb_equip_hosptr_mdco').value = selValue;">
-											<option value="null"></option>
-														
-											<?php
-												$cont=1;																
-											
-												while($row = pg_fetch_row($ret)) {
-													if($row[0]==$_SESSION['id_memb_equip_hosptr_mdco']){														
-												?>												
-													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[1]; ?></option>
-												<?php																		
-													} else {
-												?>
-													<option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option>												
-													<?php } 
-												$cont=$cont+1;} ?>	
-											</select>
-										
-										</td> 							
-									  </tr>		
-									  <tr>  
 										<td style="width:150px"><label>Psicólogo:</label></td>  
 										
 										<?php
@@ -504,10 +464,10 @@
 			</div>
 		</div>						
 		<script src="../js/jquery.min.js"></script>	 
-		<script src="../js/bootstrap.min.js"></script>	 		
+		<script src="../js/bootstrap.min.js"></script>				
 </body>
 </html>
-		
+
 <?php 
     
 	

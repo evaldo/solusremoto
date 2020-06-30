@@ -54,6 +54,10 @@
 	
 	while($rowSmart = pg_fetch_row($retSmart)) {
 		
+		if($rowSmart[9]==null){
+			$rowSmart[9]=0;
+		}
+		
 		$sqlCtrlLeito="SELECT COUNT(1) FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '" . $rowSmart[0] . "'";
 		
 		$retCtrlLeito = pg_query($pdo, $sqlCtrlLeito);
@@ -96,6 +100,8 @@
 			}
 							
 			$result = pg_query($pdo, $sql);
+			
+			//echo $sql;
 			
 			if($result){
 				echo "";
@@ -185,9 +191,9 @@
 		nm_cnvo = null,
 		pac_reg = null,
 		dt_admss = null,
-		fl_fmnte = false, 
-		fl_rtgrd = false, 
-		fl_acmpte = false, 		
+		fl_fmnte = null, 
+		fl_rtgrd = null, 
+		fl_acmpte = null, 		
 		id_memb_equip_hosptr_mdco = null, 
 		id_memb_equip_hosptr_psco = null, 
 		id_memb_equip_hosptr_trpa = null,
@@ -208,35 +214,8 @@
 		}
 
 		//fl_status_leito = 'Livre', 
-		//id_status_leito = 6,
+		//id_status_leito = 6,		
 		
-		$sqlsmarttemp = "select trim(leito_smart.ds_leito) as leito, leito_smart.pac_reg as pac_reg
-				from integracao.tb_ctrl_leito_temp leito_temp
-					LEFT JOIN integracao.tb_ctrl_leito_smart leito_smart 
-					ON leito_temp.ds_leito = trim(leito_smart.ds_leito)
-			where trim(leito_smart.ds_leito) = trim('" . $rowSmart[0] . "')";
-			
-		$retSmarttemp = pg_query($pdo, $sqlsmarttemp);	
-		if(!$retSmarttemp) {
-			echo pg_last_error($pdo);
-			//header(Config::$webLogin);
-			exit;
-		}
-		
-		$retSmarttemp = pg_query($pdo, $sqlsmarttemp);
-		$rowSmarttemp = pg_fetch_assoc($retSmarttemp);		
-		
-		if (pg_numrows($retSmarttemp)>0) {
-			
-			$sqlUpdateCtrlTemp = "UPDATE integracao.tb_ctrl_leito_temp SET pac_reg = ". $rowSmarttemp['pac_reg'] ." WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
-			
-			$resultUpdateCtrlTemp = pg_query($pdo, $sqlUpdateCtrlTemp);
-		
-			if($resultUpdateCtrlTemp){
-				echo "";
-			}
-		
-		} 
 		//else {
 		
 		//	$sqlUpdateCtrlTemp = "UPDATE integracao.tb_ctrl_leito_temp SET 
@@ -278,7 +257,31 @@
 	//$num_total = $row[0];	
 	//$num_paginas = ceil($num_total/$itens_por_pagina);
 	//$num_reg_pagina = $pagina*$itens_por_pagina;
+	
+	$sqlsmarttemp = "select trim(leito_smart.ds_leito) as leito, leito_smart.pac_reg as pac_reg
+				from integracao.tb_ctrl_leito_temp leito_temp
+					LEFT JOIN integracao.tb_ctrl_leito_smart leito_smart 
+					ON leito_temp.ds_leito = trim(leito_smart.ds_leito)";			
+			
+	$retsmarttemp = pg_query($pdo, $sqlsmarttemp);	
+	if(!$retsmarttemp) {
+		echo pg_last_error($pdo);
+		//header(Config::$webLogin);
+		exit;
+	}					
+	
+	while($rowsmarttemp = pg_fetch_row($retsmarttemp)) {
+			
+		$sqlUpdateCtrlTemp = "UPDATE integracao.tb_ctrl_leito_temp SET ds_leito = trim('" . $rowsmarttemp[0] . "') WHERE pac_reg = ". $rowsmarttemp[1] ."";
+			
+		$resultUpdateCtrlTemp = pg_query($pdo, $sqlUpdateCtrlTemp);
 		
+		if($resultUpdateCtrlTemp){
+			echo "";
+		}
+		
+	} 
+	
 	$sql ="select  
 		ds_leito,
 		ds_andar,
@@ -290,13 +293,34 @@
 		nm_mdco,
 		nm_psco,
 		nm_trpa,
-		ds_cid,
-		case when fl_fmnte = 'T' then 'Sim' else 'Não' end  ,
+		case when ds_cid is null then '' else ds_cid end as ds_cid,
+		case when fl_fmnte = 'true' then 
+				'Sim' 
+			  else 
+				case when fl_fmnte = 'false' then
+					'Não' 
+				else	
+					''
+			  end end as fl_fmnte,			  
 		ds_dieta,
 		ds_const,
 		to_char(dt_prvs_alta, 'dd/mm/yyyy hh24:mi') as dt_prvs_alta,
-		case when fl_rtgrd = 'T' then 'Sim' else 'Não' end  ,
-		case when fl_acmpte = 'T' then 'Sim' else 'Não' end ,
+		case when fl_rtgrd = 'true' then 
+				'Sim' 
+			  else 
+				case when fl_rtgrd = 'false' then
+					'Não' 
+				else	
+					''
+			  end end as fl_rtgrd,	
+		case when fl_acmpte = 'true' then 
+				'Sim' 
+			  else 
+				case when fl_acmpte = 'false' then
+					'Não' 
+				else	
+					''
+			  end end as fl_acmpte,	
 		fl_status_leito,
 		ds_apto_atvd_fisica,
 		ds_progra,
@@ -348,29 +372,53 @@
 				
 			}			
 			
+			//alterar aqui 26/06/2020
+			//if ($_POST['fl_fmnte']=='Sim'){					
+			//	$fl_fmnte = 'true';
+			//} elseif ($_POST['fl_fmnte']=='Nao'){					
+			//	$fl_fmnte = 'false';
+			//} else {
+			//	$fl_fmnte = 'null';
+			//}
 			
-			if ($_POST['fl_fmnte']=='Sim'){					
-				$fl_fmnte = 'T';
+			//if ($_POST['fl_rtgrd']=='Sim'){					
+			//	$fl_rtgrd = 'true';
+			//} elseif ($_POST['fl_rtgrd']=='Nao'){					
+			//	$fl_rtgrd = 'false';
+			//} else {
+			//	$fl_rtgrd = 'null';
+			//}
+			
+			//if ($_POST['fl_acmpte']=='Sim'){					
+			//	$fl_acmpte = 'true';
+			//} elseif ($_POST['fl_acmpte']=='Nao'){					
+			//	$fl_acmpte = 'false';
+			//} else {
+			//	$fl_acmpte = 'null';
+			//}
+			
+			if ($_POST['fl_fmnte']=='null' || $_POST['fl_fmnte']==''){
+				$fl_fmnte = 'null';
 			} else {
-				$fl_fmnte = 'F';
+				$fl_fmnte = $_POST['fl_fmnte'];
 			}
 			
-			if ($_POST['fl_rtgrd']=='Sim'){					
-				$fl_rtgrd = 'T';
+			if ($_POST['fl_rtgrd']=='null' || $_POST['fl_rtgrd']==''){
+				$fl_rtgrd = 'null';
 			} else {
-				$fl_rtgrd = 'F';
+				$fl_rtgrd = $_POST['fl_rtgrd'];
 			}
 			
-			if ($_POST['fl_acmpte']=='Sim'){					
-				$fl_acmpte = 'T';
+			if ($_POST['fl_acmpte']=='null' || $_POST['fl_acmpte']==''){
+				$fl_acmpte = 'null';
 			} else {
-				$fl_acmpte = 'F';
+				$fl_acmpte = $_POST['fl_acmpte'];
 			}
-						
+			
 			$sql = "UPDATE integracao.tb_ctrl_leito SET 
-			fl_fmnte = '" . $fl_fmnte . "', 
-			fl_rtgrd = '" . $fl_rtgrd . "', 
-			fl_acmpte = '" . $fl_acmpte . "', ";
+			fl_fmnte = " . $fl_fmnte . ", 
+			fl_rtgrd = " . $fl_rtgrd . ", 
+			fl_acmpte = " . $fl_acmpte . ", ";
 			
 			if ($_POST['id_status_leito']=='null' or $_POST['id_status_leito']=='' ) {
 				$_POST['id_status_leito']=5;				
@@ -486,12 +534,12 @@
 				$sql.= "'". $_POST['ds_ocorr'] ."',";
 				$sql.= "'". $_POST['ds_cid'] ."',";
 				$sql.= "'". $_POST['ds_dieta'] ."',";
-				$sql.= "'". $fl_fmnte ."',";
+				$sql.= "". $fl_fmnte .",";
 				$sql.= "'". $_POST['ds_const'] ."',";
 				$sql.= "'". $_POST['ds_crtr_intnc'] ."',";
 				$sql.= "(select ds_status_leito from integracao.tb_status_leito where id_status_leito = " . $_POST['id_status_leito'] . ") ,";
-				$sql.= "'". $fl_acmpte ."',";
-				$sql.= "'". $fl_rtgrd ."',";
+				$sql.= "". $fl_acmpte .",";
+				$sql.= "". $fl_rtgrd .",";
 				$sql.= "'". $_SESSION['pac_reg'] ."',";
 				$sql.= "'". $_POST['id_status_leito'] ."',";
 				if ($_POST['id_memb_equip_hosptr_mdco']=='null' or $_POST['id_memb_equip_hosptr_mdco']=='' ) {
@@ -522,9 +570,9 @@
 			} else {
 				
 				$sql = "UPDATE integracao.tb_ctrl_leito_temp SET 
-				fl_fmnte = '" . $fl_fmnte . "', 
-				fl_rtgrd = '" . $fl_rtgrd . "', 
-				fl_acmpte = '" . $fl_acmpte . "', ";
+				fl_fmnte = " . $fl_fmnte . ", 
+				fl_rtgrd = " . $fl_rtgrd . ", 
+				fl_acmpte = " . $fl_acmpte . ", ";
 				
 				if ($_POST['id_status_leito']=='null' or $_POST['id_status_leito']=='' ) {
 					$_POST['id_status_leito']=5;				
@@ -828,9 +876,11 @@
 				<label style="font-weight:bold; font-size: 11px;">a</label>&nbsp;
 				<label style="font-weight:bold; font-size: 11px;">Data Final:</label>&nbsp;
 				<input style="font-weight:bold; font-size: 11px;" type="date" id="dataFim" name="dataFim">&nbsp;&nbsp;
-				<input style="font-size: 11px;" class="btn btn-primary" type="button" value="Gerar Relatório" id="imprimirbmh">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<input style="font-size: 11px;" class="btn btn-primary" type="button" value="Imprimir" id="imprimirbmh">&nbsp;
 				
-				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Exp Excel" id="exportar">&nbsp;
+				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Exp. BMHOnline" id="exportarbmhonline">&nbsp;
+				
+				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Exp. Leito" id="exportar">&nbsp;
 				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Legenda" name="legenda" data-toggle="modal" data-target="#modallegenda">
 				
 				<!--<input class="btn btn-primary" type="submit" value="BMHOnline" id="bmhonline">-->
@@ -1076,6 +1126,23 @@
 	$(document).ready(function(){	  
 		$('[data-toggle="tooltip"]').tooltip();		
 	});
+	
+	$('#exportarbmhonline').click(function(){
+			
+			var dataInicio = document.getElementById("dataInicio").value;		
+			var dataFim = document.getElementById("dataFim").value;		
+			
+			$.ajax({
+				url : '../gestaoleitos/relatorioexcelbmhonline.php', // give complete url here
+				type : 'post',
+				data:{dataInicio:dataInicio, dataFim:dataFim},
+				success : function(completeHtmlPage) {	
+					alert("Faça o download do arquivo de impressão. Abra no Excel e solicite para Salvar Como com o nome desejado.");
+					$("html").empty();
+					$("html").append(completeHtmlPage);
+				}
+			});
+		});
 	
 	$('#imprimirbmh').click(function(){
 			

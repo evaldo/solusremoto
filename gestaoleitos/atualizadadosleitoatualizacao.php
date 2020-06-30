@@ -11,11 +11,32 @@
 			, nm_psco     
 			, nm_trpa     
 			, ds_cid     
-			, case when fl_fmnte = 'T' then 'Sim' else 'Não' end as fl_fmnte
+			, case when fl_fmnte = true then 
+				'Sim' 
+			  else 
+				case when fl_fmnte = false then
+					'Não' 
+				else	
+					''
+			  end end as fl_fmnte
 			, ds_dieta     
-			, ds_const     
-			, case when fl_rtgrd = 'T' then 'Sim' else 'Não' end as fl_rtgrd
-			, case when fl_acmpte = 'T' then 'Sim' else 'Não' end as fl_acmpte
+			, ds_const
+			, case when fl_rtgrd = true then 
+				'Sim' 
+			  else 
+				case when fl_rtgrd = false then
+					'Não' 
+				else	
+					''
+			  end end as fl_rtgrd			
+			, case when fl_acmpte = true then 
+				'Sim' 
+			  else 
+				case when fl_acmpte = false then
+					'Não' 
+				else	
+					''
+			  end end as fl_acmpte			
 			, ds_ocorr     
 			, fl_status_leito
 			, id_memb_equip_hosptr_mdco
@@ -24,6 +45,9 @@
 			, id_status_leito
 			, pac_reg
 			, nm_pcnt
+			, case when fl_fmnte = 'T' then 'true' else 'false' end fl_fmnte
+			, case when fl_rtgrd = 'T' then 'true' else 'false' end fl_rtgrd 
+			, case when fl_acmpte = 'T' then 'true' else 'false' end fl_acmpte  
 	FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '". $_SESSION['nm_loc_nome'] ."'";
 		
 	$ret = pg_query($pdo, $sql);
@@ -48,6 +72,11 @@
 	$_SESSION['id_memb_equip_hosptr_trpa'] = $row[14];
 	$_SESSION['pac_reg'] = $row[16];
 	$_SESSION['nm_pcnt'] = $row[17];
+	
+	
+	$_SESSION['fl_fmntelogico'] = $row[18];
+	$_SESSION['fl_rtgrdlogico'] = $row[19];
+	$_SESSION['fl_acmptelogico'] = $row[20];
 	
 	
 	$_SESSION['id_status_leito'] = $row[15];
@@ -245,16 +274,16 @@
 															var selObj = document.getElementById('sl_fmnte');
 															var selValue = selObj.options[selObj.selectedIndex].value;
 															document.getElementById('fl_fmnte').value = selValue;">
-													
+													<option value="null"></option>
 													<?php if ($_SESSION['fl_fmnte']=='Sim') { ?>
-														<option value="Sim" selected>Sim</option>													
+														<option value="true" selected>Sim</option>													
 													<?php } else { ?>
-														<option value="Sim">Sim</option>
+														<option value="true">Sim</option>
 													<?php } ?>
 													<?php if ($_SESSION['fl_fmnte']=='Não') { ?>
-														<option value="Nao" selected>Não</option>													
+														<option value="false" selected>Não</option>													
 													<?php } else { ?>
-														<option value="Nao">Não</option>
+														<option value="false">Não</option>
 													<?php } ?>
 												</select>
 											</td>
@@ -349,16 +378,16 @@
 															var selObj = document.getElementById('sl_rtgrd');
 															var selValue = selObj.options[selObj.selectedIndex].value;
 															document.getElementById('fl_rtgrd').value = selValue;">
-													
+													<option value="null"></option>
 													<?php if ($_SESSION['fl_rtgrd']=='Sim') { ?>
-														<option value="Sim" selected>Sim</option>													
+														<option value="true" selected>Sim</option>													
 													<?php } else { ?>
-														<option value="Sim">Sim</option>
+														<option value="true">Sim</option>
 													<?php } ?>
 													<?php if ($_SESSION['fl_rtgrd']=='Não') { ?>
-														<option value="Nao" selected>Não</option>													
+														<option value="false" selected>Não</option>													
 													<?php } else { ?>
-														<option value="Nao">Não</option>
+														<option value="false">Não</option>
 													<?php } ?>
 												</select>
 											</td>
@@ -370,16 +399,16 @@
 															var selObj = document.getElementById('sl_acmpte');
 															var selValue = selObj.options[selObj.selectedIndex].value;
 															document.getElementById('fl_acmpte').value = selValue;">
-													
+													<option value="null"></option>
 													<?php if ($_SESSION['fl_acmpte']=='Sim') { ?>
-														<option value="Sim" selected>Sim</option>													
+														<option value="true" selected>Sim</option>													
 													<?php } else { ?>
-														<option value="Sim">Sim</option>
+														<option value="true">Sim</option>
 													<?php } ?>
 													<?php if ($_SESSION['fl_acmpte']=='Não') { ?>
-														<option value="Nao" selected>Não</option>													
+														<option value="false" selected>Não</option>													
 													<?php } else { ?>
-														<option value="Nao">Não</option>
+														<option value="false">Não</option>
 													<?php } ?>
 												</select>
 											</td>
@@ -445,9 +474,10 @@
 										
 										<input type="text" id="id_memb_equip_hosptr_trpa" name="id_memb_equip_hosptr_trpa" value="<?php echo$_SESSION['id_memb_equip_hosptr_trpa']; ?>" style="display:none"> 
 										
-										<input type="text" id="fl_fmnte" name="fl_fmnte" value="<?php echo$_SESSION['fl_fmnte']; ?>" style="display:none"> 
-										<input type="text" id="fl_rtgrd" name="fl_rtgrd" value="<?php echo$_SESSION['fl_rtgrd']; ?>" style="display:none"> 
-										<input type="text" id="fl_acmpte" name="fl_acmpte" value="<?php echo$_SESSION['fl_acmpte']; ?>" style="display:none"> 
+										<input type="text" id="fl_fmnte" name="fl_fmnte" value="<?php echo$_SESSION['fl_fmntelogico']; ?>" style="display:none"> 
+										<input type="text" id="fl_rtgrd" name="fl_rtgrd" value="<?php echo$_SESSION['fl_rtgrdlogico']; ?>" style="display:none"> 
+										<input type="text" id="fl_acmpte" name="fl_acmpte" value="<?php echo$_SESSION['fl_acmptelogico']; ?>" style="display:none"> 
+										
 										<input type="text" id="id_status_leito" name="id_status_leito" value="<?php echo$_SESSION['id_status_leito']; ?>" style="display:none">
 										
 										<input type="text" id="ds_cid" name="ds_cid" value="<?php echo$_SESSION['ds_cid']; ?>" style="display:none">

@@ -261,29 +261,16 @@ GRANT SELECT ON TABLE integracao.vw_bmh_online TO mliberato;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO greis;
 
 --SQLServer -> Smart
+--EXEC sp_helptext 'dbo.view_db_gest_leitos';  
+--EXEC sp_helptext 'dbo.view_medico_leito_pac';  
 create view dbo.view_medico_leito_pac as
-	SELECT hsp_pac
-	, hsp.hsp_dthre
-	, loc.loc_nome 
-	, psv_a.psv_cod psv_cod_a
-	, psv_b.psv_cod psv_cod_b
-	, psv_a.psv_apel psv_apel_a
-	, psv_b.psv_apel psv_apel_b
-	FROM hsp 
-	, loc 
-	, str 
-	, cnv 
-	, psv psv_a 
-	, psv psv_b 
-	, smk WHERE ( hsp.hsp_mde *= psv_a.psv_cod) 
-	and ( hsp.hsp_mda *= psv_b.psv_cod) 
-	and ( hsp.hsp_smk_tipo *= smk.smk_tipo) 
-	and ( hsp.hsp_proc1 *= smk.smk_cod) 
-	and ( loc.loc_cod = hsp.hsp_loc ) 
-	and ( str.str_cod = loc.loc_str ) 
-	and ( cnv.cnv_cod = hsp.hsp_cnv ) 
-	and  (( hsp.hsp_trat_int is null or ( hsp.hsp_trat_int <> 'T' ) ) 
-	and ( hsp.hsp_stat not in ( 'X', 'C' ) ) ) 
-	and loc.loc_str = '1H'
-	and hsp.hsp_dthra  is null;
-
+SELECT distinct 
+       hsp.HSP_PAC
+     , pac.PAC_NOME
+	 , psv.PSV_COD
+	 , psv.PSV_APEL
+	 , hsp.HSP_STAT
+	 , hsp.HSP_MODALIDADE 
+FROM dbo.PAC as pac INNER JOIN (
+		dbo.HSP as hsp INNER JOIN dbo.PSV as psv ON hsp.HSP_MDE = psv.PSV_COD) ON pac.PAC_REG = hsp.HSP_PAC 
+WHERE (((hsp.HSP_STAT)='A') AND ((hsp.HSP_MODALIDADE)='HS'));

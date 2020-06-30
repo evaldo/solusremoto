@@ -67,7 +67,7 @@ if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
 // ---------------------------------------------------------
 
 // set font
-$pdf->SetFont('times', 'BI', 14);
+$pdf->SetFont('times', 'N', 8);
 
 // Start First Page Group
 $pdf->startPageGroup();
@@ -94,8 +94,9 @@ $pdf->Cell(0, 10, 'This is the second page of group 1', 0, 1, 'L');
 $pdf->startPageGroup();
 
 // add some pages
+$varteste = "Paciente\tAdmissão\tPaciente";
 $pdf->AddPage();
-$pdf->Cell(0, 10, 'This is the first page of group 2', 0, 1, 'L');
+$pdf->Cell(0, 10, $varteste, 0, 1, 'L');
 $pdf->AddPage();
 $pdf->Cell(0, 10, 'This is the second page of group 2', 0, 1, 'L');
 $pdf->AddPage();

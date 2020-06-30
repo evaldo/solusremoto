@@ -14,7 +14,14 @@ if(isset($_POST["pac_reg"]))
 			to_char(dt_nasc_pcnt, 'dd/mm/yyyy') as dt_nasc_pcnt ,			
 			nm_cnvo,
 			ds_cid,
-			case when fl_fmnte = 'T' then 'Fumante' else 'Não Fumante' end,
+			case when fl_fmnte = 'T' then 
+				'Fumante' 
+			  else 
+				case when fl_fmnte = 'F' then
+					'Não Fumante' 
+				else	
+					''
+			  end end as fl_fmnte,
 			ds_dieta,
 			ds_const,			
 			nm_mdco,

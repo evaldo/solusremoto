@@ -15,10 +15,31 @@
 			nm_psco,
 			nm_trpa,
 			ds_cid,
-			case when fl_fmnte = 'T' then 'Sim' else 'Não' end  ,
+			case when fl_fmnte = 'T' then 
+				'Sim' 
+			  else 
+				case when fl_fmnte = 'F' then
+					'Não' 
+				else	
+					''
+			end end as fl_fmnte,
 			to_char(dt_prvs_alta, 'dd/mm/yyyy hh24:mi:ss') as dt_prvs_alta,			
-			case when fl_rtgrd = 'T' then 'Sim' else 'Não' end  ,
-			case when fl_acmpte = 'T' then 'Sim' else 'Não' end ,
+			case when fl_rtgrd = 'T' then 
+				'Sim' 
+			  else 
+				case when fl_rtgrd = 'F' then
+					'Não' 
+				else	
+					''
+			  end end as fl_rtgrd  ,
+			case when fl_acmpte = 'T' then 
+				'Sim' 
+			  else 
+				case when fl_acmpte = 'F' then
+					'Não' 
+				else	
+					''
+			  end end as fl_acmpte ,
 			ds_crtr_intnc,
 			ds_dieta,
 			ds_const,			

@@ -83,6 +83,7 @@
 				<label style="font-weight:bold;">Data Final:</label>&nbsp;
 				<input type="date" id="dataFim" name="dataFim">&nbsp;&nbsp;
 				<input class="btn btn-primary" type="button" value="Gerar Relatório" id="imprimir">&nbsp;
+				<input class="btn btn-primary" type="submit" value="Exp. BMHOnline" id="exportarbmhonline">&nbsp;
 			</div>			
 			<div id="list" class="row" style="margin-left: 20px; margin-right: 20px; ">
 			
@@ -149,7 +150,25 @@
 			</div>
 		</div>			
 	<script>	
-	
+		
+		$('#exportarbmhonline').click(function(){
+			
+			var dataInicio = document.getElementById("dataInicio").value;		
+			var dataFim = document.getElementById("dataFim").value;		
+			
+			$.ajax({
+				url : '../gestaoleitos/relatorioexcelbmhonline.php', // give complete url here
+				type : 'post',
+				data:{dataInicio:dataInicio, dataFim:dataFim},
+				success : function(completeHtmlPage) {	
+					alert("Faça o download do arquivo de impressão. Abra no Excel e solicite para Salvar Como com o nome desejado.");
+					$("html").empty();
+					$("html").append(completeHtmlPage);
+				}
+			});
+		});
+		
+		
 		$('#imprimir').click(function(){
 			
 			var dataInicio = document.getElementById("dataInicio").value;		

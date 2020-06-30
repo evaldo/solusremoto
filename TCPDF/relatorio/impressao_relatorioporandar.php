@@ -15,10 +15,31 @@
 			nm_psco,
 			nm_trpa,
 			ds_cid,
-			case when fl_fmnte = 'T' then 'Sim' else 'Não' end  ,
+			case when fl_fmnte = 'T' then 
+				'Sim' 
+			  else 
+				case when fl_fmnte = 'F' then
+					'Não' 
+				else	
+					''
+			end end as fl_fmnte,
 			to_char(dt_prvs_alta, 'dd/mm/yyyy hh24:mi:ss') as dt_prvs_alta,			
-			case when fl_rtgrd = 'T' then 'Sim' else 'Não' end  ,
-			case when fl_acmpte = 'T' then 'Sim' else 'Não' end ,
+			case when fl_rtgrd = 'T' then 
+				'Sim' 
+			  else 
+				case when fl_rtgrd = 'F' then
+					'Não' 
+				else	
+					''
+			  end end as fl_rtgrd  ,
+			case when fl_acmpte = 'T' then 
+				'Sim' 
+			  else 
+				case when fl_acmpte = 'F' then
+					'Não' 
+				else	
+					''
+			  end end as fl_acmpte ,
 			ds_crtr_intnc,
 			ds_dieta,
 			ds_const,			
@@ -103,14 +124,14 @@ if (@file_exists(dirname(__FILE__).'/lang/por.php')) {
 $pdf->SetDisplayMode('fullpage', 'SinglePage', 'UseNone');
 
 // set font
-$pdf->SetFont('times', 'B', 9);
+$pdf->SetFont('times', 'N', 9);
 
 $pdf->AddPage('L', 'A4');
 
 date_default_timezone_set('America/Sao_Paulo');
 
 	$html = ' 				
-		<h4>Data/Hora da Emissão: '. date("d/m/Y H:i:s").'<h4>
+		<h5>Data/Hora da Emissão: '. date("d/m/Y H:i:s").'<h5>
         <table>					
 			<tr>
 				<th>Leito</th>				
@@ -132,6 +153,7 @@ date_default_timezone_set('America/Sao_Paulo');
 				<th>Ocorrências</th>						
 			</tr>
 			<hr>';
+	$contalinha = 0;
 	while($row = pg_fetch_row($ret)) {
 		$html .= ' 
 			<tr >
@@ -152,9 +174,39 @@ date_default_timezone_set('America/Sao_Paulo');
 				<td>'.$row[14].'</td>
 				<td>'.$row[15].'</td>							
 				<td>'.$row[16].'</td>
-			</tr>
-			<hr>';
-			//echo $row[0];
+			</tr>';
+			$contalinha = $contalinha + 1;
+			
+			if ($contalinha == 10){
+				$contalinha = 0;
+				$html .= ' <div style="page-break-after: always"></div>';			
+				
+				$html .= ' 				
+				<h5>Data/Hora da Emissão: '. date("d/m/Y H:i:s"). '<h5>
+				<table>					
+					<tr>
+						<th>Leito</th>				
+						<th>Admissão</th>
+						<th>Paciente</th>				
+						<th>Data de Nasc.</th>
+						<th>Convênio</th>
+						<th>Médico</th>
+						<th>Psicólogo</th>
+						<th>Terapeuta</th>
+						<th>Grupo de CID</th>
+						<th>Fumante</th>
+						<th>Prvs. de Alta</th>					
+						<th>Retagd.</th>
+						<th>Acomp.</th>
+						<th>Cart. Inter.</th>
+						<th>Dieta</th>
+						<th>Consist.</th>
+						<th>Ocorrências</th>						
+					</tr>
+					<hr>';				
+				
+			}
+			$html .= ' <hr>';						
 	}
 		$html .= '</table>';
 

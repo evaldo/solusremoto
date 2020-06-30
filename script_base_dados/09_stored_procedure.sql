@@ -213,6 +213,24 @@ BEGIN
 			WHERE pac_reg =rec_smart_alta.pac_reg
 			  and dt_admss = rec_smart_alta.dt_admss;
 			  
+			 UPDATE integracao.tb_ctrl_leito_temp SET 
+				fl_fmnte = false, 
+				fl_rtgrd = false, 
+				fl_acmpte = false, 		
+				id_memb_equip_hosptr_mdco = null, 
+				id_memb_equip_hosptr_psco = null, 
+				id_memb_equip_hosptr_trpa = null,
+				nm_mdco=null, 		
+				nm_psco=null,
+				nm_trpa=null,
+				ds_cid = null,			
+				ds_dieta = null,
+				ds_const = null,
+				ds_ocorr = null, 
+				ds_crtr_intnc = null,				 
+				pac_reg = null
+				WHERE pac_reg =rec_smart_alta.pac_reg; 			 
+			 
 			 qtde_reg_smart:=qtde_reg_smart + 1;
 			 
 		end if;		

@@ -27,7 +27,9 @@
 			from integracao.vw_bmh_online 
 			where  to_date(dt_admss, 'dd/mm/yyyy') >= to_date('".$_SESSION['dataInicio']."','dd/mm/yyyy')
 			   and to_date(dt_admss, 'dd/mm/yyyy') <= to_date('".$_SESSION['dataFim']."','dd/mm/yyyy')
-			   and tipo_bmh_online = 'Admissão'";	   			
+			   and tipo_bmh_online = 'Admissão'
+			   and (ds_leito not like 'EC%' or ds_leito is null)
+			   and (nm_pcnt not like 'ACOMPANHANTE%'  and nm_pcnt not like 'RETAGUARDA%')";	   			
 		$ret = pg_query($pdo, $sql);
 		
 		if(!$ret) {
@@ -61,7 +63,9 @@
 		from integracao.vw_bmh_online 
 			where  to_date(dt_admss, 'dd/mm/yyyy') >= to_date('".$_SESSION['dataInicio']."','dd/mm/yyyy')
 			   and to_date(dt_admss, 'dd/mm/yyyy') <= to_date('".$_SESSION['dataFim']."','dd/mm/yyyy') 	
-               and tipo_bmh_online = 'Admissão'			   
+               and tipo_bmh_online = 'Admissão'	
+			   and (ds_leito not like 'EC%' or ds_leito is null)
+			   and (nm_pcnt not like 'ACOMPANHANTE%'  and nm_pcnt not like 'RETAGUARDA%')			   
 		order by dt_admss";			
 		
 		$ret = pg_query($pdo, $sql);
@@ -302,6 +306,7 @@ date_default_timezone_set('America/Sao_Paulo');
 			<tr>
 				<th>Paciente</th>				
 				<th>Admissão</th>
+				<th>Alta</th>
 				<th>Data de Nasc.</th>
 				<th>Convênio</th>
 				<th>Médico</th>
@@ -315,8 +320,7 @@ date_default_timezone_set('America/Sao_Paulo');
 				<th>Dieta</th>
 				<th>Consist.</th>
 				<th>Ocorrências</th>							
-				<th>Destino de Alta</th>
-				<th>Alta</th>
+				<th>Destino de Alta</th>				
 															
 			</tr>
 			<hr>';
@@ -325,6 +329,7 @@ date_default_timezone_set('America/Sao_Paulo');
 			<tr >
 				<td>'.$row[0].'</td>				
 				<td>'.$row[1].'</td>
+				<td>'.$row[17].'</td>
 				<td>'.$row[2].'</td>				
 				<td>'.$row[3].'</td>
 				<td>'.$row[4].'</td>
@@ -355,6 +360,7 @@ date_default_timezone_set('America/Sao_Paulo');
 			<tr>
 				<th>Paciente</th>				
 				<th>Admissão</th>
+				<th>Alta</th>
 				<th>Data de Nasc.</th>
 				<th>Convênio</th>
 				<th>Médico</th>
@@ -379,6 +385,7 @@ date_default_timezone_set('America/Sao_Paulo');
 			<tr >
 				<td>'.$row[0].'</td>				
 				<td>'.$row[1].'</td>
+				<td>'.$row[17].'</td>
 				<td>'.$row[2].'</td>				
 				<td>'.$row[3].'</td>
 				<td>'.$row[4].'</td>

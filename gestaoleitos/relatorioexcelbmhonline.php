@@ -50,6 +50,8 @@
 			where  to_date(dt_admss, 'dd/mm/yyyy') >= to_date('".$_SESSION['dataInicio']."','dd/mm/yyyy')
 			   and to_date(dt_admss, 'dd/mm/yyyy') <= to_date('".$_SESSION['dataFim']."','dd/mm/yyyy') 	
 			   and tipo_bmh_online = 'Admissão'
+			   and (ds_leito not like 'EC%' or ds_leito is null)
+			   and (nm_pcnt not like 'ACOMPANHANTE%'  and nm_pcnt not like 'RETAGUARDA%')
 		order by dt_admss";
 				
 		if ($pdo==null){

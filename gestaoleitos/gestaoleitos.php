@@ -699,7 +699,7 @@
 						exit;
 					}
 				?>
-					<select id="sl_tp_carater_inter" style="width: 150px;" onchange="Busca(4, 'sl_tp_carater_inter')">
+					<select id="sl_tp_carater_inter" style="width: 150px;" onchange="BuscaExato(4, 'sl_tp_carater_inter')">
 					<option value=""></option>
 								
 					<?php
@@ -1030,6 +1030,26 @@
 			 <script src="../js/bootstrap.min.js"></script>
 			 <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 			 <script>
+				function BuscaExato(col, idbusca) {
+					  var input, filter, table, tr, td, i, txtValue;
+					  input = document.getElementById(idbusca);
+					  filter = input.value.toUpperCase();
+					  table = document.getElementById("tabela");
+					  tr = table.getElementsByTagName("tr");
+					  for (i = 0; i < tr.length; i++) {
+						td = tr[i].getElementsByTagName("td")[col];
+						if (td) {
+							txtValue = td.innerHTML;							
+							if (txtValue.toUpperCase() == filter) {
+								tr[i].style.display = "";
+							} else {
+								tr[i].style.display = "none";
+							}							
+							
+						}       
+					}
+				}
+					
 				 function Busca(col, idbusca) {
 					  var input, filter, table, tr, td, i, txtValue;
 					  input = document.getElementById(idbusca);

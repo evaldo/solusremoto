@@ -138,38 +138,39 @@ order by 1
 
 
 -- View: integracao.vw_bmh_online
-
 -- DROP VIEW integracao.vw_bmh_online;
 
 CREATE OR REPLACE VIEW integracao.vw_bmh_online AS
- SELECT 'Admissão'::text AS tipo_bmh_online,
-    to_char(tb_bmh_online.dt_admss, 'dd/mm/yyyy hh24:mi'::text) AS dt_admss,
+SELECT 'Admissão' AS tipo_bmh_online,    
+    to_char(tb_bmh_online.dt_admss, 'dd/mm/yyyy hh24:mi') AS dt_admss,
     tb_bmh_online.nm_pcnt,
-    to_char(tb_bmh_online.dt_nasc_pcnt, 'dd/mm/yyyy'::text) AS dt_nasc_pcnt,
+    to_char(tb_bmh_online.dt_nasc_pcnt, 'dd/mm/yyyy') AS dt_nasc_pcnt,
     tb_bmh_online.nm_cnvo,
     tb_bmh_online.nm_mdco,
     tb_bmh_online.nm_psco,
     tb_bmh_online.nm_trpa,
     tb_bmh_online.ds_cid,
         CASE
-            WHEN tb_bmh_online.fl_fmnte = true THEN 'Sim'::text
-            ELSE 'Não'::text
+            WHEN tb_bmh_online.fl_fmnte = true THEN 'Sim'
+            ELSE 'Não'
         END AS fl_fmnte,
         CASE
-            WHEN tb_bmh_online.fl_rtgrd = true THEN 'Sim'::text
-            ELSE 'Não'::text
+            WHEN tb_bmh_online.fl_rtgrd = true THEN 'Sim'
+            ELSE 'Não'
         END AS fl_rtgrd,
         CASE
-            WHEN tb_bmh_online.fl_acmpte = true THEN 'Sim'::text
-            ELSE 'Não'::text
+            WHEN tb_bmh_online.fl_acmpte = true THEN 'Sim'
+            ELSE 'Não'
         END AS fl_acmpte,
     tb_bmh_online.ds_crtr_intnc,
     tb_bmh_online.ds_dieta,
     tb_bmh_online.ds_const,
-    tb_bmh_online.ds_ocorr,	
-    ''::character varying AS destino_alta,
-	dt_alta
+    tb_bmh_online.ds_ocorr,
+    '' AS destino_alta,
+    tb_bmh_online.dt_alta,
+    tb_bmh_online.ds_leito
    FROM integracao.tb_bmh_online
+  WHERE (tb_bmh_online.ds_leito not like 'EC%' OR tb_bmh_online.ds_leito IS NULL) AND tb_bmh_online.fl_rtgrd=false AND tb_bmh_online.fl_acmpte=false  
 UNION ALL
  SELECT 'Alta'::text AS tipo_bmh_online,
     to_char(bmh.dt_admss, 'dd/mm/yyyy hh24:mi'::text) AS dt_admss,
@@ -197,10 +198,12 @@ UNION ALL
     bmh.ds_const,
     bmh.ds_ocorr,
     alta.ds_mtvo_alta AS destino_alta,
-	dt_alta	
+    bmh.dt_alta,
+    bmh.ds_leito
    FROM integracao.tb_bmh_online bmh,
     integracao.tb_mtvo_alta alta
-  WHERE bmh.id_mtvo_alta = alta.id_mtvo_alta;
+  WHERE bmh.id_mtvo_alta = alta.id_mtvo_alta
+    and (bmh.ds_leito not like 'EC%' OR bmh.ds_leito IS NULL) AND bmh.fl_rtgrd=false AND bmh.fl_acmpte=false;
 
 ALTER TABLE integracao.vw_bmh_online
     OWNER TO postgres;
@@ -225,15 +228,17 @@ GRANT SELECT ON TABLE integracao.vw_bmh_online TO amonteiro;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO tivilaverde;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO deliza;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO ronan;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.vw_bmh_online TO elaurentino;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO axavier;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO poliveira;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO soliveira;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO mmattos;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE integracao.vw_bmh_online TO mmoravia;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO jmiguel;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO fmedeiros;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO fernandazeferino;
-GRANT SELECT ON TABLE integracao.vw_bmh_online TO sbhering;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO camila;
+GRANT SELECT ON TABLE integracao.vw_bmh_online TO sbhering;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO ftesta;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO woliveira;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO evaldo;
@@ -259,6 +264,7 @@ GRANT SELECT ON TABLE integracao.vw_bmh_online TO lamorim;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO aalbino;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO mliberato;
 GRANT SELECT ON TABLE integracao.vw_bmh_online TO greis;
+
 
 --SQLServer -> Smart
 --EXEC sp_helptext 'dbo.view_db_gest_leitos';  

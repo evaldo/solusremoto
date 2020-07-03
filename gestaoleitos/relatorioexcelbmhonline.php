@@ -49,10 +49,8 @@
 		from integracao.vw_bmh_online 
 			where  to_date(dt_admss, 'dd/mm/yyyy') >= to_date('".$_SESSION['dataInicio']."','dd/mm/yyyy')
 			   and to_date(dt_admss, 'dd/mm/yyyy') <= to_date('".$_SESSION['dataFim']."','dd/mm/yyyy') 	
-			   and tipo_bmh_online = 'Admissão'
-			   and (ds_leito not like 'EC%' or ds_leito is null)
-			   and (nm_pcnt not like 'ACOMPANHANTE%'  and nm_pcnt not like 'RETAGUARDA%')
-		order by dt_admss";
+			   and tipo_bmh_online = 'Admissão'			   
+		order by nm_pcnt";
 				
 		if ($pdo==null){
 			header(Config::$webLogin);
@@ -144,7 +142,7 @@
 		from integracao.vw_bmh_online 
 			where  to_date(to_char(dt_alta,'dd/mm/yyyy'),'dd/mm/yyyy') >= to_date('".$_SESSION['dataInicio']."','dd/mm/yyyy')
 			   and to_date(to_char(dt_alta,'dd/mm/yyyy'),'dd/mm/yyyy') <= to_date('".$_SESSION['dataFim']."','dd/mm/yyyy')
-	   and tipo_bmh_online = 'Alta' order by dt_admss";
+	   and tipo_bmh_online = 'Alta' order by nm_pcnt";
 				
 		if ($pdo==null){
 			header(Config::$webLogin);

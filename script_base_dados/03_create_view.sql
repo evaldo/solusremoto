@@ -280,3 +280,84 @@ SELECT distinct
 FROM dbo.PAC as pac INNER JOIN (
 		dbo.HSP as hsp INNER JOIN dbo.PSV as psv ON hsp.HSP_MDE = psv.PSV_COD) ON pac.PAC_REG = hsp.HSP_PAC 
 WHERE (((hsp.HSP_STAT)='A') AND ((hsp.HSP_MODALIDADE)='HS'));
+
+
+-- View: integracao.vw_bmh_online_media_admissao
+-- DROP VIEW integracao.vw_bmh_online_media_admissao;
+
+CREATE OR REPLACE VIEW integracao.vw_bmh_online_media_admissao AS
+ SELECT to_char(bmh.dt_admss, 'mm/yyyy'::text) AS mes_ano_qtde_admss,
+    count(bmh.pac_reg) AS nu_qtde_reg,
+	to_date('01/'||to_char(bmh.dt_admss, 'mm/yyyy'::text), 'dd/mm/yyyy') as data_mes_ano,
+	to_char(bmh.dt_admss, 'TMMonth'::text) AS mes_admissao
+   FROM integracao.tb_bmh_online bmh
+  WHERE (bmh.ds_leito::text !~~ 'EC%'::text OR bmh.ds_leito IS NULL) AND bmh.fl_rtgrd = false AND bmh.fl_acmpte = false AND to_char(bmh.dt_admss, 'mm/yyyy'::text) >= '06/2020'::text
+  GROUP BY (to_char(bmh.dt_admss, 'mm/yyyy'::text))
+          , to_date('01/'||to_char(bmh.dt_admss, 'mm/yyyy'::text), 'dd/mm/yyyy')
+		  , to_char(bmh.dt_admss, 'TMMonth'::text);
+
+ALTER TABLE integracao.vw_bmh_online_media_admissao
+    OWNER TO postgres;
+
+--------------------------------------------------------------------------------------------------------------------
+
+-- View: integracao.vw_bmh_online_media_alta
+-- DROP VIEW integracao.vw_bmh_online_media_alta;
+
+CREATE OR REPLACE VIEW integracao.vw_bmh_online_media_alta AS
+ SELECT to_char(bmh.dt_admss, 'mm/yyyy'::text) AS mes_ano_qtde_alta,
+    count(bmh.pac_reg) AS nu_qtde_reg,
+	to_date('01/'||to_char(bmh.dt_admss, 'mm/yyyy'::text), 'dd/mm/yyyy') AS data_mes_ano,
+	to_char(bmh.dt_admss, 'TMMonth'::text) AS mes_alta
+   FROM integracao.tb_bmh_online bmh,
+    integracao.tb_mtvo_alta alta
+  WHERE bmh.id_mtvo_alta = alta.id_mtvo_alta AND (bmh.ds_leito::text !~~ 'EC%'::text OR bmh.ds_leito IS NULL) AND bmh.fl_rtgrd = false AND bmh.fl_acmpte = false AND to_char(bmh.dt_admss, 'mm/yyyy'::text) >= '06/2020'::text
+  GROUP BY (to_char(bmh.dt_admss, 'mm/yyyy'::text))
+         ,  to_date('01/'||to_char(bmh.dt_admss, 'mm/yyyy'::text), 'dd/mm/yyyy')
+		 , to_char(bmh.dt_admss, 'TMMonth'::text);
+
+ALTER TABLE integracao.vw_bmh_online_media_alta
+    OWNER TO postgres;
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- View: integracao.vw_bmh_online_por_municipio
+-- DROP VIEW integracao.vw_bmh_online_por_municipio;
+
+CREATE OR REPLACE VIEW integracao.vw_bmh_online_por_municipio AS
+ SELECT to_char(bmh.dt_admss, 'mm/yyyy'::text) AS mes_ano_qtde,
+    count(bmh.pac_reg) AS nu_qtde_reg,
+	ds_cidade,
+	to_char(bmh.dt_admss, 'TMMonth'::text) AS mes,
+	to_date('01/'||to_char(bmh.dt_admss, 'mm/yyyy'::text), 'dd/mm/yyyy') AS data_mes_ano
+   FROM integracao.tb_bmh_online bmh    
+  WHERE (bmh.ds_leito::text !~~ 'EC%'::text OR bmh.ds_leito IS NULL) AND bmh.fl_rtgrd = false AND bmh.fl_acmpte = false AND to_char(bmh.dt_admss, 'mm/yyyy'::text) >= '06/2020'::text
+  GROUP BY (to_char(bmh.dt_admss, 'mm/yyyy'::text))
+         , ds_cidade
+		 , to_char(bmh.dt_admss, 'TMMonth'::text),
+		 to_date('01/'||to_char(bmh.dt_admss, 'mm/yyyy'::text), 'dd/mm/yyyy');
+
+ALTER TABLE integracao.vw_bmh_online_por_municipio
+    OWNER TO postgres;
+	
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+-- View: integracao.vw_bmh_online_destino_alta
+-- DROP VIEW integracao.vw_bmh_online_destino_alta;
+
+CREATE OR REPLACE VIEW integracao.vw_bmh_online_destino_alta AS
+ SELECT to_char(bmh.dt_admss, 'mm/yyyy'::text) AS mes_ano_qtde_destino_alta,
+    count(bmh.pac_reg) AS nu_qtde_reg,
+	alta.ds_mtvo_alta AS destino_alta,
+	to_char(bmh.dt_admss, 'TMMonth'::text) AS mes_alta,
+	to_date('01/'||to_char(bmh.dt_admss, 'mm/yyyy'::text), 'dd/mm/yyyy') AS data_mes_ano
+   FROM integracao.tb_bmh_online bmh,
+    integracao.tb_mtvo_alta alta
+  WHERE bmh.id_mtvo_alta = alta.id_mtvo_alta AND (bmh.ds_leito::text !~~ 'EC%'::text OR bmh.ds_leito IS NULL) AND bmh.fl_rtgrd = false AND bmh.fl_acmpte = false AND to_char(bmh.dt_admss, 'mm/yyyy'::text) >= '06/2020'::text
+  GROUP BY (to_char(bmh.dt_admss, 'mm/yyyy'::text))
+         ,  ds_mtvo_alta
+		 , to_char(bmh.dt_admss, 'TMMonth'::text)
+		 , to_date('01/'||to_char(bmh.dt_admss, 'mm/yyyy'::text), 'dd/mm/yyyy') ;
+
+ALTER TABLE integracao.vw_bmh_online_destino_alta
+    OWNER TO postgres;

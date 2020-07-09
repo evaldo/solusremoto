@@ -342,22 +342,23 @@ ALTER TABLE integracao.vw_bmh_online_por_municipio
 	
 --------------------------------------------------------------------------------------------------------------------------------------------------
 
--- View: integracao.vw_bmh_online_destino_alta
--- DROP VIEW integracao.vw_bmh_online_destino_alta;
+-- View: integracao.vw_bmh_online_media_alta
+-- DROP VIEW integracao.vw_bmh_online_media_alta;
 
-CREATE OR REPLACE VIEW integracao.vw_bmh_online_destino_alta AS
- SELECT to_char(bmh.dt_admss, 'mm/yyyy'::text) AS mes_ano_qtde_destino_alta,
-    count(bmh.pac_reg) AS nu_qtde_reg,
-	alta.ds_mtvo_alta AS destino_alta,
-	to_char(bmh.dt_admss, 'TMMonth'::text) AS mes_alta,
-	to_date('01/'||to_char(bmh.dt_admss, 'mm/yyyy'::text), 'dd/mm/yyyy') AS data_mes_ano
+CREATE OR REPLACE VIEW integracao.vw_bmh_online_media_alta AS
+ SELECT to_char(bmh.dt_alta, 'mm/yyyy') AS mes_ano_qtde_alta    
+    , to_date('01/'|| to_char(bmh.dt_alta, 'mm/yyyy'), 'dd/mm/yyyy')
+	, to_char(bmh.dt_alta, 'TMMonth')
+	, count(bmh.pac_reg) AS nu_qtde_reg
    FROM integracao.tb_bmh_online bmh,
     integracao.tb_mtvo_alta alta
-  WHERE bmh.id_mtvo_alta = alta.id_mtvo_alta AND (bmh.ds_leito::text !~~ 'EC%'::text OR bmh.ds_leito IS NULL) AND bmh.fl_rtgrd = false AND bmh.fl_acmpte = false AND to_char(bmh.dt_admss, 'mm/yyyy'::text) >= '06/2020'::text
-  GROUP BY (to_char(bmh.dt_admss, 'mm/yyyy'::text))
-         ,  ds_mtvo_alta
-		 , to_char(bmh.dt_admss, 'TMMonth'::text)
-		 , to_date('01/'||to_char(bmh.dt_admss, 'mm/yyyy'::text), 'dd/mm/yyyy') ;
+  WHERE bmh.id_mtvo_alta = alta.id_mtvo_alta     
+	AND (bmh.ds_leito::text !~~ 'EC%'::text OR bmh.ds_leito IS NULL) AND bmh.fl_rtgrd = false AND bmh.fl_acmpte = false 
+	AND to_char(bmh.dt_alta, 'mm/yyyy') >= '06/2020'
+  GROUP BY to_char(bmh.dt_alta, 'mm/yyyy')
+         , to_date('01/'|| to_char(bmh.dt_alta, 'mm/yyyy'), 'dd/mm/yyyy')
+		 , to_char(bmh.dt_alta, 'TMMonth');
 
-ALTER TABLE integracao.vw_bmh_online_destino_alta
+ALTER TABLE integracao.vw_bmh_online_media_alta
     OWNER TO postgres;
+

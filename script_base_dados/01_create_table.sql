@@ -1433,3 +1433,27 @@ GRANT DELETE, UPDATE, INSERT, SELECT ON TABLE integracao.tb_status_leito TO eval
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO camila;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO tivilaverde;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE integracao.tb_status_leito TO administrativo;	
+
+---------------------------------------------------------------------------------------------------
+
+ALTER TABLE integracao.tb_ctrl_leito_temp
+    ADD CONSTRAINT pk_ds_leito_temp PRIMARY KEY (ds_leito);
+
+COMMENT ON CONSTRAINT pk_ds_leito_temp ON integracao.tb_ctrl_leito_temp
+    IS 'Chave primária dos leitos de dados temporários';
+
+---------------------------------------------------------------------------------------------------
+
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD CONSTRAINT pk_ctrl_leito PRIMARY KEY (cd_ctrl_leito);
+
+COMMENT ON CONSTRAINT pk_ctrl_leito ON integracao.tb_ctrl_leito
+    IS 'Chave primária da tabela de controle de leitos.';
+	
+---------------------------------------------------------------------------------------------------
+
+ALTER TABLE integracao.tb_ctrl_leito
+    ADD CONSTRAINT uk_ctrl_leito_01 UNIQUE (ds_leito);
+
+COMMENT ON CONSTRAINT uk_ctrl_leito_01 ON integracao.tb_ctrl_leito
+    IS 'Chave única da tabela de controle de leito do campo ds_leito';

@@ -1,85 +1,91 @@
  <?php  
 	
 	session_start();
-	$_SESSION['nm_loc_nome']=$_POST['nm_loc_nome'];
 	
 	include '../database.php';
 	$pdo = database::connect();
 	
-	$sql = "SELECT ds_crtr_intnc     
-			, nm_mdco     
-			, nm_psco     
-			, nm_trpa     
-			, ds_cid     
-			, case when fl_fmnte = true then 
-				'Sim' 
-			  else 
-				case when fl_fmnte = false then
-					'Não' 
-				else	
-					''
-			  end end as fl_fmnte
-			, ds_dieta     
-			, ds_const
-			, case when fl_rtgrd = true then 
-				'Sim' 
-			  else 
-				case when fl_rtgrd = false then
-					'Não' 
-				else	
-					''
-			  end end as fl_rtgrd			
-			, case when fl_acmpte = true then 
-				'Sim' 
-			  else 
-				case when fl_acmpte = false then
-					'Não' 
-				else	
-					''
-			  end end as fl_acmpte			
-			, ds_ocorr     
-			, fl_status_leito
-			, id_memb_equip_hosptr_mdco
-			, id_memb_equip_hosptr_psco
-			, id_memb_equip_hosptr_trpa
-			, id_status_leito
-			, pac_reg
-			, nm_pcnt
-			, case when fl_fmnte = 'T' then 'true' else 'false' end fl_fmnte
-			, case when fl_rtgrd = 'T' then 'true' else 'false' end fl_rtgrd 
-			, case when fl_acmpte = 'T' then 'true' else 'false' end fl_acmpte  
-	FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '". $_SESSION['nm_loc_nome'] ."'";
+	$_SESSION['nm_loc_nome']="";
+	
+	if (isset($_POST['nm_loc_nome'])){	
+		$_SESSION['nm_loc_nome']=$_POST['nm_loc_nome'];
 		
-	$ret = pg_query($pdo, $sql);
-	if(!$ret) {
-		echo pg_last_error($pdo);
-		exit;
-	}
-	
-	$row = pg_fetch_row($ret);
+		$sql = "SELECT ds_crtr_intnc     
+				, nm_mdco     
+				, nm_psco     
+				, nm_trpa     
+				, ds_cid     
+				, case when fl_fmnte = true then 
+					'Sim' 
+				  else 
+					case when fl_fmnte = false then
+						'Não' 
+					else	
+						''
+				  end end as fl_fmnte
+				, ds_dieta     
+				, ds_const
+				, case when fl_rtgrd = true then 
+					'Sim' 
+				  else 
+					case when fl_rtgrd = false then
+						'Não' 
+					else	
+						''
+				  end end as fl_rtgrd			
+				, case when fl_acmpte = true then 
+					'Sim' 
+				  else 
+					case when fl_acmpte = false then
+						'Não' 
+					else	
+						''
+				  end end as fl_acmpte			
+				, ds_ocorr     
+				, fl_status_leito
+				, id_memb_equip_hosptr_mdco
+				, id_memb_equip_hosptr_psco
+				, id_memb_equip_hosptr_trpa
+				, id_status_leito
+				, pac_reg
+				, nm_pcnt
+				, case when fl_fmnte = 'T' then 'true' else 'false' end fl_fmnte
+				, case when fl_rtgrd = 'T' then 'true' else 'false' end fl_rtgrd 
+				, case when fl_acmpte = 'T' then 'true' else 'false' end fl_acmpte  
+		FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '". $_SESSION['nm_loc_nome'] ."'";
+			
+		$ret = pg_query($pdo, $sql);
+		if(!$ret) {
+			echo pg_last_error($pdo);
+			exit;
+		}
+		
+		$row = pg_fetch_row($ret);
 
-	//Completar as variáveis aqui
-	$_SESSION['ds_crtr_intnc'] = $row[0];
-	$_SESSION['ds_cid'] = $row[4];
-	$_SESSION['fl_fmnte'] = $row[5];
-	$_SESSION['ds_dieta'] = $row[6];	
-	$_SESSION['ds_const'] = $row[7];
-	$_SESSION['fl_rtgrd'] = $row[8];
-	$_SESSION['fl_acmpte'] = $row[9];
-	$_SESSION['ds_ocorr'] = $row[10];
-	$_SESSION['id_memb_equip_hosptr_mdco'] = $row[12];
-	$_SESSION['id_memb_equip_hosptr_psco'] = $row[13];
-	$_SESSION['id_memb_equip_hosptr_trpa'] = $row[14];
-	$_SESSION['pac_reg'] = $row[16];
-	$_SESSION['nm_pcnt'] = $row[17];
-	
-	
-	$_SESSION['fl_fmntelogico'] = $row[18];
-	$_SESSION['fl_rtgrdlogico'] = $row[19];
-	$_SESSION['fl_acmptelogico'] = $row[20];
-	
-	
-	$_SESSION['id_status_leito'] = $row[15];
+		//Completar as variáveis aqui
+		$ds_crtr_intnc = $row[0];
+		$ds_cid = $row[4];
+		$fl_fmnte = $row[5];
+		$ds_dieta = $row[6];	
+		$ds_const = $row[7];
+		$fl_rtgrd = $row[8];
+		$fl_acmpte = $row[9];
+		$ds_ocorr = $row[10];
+		$id_memb_equip_hosptr_mdco = $row[12];
+		$id_memb_equip_hosptr_psco = $row[13];
+		$id_memb_equip_hosptr_trpa = $row[14];
+		$_SESSION['pac_reg'] = $row[16];
+		$nm_pcnt = $row[17];
+		
+		
+		$fl_fmntelogico = $row[18];
+		$fl_rtgrdlogico = $row[19];
+		$fl_acmptelogico = $row[20];
+		
+		
+		$id_status_leito = $row[15];
+		
+	}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -94,7 +100,7 @@
 		  <div class="modal-dialog">
 				<div class="modal-content" style="width:800px">
 					<div class="container">						
-						<h5 class="modal-title">Alteração da Gestão de Leitos - <?php echo $_SESSION['nm_pcnt'];?> - em - <?php echo $_SESSION['nm_loc_nome'];?></h5>
+						<h5 class="modal-title">Alteração da Gestão de Leitos - <?php echo $nm_pcnt;?> - em - <?php echo $_SESSION['nm_loc_nome'];?></h5>
 					</div>						
 					<form class="form-inline" method="post" >
 						<div class="modal-body">
@@ -128,7 +134,7 @@
 												$cont=1;																
 											
 												while($row = pg_fetch_row($ret)) {
-													if($row[0]==$_SESSION['ds_crtr_intnc']){														
+													if($row[0]==$ds_crtr_intnc){														
 												?>												
 													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[0]; ?></option>
 												<?php																		
@@ -171,7 +177,7 @@
 												$cont=1;																
 											
 												while($row = pg_fetch_row($ret)) {
-													if($row[0]==$_SESSION['id_memb_equip_hosptr_psco']){														
+													if($row[0]==$id_memb_equip_hosptr_psco){														
 												?>												
 													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[1]; ?></option>
 												<?php																		
@@ -212,7 +218,7 @@
 												$cont=1;																
 											
 												while($row = pg_fetch_row($ret)) {
-													if($row[0]==$_SESSION['id_memb_equip_hosptr_trpa']){														
+													if($row[0]==$id_memb_equip_hosptr_trpa){														
 												?>												
 													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[1]; ?></option>
 												<?php																		
@@ -253,7 +259,7 @@
 												<?php
 													$cont=1;																											
 													while($row = pg_fetch_row($ret)) {
-														if($row[0]==$_SESSION['ds_cid']){														
+														if($row[0]==$ds_cid){														
 													?>												
 														<option value="<?php echo $row[0]; ?>" selected><?php echo $row[0]; ?></option>
 													<?php																		
@@ -275,12 +281,12 @@
 															var selValue = selObj.options[selObj.selectedIndex].value;
 															document.getElementById('fl_fmnte').value = selValue;">
 													<option value="null"></option>
-													<?php if ($_SESSION['fl_fmnte']=='Sim') { ?>
+													<?php if ($fl_fmnte=='Sim') { ?>
 														<option value="true" selected>Sim</option>													
 													<?php } else { ?>
 														<option value="true">Sim</option>
 													<?php } ?>
-													<?php if ($_SESSION['fl_fmnte']=='Não') { ?>
+													<?php if ($fl_fmnte=='Não') { ?>
 														<option value="false" selected>Não</option>													
 													<?php } else { ?>
 														<option value="false">Não</option>
@@ -316,7 +322,7 @@
 												$cont=1;																
 											
 												while($row = pg_fetch_row($ret)) {
-													if($row[0]==$_SESSION['ds_dieta']){														
+													if($row[0]==$ds_dieta){														
 												?>												
 													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[0]; ?></option>
 												<?php																		
@@ -357,7 +363,7 @@
 												$cont=1;																
 											
 												while($row = pg_fetch_row($ret)) {
-													if($row[0]==$_SESSION['ds_const']){														
+													if($row[0]==$ds_const){														
 												?>												
 													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[0]; ?></option>
 												<?php																		
@@ -379,12 +385,12 @@
 															var selValue = selObj.options[selObj.selectedIndex].value;
 															document.getElementById('fl_rtgrd').value = selValue;">
 													<option value="null"></option>
-													<?php if ($_SESSION['fl_rtgrd']=='Sim') { ?>
+													<?php if ($fl_rtgrd=='Sim') { ?>
 														<option value="true" selected>Sim</option>													
 													<?php } else { ?>
 														<option value="true">Sim</option>
 													<?php } ?>
-													<?php if ($_SESSION['fl_rtgrd']=='Não') { ?>
+													<?php if ($fl_rtgrd=='Não') { ?>
 														<option value="false" selected>Não</option>													
 													<?php } else { ?>
 														<option value="false">Não</option>
@@ -400,12 +406,12 @@
 															var selValue = selObj.options[selObj.selectedIndex].value;
 															document.getElementById('fl_acmpte').value = selValue;">
 													<option value="null"></option>
-													<?php if ($_SESSION['fl_acmpte']=='Sim') { ?>
+													<?php if ($fl_acmpte=='Sim') { ?>
 														<option value="true" selected>Sim</option>													
 													<?php } else { ?>
 														<option value="true">Sim</option>
 													<?php } ?>
-													<?php if ($_SESSION['fl_acmpte']=='Não') { ?>
+													<?php if ($fl_acmpte=='Não') { ?>
 														<option value="false" selected>Não</option>													
 													<?php } else { ?>
 														<option value="false">Não</option>
@@ -415,7 +421,7 @@
 										</tr>								 
 										<tr>  				
 											<td><label>Ocorrências:</label></td>
-											<td><input style="width:600px" type="text" name="ds_ocorr" id="ds_ocorr" value="<?php echo $_SESSION['ds_ocorr']; ?>" class="form-control" /></td>
+											<td><input style="width:600px" type="text" name="ds_ocorr" id="ds_ocorr" value="<?php echo $ds_ocorr; ?>" class="form-control" /></td>
 										</tr>
 										<tr>  				
 											<td><label>Status:</label></td>
@@ -443,7 +449,7 @@
 													$cont=1;
 													
 													while($row = pg_fetch_row($ret)) {
-														if($row[0]==$_SESSION['id_status_leito']){														
+														if($row[0]==$id_status_leito){														
 													?>												
 														<option value="<?php echo $row[0]; ?>" selected><?php echo $row[1]; ?></option>
 													<?php																		
@@ -461,26 +467,26 @@
 										
 										
 										
-										<input type="text" name="ds_crtr_intnc" id="ds_crtr_intnc" value="<?php echo $_SESSION['ds_crtr_intnc']; ?>" style="display:none">
+										<input type="text" name="ds_crtr_intnc" id="ds_crtr_intnc" value="<?php echo $ds_crtr_intnc; ?>" style="display:none">
 										
-										<input type="text" name="ds_dieta" id="ds_dieta" value="<?php echo $_SESSION['ds_dieta']; ?>" style="display:none">
+										<input type="text" name="ds_dieta" id="ds_dieta" value="<?php echo $ds_dieta; ?>" style="display:none">
 										
-										<input type="text" name="ds_const" id="ds_const" value="<?php echo $_SESSION['ds_const']; ?>" style="display:none">
+										<input type="text" name="ds_const" id="ds_const" value="<?php echo $ds_const; ?>" style="display:none">
 										
 										
-										<input type="text" id="id_memb_equip_hosptr_mdco" name="id_memb_equip_hosptr_mdco" value="<?php echo$_SESSION['id_memb_equip_hosptr_mdco']; ?>" style="display:none"> 
+										<input type="text" id="id_memb_equip_hosptr_mdco" name="id_memb_equip_hosptr_mdco" value="<?php echo $id_memb_equip_hosptr_mdco; ?>" style="display:none"> 
 										
-										<input type="text" id="id_memb_equip_hosptr_psco" name="id_memb_equip_hosptr_psco" value="<?php echo $_SESSION['id_memb_equip_hosptr_psco']; ?>" style="display:none">
+										<input type="text" id="id_memb_equip_hosptr_psco" name="id_memb_equip_hosptr_psco" value="<?php echo $id_memb_equip_hosptr_psco; ?>" style="display:none">
 										
-										<input type="text" id="id_memb_equip_hosptr_trpa" name="id_memb_equip_hosptr_trpa" value="<?php echo$_SESSION['id_memb_equip_hosptr_trpa']; ?>" style="display:none"> 
+										<input type="text" id="id_memb_equip_hosptr_trpa" name="id_memb_equip_hosptr_trpa" value="<?php echo $id_memb_equip_hosptr_trpa; ?>" style="display:none"> 
 										
-										<input type="text" id="fl_fmnte" name="fl_fmnte" value="<?php echo$_SESSION['fl_fmntelogico']; ?>" style="display:none"> 
-										<input type="text" id="fl_rtgrd" name="fl_rtgrd" value="<?php echo$_SESSION['fl_rtgrdlogico']; ?>" style="display:none"> 
-										<input type="text" id="fl_acmpte" name="fl_acmpte" value="<?php echo$_SESSION['fl_acmptelogico']; ?>" style="display:none"> 
+										<input type="text" id="fl_fmnte" name="fl_fmnte" value="<?php echo$fl_fmntelogico; ?>" style="display:none"> 
+										<input type="text" id="fl_rtgrd" name="fl_rtgrd" value="<?php echo$fl_rtgrdlogico; ?>" style="display:none"> 
+										<input type="text" id="fl_acmpte" name="fl_acmpte" value="<?php echo$fl_acmptelogico; ?>" style="display:none"> 
 										
-										<input type="text" id="id_status_leito" name="id_status_leito" value="<?php echo$_SESSION['id_status_leito']; ?>" style="display:none">
+										<input type="text" id="id_status_leito" name="id_status_leito" value="<?php echo $id_status_leito; ?>" style="display:none">
 										
-										<input type="text" id="ds_cid" name="ds_cid" value="<?php echo$_SESSION['ds_cid']; ?>" style="display:none">
+										<input type="text" id="ds_cid" name="ds_cid" value="<?php echo $ds_cid; ?>" style="display:none">
 								 								 
 								</table>								
 							</div>

@@ -57,7 +57,7 @@
 								</table>								
 							</div>
 							<div class="modal-footer">	
-								<input type="submit" class="btn btn-primary" name="altera" value="Imprimir" onclick="window.open('../tcpdf/relatorio/impressao_relatoriobmh_online.php');">		
+								<input type="submit" class="btn btn-primary" name="imprimir" value="Imprimir" onclick="window.open('../tcpdf/relatorio/impressao_relatoriobmh_online.php');">		
 								<input type="submit" class="btn btn-primary" onclick="history.go()" value="Voltar">
 							</div>
 						</div>

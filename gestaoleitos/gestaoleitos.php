@@ -5,10 +5,7 @@
     include '../database.php';
     $pdo = database::connect();
 	
-	error_reporting(0); 
-	
-	//$itens_por_pagina=20;
-	//$pagina=intval($_GET['pagina']);
+	error_reporting(0); 	
 		
 	$textoconsulta = "";
 	$retSqlServer = "";
@@ -45,12 +42,9 @@
 	$retSmart = pg_query($pdo, $sql);
 	
 	if(!$retSmart) {
-		echo pg_last_error($pdo);
-		//header(Config::$webLogin);
+		echo pg_last_error($pdo);	
 		exit;
 	}	
-	
-	//$rowSmart = pg_fetch_row($retSmart);	
 	
 	while($rowSmart = pg_fetch_row($retSmart)) {
 		
@@ -63,8 +57,7 @@
 		$retCtrlLeito = pg_query($pdo, $sqlCtrlLeito);
 	
 		if(!$retCtrlLeito) {
-			echo pg_last_error($pdo);
-			//header(Config::$webLogin);
+			echo pg_last_error($pdo);			
 			exit;
 		}	
 		
@@ -101,19 +94,19 @@
 							
 			$result = pg_query($pdo, $sql);
 			
+			//retirar aqui
 			//echo $sql;
 			
 			if($result){
 				echo "";
 			}
 			
-			$sqlCtrlLeitoTemp="SELECT nm_mdco, nm_psco, nm_trpa, ds_ocorr, ds_cid, ds_dieta, fl_fmnte, ds_const, ds_crtr_intnc, fl_status_leito, fl_acmpte, fl_rtgrd, pac_reg, id_status_leito, id_memb_equip_hosptr_mdco, id_memb_equip_hosptr_psco, id_memb_equip_hosptr_trpa FROM integracao.tb_ctrl_leito_temp WHERE pac_reg = " . $rowSmart[7] . "";
+			$sqlCtrlLeitoTemp="SELECT nm_mdco, nm_psco, nm_trpa, ds_ocorr, ds_cid, ds_dieta, fl_fmnte, ds_const, ds_crtr_intnc, fl_status_leito, fl_acmpte, fl_rtgrd, pac_reg, id_status_leito, id_memb_equip_hosptr_mdco, id_memb_equip_hosptr_psco, id_memb_equip_hosptr_trpa FROM integracao.tb_ctrl_leito_temp WHERE pac_reg = " . $rowSmart[7] . " and trim(ds_leito) = trim('" . $rowSmart[0] . "')";
 		
 			$retCtrlLeitoTemp = pg_query($pdo, $sqlCtrlLeitoTemp);
 		
 			if(!$retCtrlLeitoTemp) {
-				echo pg_last_error($pdo);
-				//header(Config::$webLogin);
+				echo pg_last_error($pdo);		
 				exit;
 			}	
 			
@@ -161,7 +154,9 @@
 					echo "";
 				}
 				
+				//retirar aqui				
 				//echo $sqlUpdateCtrlTemp;
+				
 				
 			}
 		}
@@ -173,15 +168,11 @@
 	$retSmart = pg_query($pdo, $sql);	
 	if(!$retSmart) {
 		echo pg_last_error($pdo);
-		//header(Config::$webLogin);
+		
 		exit;
-	}			
-	//$rowSmart = pg_fetch_row($retSmart);	
+	}				
 	
 	while($rowSmart = pg_fetch_row($retSmart)) {
-
-		//fl_status_leito = 'Livre', 
-		//id_status_leito = 6, 
 	
 		$sqlUpdateCtrl = "UPDATE integracao.tb_ctrl_leito SET 
 		dt_prvs_alta = null,
@@ -212,51 +203,32 @@
 		if($resultUpdateCtrl){
 			echo "";
 		}
+		
+		$sqlUpdateCtrl = "UPDATE integracao.tb_ctrl_leito_temp SET 						
+		pac_reg = null,		
+		fl_fmnte = null, 
+		fl_rtgrd = null, 
+		fl_acmpte = null, 		
+		id_memb_equip_hosptr_mdco = null, 
+		id_memb_equip_hosptr_psco = null, 
+		id_memb_equip_hosptr_trpa = null,
+		nm_mdco=null, 		
+		nm_psco=null,
+		nm_trpa=null,
+		ds_cid = null,	
+		ds_dieta = null,
+		ds_const = null,
+		ds_ocorr = null, 
+		ds_crtr_intnc = null				 
+		WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
+		
+		$resultUpdateCtrl = pg_query($pdo, $sqlUpdateCtrl);
 
-		//fl_status_leito = 'Livre', 
-		//id_status_leito = 6,		
-		
-		//else {
-		
-		//	$sqlUpdateCtrlTemp = "UPDATE integracao.tb_ctrl_leito_temp SET 
-		//	fl_fmnte = false, 
-		//	fl_rtgrd = false, 
-		//	fl_acmpte = false, 		
-		//	id_memb_equip_hosptr_mdco = null, 
-		//	id_memb_equip_hosptr_psco = null, 
-		//	id_memb_equip_hosptr_trpa = null,
-		//	nm_mdco=null, 		
-		//	nm_psco=null,
-		//	nm_trpa=null,
-		//	ds_cid = null,			
-		//	ds_dieta = null,
-		//	ds_const = null,
-		//	ds_ocorr = null, 
-		//	ds_crtr_intnc = null				 
-		//	WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
+		if($resultUpdateCtrl){
+			echo "";
+		}
 
-		//	$resultUpdateCtrlTemp = pg_query($pdo, $sqlUpdateCtrlTemp);
-		
-		//	if($resultUpdateCtrlTemp){
-		//		echo "";
-		//	}
-		//}
 	}
-	
-	
-	//$sql ="select count(1) AS QTDE_REG FROM integracao.tb_ctrl_leito; ";
-	
-	//$ret = pg_query($pdo, $sql);
-	//if(!$ret) {
-	//	echo pg_last_error($pdo);
-	//	header(Config::$webLogin);
-	//	exit;
-	//}
-	
-	//$row = pg_fetch_row($ret);		
-	//$num_total = $row[0];	
-	//$num_paginas = ceil($num_total/$itens_por_pagina);
-	//$num_reg_pagina = $pagina*$itens_por_pagina;
 	
 	$sqlsmarttemp = "select trim(leito_smart.ds_leito) as leito, leito_smart.pac_reg as pac_reg
 				from integracao.tb_ctrl_leito_temp leito_temp
@@ -265,8 +237,7 @@
 			
 	$retsmarttemp = pg_query($pdo, $sqlsmarttemp);	
 	if(!$retsmarttemp) {
-		echo pg_last_error($pdo);
-		//header(Config::$webLogin);
+		echo pg_last_error($pdo);	
 		exit;
 	}					
 	
@@ -339,8 +310,7 @@
 	$ret = pg_query($pdo, $sql);
 	
 	if(!$ret) {
-		echo pg_last_error($pdo);
-		//header(Config::$webLogin);
+		echo pg_last_error($pdo);		
 		exit;
 	}
 	
@@ -355,13 +325,12 @@
 		
 			$fl_status_leitoAnterior = "NENHUM";
 		
-			$sqlStatusLeito = "SELECT fl_status_leito FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '". $_SESSION['nm_loc_nome'] ."'";
+			$sqlStatusLeito = "SELECT fl_status_leito FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '". $_POST['nm_loc_nome'] ."'";
 			
 			$retStatusLeito = pg_query($pdo, $sqlStatusLeito);
 		
 			if(!$retStatusLeito) {
-				echo pg_last_error($pdo);
-				//header(Config::$webLogin);
+				echo pg_last_error($pdo);				
 				exit;
 			}	
 			
@@ -371,31 +340,6 @@
 				$fl_status_leitoAnterior = $rowStatusLeito['fl_status_leito'];
 				
 			}			
-			
-			//alterar aqui 26/06/2020
-			//if ($_POST['fl_fmnte']=='Sim'){					
-			//	$fl_fmnte = 'true';
-			//} elseif ($_POST['fl_fmnte']=='Nao'){					
-			//	$fl_fmnte = 'false';
-			//} else {
-			//	$fl_fmnte = 'null';
-			//}
-			
-			//if ($_POST['fl_rtgrd']=='Sim'){					
-			//	$fl_rtgrd = 'true';
-			//} elseif ($_POST['fl_rtgrd']=='Nao'){					
-			//	$fl_rtgrd = 'false';
-			//} else {
-			//	$fl_rtgrd = 'null';
-			//}
-			
-			//if ($_POST['fl_acmpte']=='Sim'){					
-			//	$fl_acmpte = 'true';
-			//} elseif ($_POST['fl_acmpte']=='Nao'){					
-			//	$fl_acmpte = 'false';
-			//} else {
-			//	$fl_acmpte = 'null';
-			//}
 			
 			if ($_POST['fl_fmnte']=='null' || $_POST['fl_fmnte']==''){
 				$fl_fmnte = 'null';
@@ -455,8 +399,9 @@
 			ds_crtr_intnc = '" . $_POST['ds_crtr_intnc'] . "', 
 			cd_usua_altr = '" . $_SESSION['usuario'] . "', 
             dt_altr = current_timestamp
-			WHERE trim(ds_leito) = '". $_SESSION['nm_loc_nome'] ."'";
+			WHERE trim(ds_leito) = '". $_POST['nm_loc_nome'] ."'";
 			
+			//retirar aqui
 			//echo $sql;
 			
 			$result = pg_query($pdo, $sql);
@@ -484,7 +429,7 @@
 					$rowStatusLeito = pg_fetch_assoc($retStatusLeito);	
 					if ($fl_status_leitoAnterior <> $rowStatusLeito['ds_status_leito']){
 						
-						$sqlHstrStatusLeito = "INSERT INTO integracao.tb_f_hstr_ocpa_leito_status VALUES ((select NEXTVAL('integracao.sq_hstr_ocpa_leito_status')), '". $_SESSION['nm_loc_nome'] ."', current_timestamp, '". $rowStatusLeito['ds_status_leito'] ."')";
+						$sqlHstrStatusLeito = "INSERT INTO integracao.tb_f_hstr_ocpa_leito_status VALUES ((select NEXTVAL('integracao.sq_hstr_ocpa_leito_status')), '". $_POST['nm_loc_nome'] ."', current_timestamp, '". $rowStatusLeito['ds_status_leito'] ."')";
 						
 						$resultHstrStatusLeito = pg_query($pdo, $sqlHstrStatusLeito);
 						
@@ -499,13 +444,12 @@
 			}			
 			//--------------------------------------------------------------------------------
 			
-			$sqlCtrlLeitoTemp="SELECT COUNT(1) FROM integracao.tb_ctrl_leito_temp WHERE trim(ds_leito) = '". $_SESSION['nm_loc_nome'] ."'";
+			$sqlCtrlLeitoTemp="SELECT COUNT(1) FROM integracao.tb_ctrl_leito_temp WHERE trim(ds_leito) = '". $_POST['nm_loc_nome'] ."'";
 			
 			$retCtrlLeitoTemp = pg_query($pdo, $sqlCtrlLeitoTemp);
 		
 			if(!$retCtrlLeitoTemp) {
-				echo pg_last_error($pdo);
-				//header(Config::$webLogin);
+				echo pg_last_error($pdo);				
 				exit;
 			}	
 			
@@ -515,7 +459,7 @@
 				
 				$sql = "INSERT INTO integracao.tb_ctrl_leito_temp(
 						ds_leito, nm_mdco, nm_psco, nm_trpa, ds_ocorr, ds_cid, ds_dieta, fl_fmnte, ds_const, ds_crtr_intnc, fl_status_leito, fl_acmpte, fl_rtgrd, pac_reg, id_status_leito, id_memb_equip_hosptr_mdco, id_memb_equip_hosptr_psco, id_memb_equip_hosptr_trpa) VALUES ( ";
-				$sql.= "'". $_SESSION['nm_loc_nome'] ."',";
+				$sql.= "'". $_POST['nm_loc_nome'] ."',";
 				if ($_POST['id_memb_equip_hosptr_mdco']=='null' or $_POST['id_memb_equip_hosptr_mdco']=='' ) {
 					$sql.="null,";
 				} else {
@@ -540,7 +484,7 @@
 				$sql.= "(select ds_status_leito from integracao.tb_status_leito where id_status_leito = " . $_POST['id_status_leito'] . ") ,";
 				$sql.= "". $fl_acmpte .",";
 				$sql.= "". $fl_rtgrd .",";
-				$sql.= "'". $_SESSION['pac_reg'] ."',";
+				$sql.= "'". $_POST['pac_reg'] ."',";
 				$sql.= "'". $_POST['id_status_leito'] ."',";
 				if ($_POST['id_memb_equip_hosptr_mdco']=='null' or $_POST['id_memb_equip_hosptr_mdco']=='' ) {
 					$sql.=" null , ";
@@ -565,6 +509,7 @@
 					echo "";
 				}
 				
+				//retirar aqui
 				//echo $sql;
 				
 			} else {
@@ -608,8 +553,8 @@
 				ds_const = '" . $_POST['ds_const'] . "',
 				ds_ocorr = '" . $_POST['ds_ocorr'] . "', 
 				ds_crtr_intnc = '" . $_POST['ds_crtr_intnc'] . "',
-				pac_reg = " . $_SESSION['pac_reg'] . " 
-				WHERE trim(ds_leito) = trim('". $_SESSION['nm_loc_nome'] ."') ";
+				pac_reg = " . $_POST['pac_reg'] . " 
+				WHERE trim(ds_leito) = trim('". $_POST['nm_loc_nome'] ."') ";
 				
 				$result = pg_query($pdo, $sql);
 
@@ -617,10 +562,12 @@
 					echo "";
 				}
 				
+				//retirar aqui
 				//echo $sql;
 				
 			}
-				
+			
+			//voltar aqui
 			$secondsWait = 0;
 			header("Refresh:$secondsWait");
 

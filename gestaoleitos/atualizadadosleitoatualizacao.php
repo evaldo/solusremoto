@@ -5,10 +5,9 @@
 	include '../database.php';
 	$pdo = database::connect();
 	
-	$_SESSION['nm_loc_nome']="";
-	
 	if (isset($_POST['nm_loc_nome'])){	
-		$_SESSION['nm_loc_nome']=$_POST['nm_loc_nome'];
+		//$_SESSION['nm_loc_nome']=$_POST['nm_loc_nome'];
+		$nm_loc_nome=$_POST['nm_loc_nome'];
 		
 		$sql = "SELECT ds_crtr_intnc     
 				, nm_mdco     
@@ -52,7 +51,7 @@
 				, case when fl_fmnte = 'T' then 'true' else 'false' end fl_fmnte
 				, case when fl_rtgrd = 'T' then 'true' else 'false' end fl_rtgrd 
 				, case when fl_acmpte = 'T' then 'true' else 'false' end fl_acmpte  
-		FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '". $_SESSION['nm_loc_nome'] ."'";
+		FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '". $_POST['nm_loc_nome'] ."'";
 			
 		$ret = pg_query($pdo, $sql);
 		if(!$ret) {
@@ -74,7 +73,7 @@
 		$id_memb_equip_hosptr_mdco = $row[12];
 		$id_memb_equip_hosptr_psco = $row[13];
 		$id_memb_equip_hosptr_trpa = $row[14];
-		$_SESSION['pac_reg'] = $row[16];
+		$pac_reg = $row[16];
 		$nm_pcnt = $row[17];
 		
 		
@@ -100,7 +99,7 @@
 		  <div class="modal-dialog">
 				<div class="modal-content" style="width:800px">
 					<div class="container">						
-						<h5 class="modal-title">Alteração da Gestão de Leitos - <?php echo $nm_pcnt;?> - em - <?php echo $_SESSION['nm_loc_nome'];?></h5>
+						<h5 class="modal-title">Alteração da Gestão de Leitos - <?php echo $nm_pcnt;?> - em - <?php echo $_POST['nm_loc_nome'];?></h5>
 					</div>						
 					<form class="form-inline" method="post" >
 						<div class="modal-body">
@@ -466,6 +465,9 @@
 										<!--style="display:none"-->
 										
 										
+										<input type="text" name="nm_loc_nome" id="nm_loc_nome" value="<?php echo $nm_loc_nome; ?>" style="display:none">
+										
+										<input type="text" name="pac_reg" id="pac_reg" value="<?php echo $pac_reg; ?>" style="display:none">
 										
 										<input type="text" name="ds_crtr_intnc" id="ds_crtr_intnc" value="<?php echo $ds_crtr_intnc; ?>" style="display:none">
 										

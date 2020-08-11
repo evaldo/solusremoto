@@ -101,7 +101,7 @@
 				echo "";
 			}
 			
-			$sqlCtrlLeitoTemp="SELECT nm_mdco, nm_psco, nm_trpa, ds_ocorr, ds_cid, ds_dieta, fl_fmnte, ds_const, ds_crtr_intnc, fl_status_leito, fl_acmpte, fl_rtgrd, pac_reg, id_status_leito, id_memb_equip_hosptr_mdco, id_memb_equip_hosptr_psco, id_memb_equip_hosptr_trpa FROM integracao.tb_ctrl_leito_temp WHERE pac_reg = " . $rowSmart[7] . " and trim(ds_leito) = trim('" . $rowSmart[0] . "')";
+			$sqlCtrlLeitoTemp="SELECT nm_mdco, nm_psco, nm_trpa, ds_ocorr, ds_cid, ds_dieta, fl_fmnte, ds_const, ds_crtr_intnc, fl_status_leito, fl_acmpte, fl_rtgrd, pac_reg, id_status_leito, id_memb_equip_hosptr_mdco, id_memb_equip_hosptr_psco, id_memb_equip_hosptr_trpa FROM integracao.tb_ctrl_leito_temp WHERE pac_reg = " . $rowSmart[7] . "";
 		
 			$retCtrlLeitoTemp = pg_query($pdo, $sqlCtrlLeitoTemp);
 		
@@ -156,7 +156,6 @@
 				
 				//retirar aqui				
 				//echo $sqlUpdateCtrlTemp;
-				
 				
 			}
 		}
@@ -230,25 +229,80 @@
 
 	}
 	
-	$sqlsmarttemp = "select trim(leito_smart.ds_leito) as leito, leito_smart.pac_reg as pac_reg
-				from integracao.tb_ctrl_leito_temp leito_temp
-					LEFT JOIN integracao.tb_ctrl_leito_smart leito_smart 
-					ON leito_temp.ds_leito = trim(leito_smart.ds_leito)";			
-			
-	$retsmarttemp = pg_query($pdo, $sqlsmarttemp);	
-	if(!$retsmarttemp) {
+	$sqlCtrlLeito = "SELECT ds_leito
+	, pac_reg
+	, nm_mdco
+	, nm_psco
+	, nm_trpa
+	, ds_ocorr
+	, ds_cid
+	, ds_dieta
+	, fl_fmnte
+	, ds_const
+	, ds_crtr_intnc
+	, fl_status_leito
+	, fl_acmpte
+	, fl_rtgrd
+	, pac_reg
+	, id_status_leito
+	, id_memb_equip_hosptr_mdco
+	, id_memb_equip_hosptr_psco
+	, id_memb_equip_hosptr_trpa 
+	FROM integracao.tb_ctrl_leito order by 1 ";			
+	
+	$retctrlleito = pg_query($pdo, $sqlCtrlLeito);	
+	
+	if(!$retctrlleito) {
 		echo pg_last_error($pdo);	
 		exit;
-	}					
+	}	
 	
-	while($rowsmarttemp = pg_fetch_row($retsmarttemp)) {
-			
-		$sqlUpdateCtrlTemp = "UPDATE integracao.tb_ctrl_leito_temp SET ds_leito = trim('" . $rowsmarttemp[0] . "') WHERE pac_reg = ". $rowsmarttemp[1] ."";
-			
-		$resultUpdateCtrlTemp = pg_query($pdo, $sqlUpdateCtrlTemp);
+	while($rowctrlleito = pg_fetch_assoc($retctrlleito)) {
+	
+		$sqlUpdateCtrlLeitoTemp = "UPDATE integracao.tb_ctrl_leito_temp SET 
+		fl_fmnte = '". $rowctrlleito['fl_fmnte'] . "', 
+		fl_rtgrd = '". $rowctrlleito['fl_rtgrd'] . "', 
+		fl_acmpte = '". $rowctrlleito['fl_acmpte'] . "', 
+		fl_status_leito = '" . $rowctrlleito['fl_status_leito'] . "', " ;
+		if ($rowctrlleito['id_status_leito']==null){
+			$rowctrlleito.=" id_status_leito = null , ";				
+		} else {
+			$sqlUpdateCtrlLeitoTemp.="id_status_leito = " . $rowctrlleito['id_status_leito'] . " ,";
+		}
+		if ($rowctrlleito['id_memb_equip_hosptr_mdco']==null){
+			$sqlUpdateCtrlLeitoTemp.=" id_memb_equip_hosptr_mdco = null, ";
+		} else {
+			$sqlUpdateCtrlLeitoTemp.="id_memb_equip_hosptr_mdco = " . $rowctrlleito['id_memb_equip_hosptr_mdco'] . " ,";
+		}
+		$sqlUpdateCtrlLeitoTemp.="nm_mdco = '" . $rowctrlleito['nm_mdco'] . "' , ";				
+		if ($rowctrlleito['id_memb_equip_hosptr_psco']==null){
+			$sqlUpdateCtrlLeitoTemp.=" id_memb_equip_hosptr_psco = null, ";
+		} else {
+			$sqlUpdateCtrlLeitoTemp.="id_memb_equip_hosptr_psco = " . $rowctrlleito['id_memb_equip_hosptr_psco'] . " ,";
+		}
+		$sqlUpdateCtrlLeitoTemp.="nm_psco = '" . $rowctrlleito['nm_psco'] . "'   , ";
+		if ($rowctrlleito['id_memb_equip_hosptr_trpa']==null){
+			$sqlUpdateCtrlLeitoTemp.=" id_memb_equip_hosptr_trpa = null, ";
+		} else {
+			$sqlUpdateCtrlLeitoTemp.="id_memb_equip_hosptr_trpa = " . $rowctrlleito['id_memb_equip_hosptr_trpa'] . " ,";				}				
+		$sqlUpdateCtrlLeitoTemp.="nm_trpa = '" . $rowctrlleito['nm_trpa'] . "'  ,				
+		ds_cid = '" . $rowctrlleito['ds_cid'] . "'	,
+		ds_dieta = '" . $rowctrlleito['ds_dieta'] . "',
+		ds_const = '" . $rowctrlleito['ds_const'] . "',
+		ds_ocorr = '" . $rowctrlleito['ds_ocorr'] . "', 
+		ds_crtr_intnc = '" . $rowctrlleito['ds_crtr_intnc'] . "',				 
+		pac_reg = ". $rowctrlleito['pac_reg'] . "
+		WHERE ds_leito = '" . $rowctrlleito['ds_leito'] . "'";
 		
-		if($resultUpdateCtrlTemp){
+		$resultUpdateCtrlLeito = pg_query($pdo, $sqlUpdateCtrlLeitoTemp);
+		
+		if($resultUpdateCtrlLeito){
 			echo "";
+		}
+		
+		//retirar aqui	
+		if ($rowctrlleito['ds_leito']=='LEITO 414-A'){
+			echo $sqlUpdateCtrlLeitoTemp;
 		}
 		
 	} 

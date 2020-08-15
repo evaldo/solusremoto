@@ -86,6 +86,11 @@
 			
 				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = null, NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "', id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."' WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
 				
+				//retirar aqui	
+				//if ( $rowSmart[0]=='LEITO 307-B'){
+				//	echo $sql;
+				//}
+				
 			} else {
 				
 				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = '" . $rowSmart[2] . "', NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "' , id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."' WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
@@ -124,12 +129,12 @@
 				} else {
 					$sqlUpdateCtrlTemp.="id_status_leito = " . $rowCtrlLeitoTemp['id_status_leito'] . " ,";
 				}
-				if ($rowCtrlLeitoTemp['id_memb_equip_hosptr_mdco']==null){
+				/*if ($rowCtrlLeitoTemp['id_memb_equip_hosptr_mdco']==null){
 					$sqlUpdateCtrlTemp.=" id_memb_equip_hosptr_mdco = null, ";
 				} else {
 					$sqlUpdateCtrlTemp.="id_memb_equip_hosptr_mdco = " . $rowCtrlLeitoTemp['id_memb_equip_hosptr_mdco'] . " ,";
 				}
-				$sqlUpdateCtrlTemp.="nm_mdco = '" . $rowCtrlLeitoTemp['nm_mdco'] . "' , ";				
+				$sqlUpdateCtrlTemp.="nm_mdco = '" . $rowCtrlLeitoTemp['nm_mdco'] . "' , ";				*/
 				if ($rowCtrlLeitoTemp['id_memb_equip_hosptr_psco']==null){
 					$sqlUpdateCtrlTemp.=" id_memb_equip_hosptr_psco = null, ";
 				} else {
@@ -301,9 +306,9 @@
 		}
 		
 		//retirar aqui	
-		if ($rowctrlleito['ds_leito']=='LEITO 414-A'){
-			echo $sqlUpdateCtrlLeitoTemp;
-		}
+		//if ($rowctrlleito['ds_leito']=='LEITO 414-A'){
+		//	echo $sqlUpdateCtrlLeitoTemp;
+		//}
 		
 	} 
 	

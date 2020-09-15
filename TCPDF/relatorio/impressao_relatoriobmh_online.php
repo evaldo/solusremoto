@@ -166,18 +166,16 @@ date_default_timezone_set('America/Sao_Paulo');
 				<th>Médico</th>
 				<th>Psicólogo</th>
 				<th>Terapeuta</th>
-				<th>Grupo de CID</th>
-				<th>Fumante</th>				
-				<th>Retagd.</th>
-				<th>Acomp.</th>
-				<th>Cart. Inter.</th>
+				<th>CID</th>
+				<th>Fumante</th>								
 				<th>Dieta</th>
 				<th>Consist.</th>
-				<th>Ocorrências</th>							
-															
+				<th>Ocorrências</th>			
+				<th>Retagd.</th>
+				<th>Acomp.</th>	
+				<th>Carat. Inter.</th>
 			</tr>
 			<hr>';
-			
 	$html .= ' 
 			<tr >
 				<td>'.$row[0].'</td>				
@@ -188,20 +186,22 @@ date_default_timezone_set('America/Sao_Paulo');
 				<td>'.$row[5].'</td>
 				<td>'.$row[6].'</td>
 				<td>'.$row[7].'</td>
-				<td>'.$row[8].'</td>
-				<td>'.$row[9].'</td>
-				<td>'.$row[10].'</td>					
-				<td>'.$row[11].'</td>
+				<td>'.$row[8].'</td>													
 				<td>'.$row[12].'</td>
 				<td>'.$row[13].'</td>
-				<td>'.$row[14].'</td>															
+				<td>'.$row[14].'</td>
+				<td>'.$row[9].'</td>
+				<td>'.$row[10].'</td>				
+				<td>'.$row[11].'</td>
 											
 			</tr>
 			<hr>';
 	$cabecalho='';	
 	$contalinha = 0;
+	$cor=1;
+	$color='';
 	while($row = pg_fetch_row($ret)) {
-			
+		
 		if ($contalinha == 8){
 			$contalinha = 0;
 			$html .= ' <div style="page-break-after: always"></div>';
@@ -216,22 +216,29 @@ date_default_timezone_set('America/Sao_Paulo');
 				<th>Médico</th>
 				<th>Psicólogo</th>
 				<th>Terapeuta</th>
-				<th>Grupo de CID</th>
-				<th>Fumante</th>				
-				<th>Retagd.</th>
-				<th>Acomp.</th>
-				<th>Cart. Inter.</th>
+				<th>CID</th>
+				<th>Fumante</th>								
 				<th>Dieta</th>
 				<th>Consist.</th>
-				<th>Ocorrências</th>				
-															
+				<th>Ocorrências</th>			
+				<th>Retagd.</th>
+				<th>Acomp.</th>	
+				<th>Carat. Inter.</th>
 			</tr>
 			<hr>';
 			
 		}
-	
+		
+		/*if ($cor==1){
+			$color="#FFFFCC";
+			$cor=2;
+		} else {
+			$color="#FF0000";
+			$cor=1;
+		}*/
+		
 		$html .= ' 
-			<tr >
+			<tr>
 				<td>'.$row[0].'</td>				
 				<td>'.$row[1].'</td>
 				<td>'.$row[2].'</td>				
@@ -240,13 +247,13 @@ date_default_timezone_set('America/Sao_Paulo');
 				<td>'.$row[5].'</td>
 				<td>'.$row[6].'</td>
 				<td>'.$row[7].'</td>
-				<td>'.$row[8].'</td>
-				<td>'.$row[9].'</td>
-				<td>'.$row[10].'</td>					
-				<td>'.$row[11].'</td>
+				<td>'.$row[8].'</td>													
 				<td>'.$row[12].'</td>
 				<td>'.$row[13].'</td>
-				<td>'.$row[14].'</td>															
+				<td>'.$row[14].'</td>
+				<td>'.$row[9].'</td>
+				<td>'.$row[10].'</td>
+				<td>'.$row[11].'</td>
 			</tr>
 			<hr>';
 			//echo $row[0];
@@ -308,15 +315,15 @@ date_default_timezone_set('America/Sao_Paulo');
 				<th>Médico</th>
 				<th>Psicólogo</th>
 				<th>Terapeuta</th>
-				<th>Grupo de CID</th>
-				<th>Fumante</th>				
-				<th>Retagd.</th>
-				<th>Acomp.</th>
-				<th>Cart. Inter.</th>
+				<th>CID</th>
+				<th>Fumante</th>												
 				<th>Dieta</th>
 				<th>Consist.</th>
-				<th>Ocorrências</th>							
-				<th>Destino de Alta</th>				
+				<th>Ocorrências</th>			
+				<th>Destino de Alta</th>
+				<th>Retagd.</th>
+				<th>Acomp.</th>	
+				<th>Carat. Inter.</th>
 															
 			</tr>
 			<hr>';
@@ -332,15 +339,14 @@ date_default_timezone_set('America/Sao_Paulo');
 				<td>'.$row[5].'</td>
 				<td>'.$row[6].'</td>
 				<td>'.$row[7].'</td>
-				<td>'.$row[8].'</td>
-				<td>'.$row[9].'</td>
-				<td>'.$row[10].'</td>					
-				<td>'.$row[11].'</td>
+				<td>'.$row[8].'</td>													
 				<td>'.$row[12].'</td>
 				<td>'.$row[13].'</td>
 				<td>'.$row[14].'</td>
-				<td>'.$row[15].'</td>											
-				<td>'.$row[16].'</td>							
+				<td>'.$row[15].'</td>
+				<td>'.$row[9].'</td>
+				<td>'.$row[10].'</td>															
+				<td>'.$row[11].'</td>
 			</tr>
 			<hr>';
 	$cabecalho='';	
@@ -362,16 +368,15 @@ date_default_timezone_set('America/Sao_Paulo');
 				<th>Médico</th>
 				<th>Psicólogo</th>
 				<th>Terapeuta</th>
-				<th>Grupo de CID</th>
-				<th>Fumante</th>				
-				<th>Retagd.</th>
-				<th>Acomp.</th>
-				<th>Cart. Inter.</th>
+				<th>CID</th>
+				<th>Fumante</th>												
 				<th>Dieta</th>
 				<th>Consist.</th>
-				<th>Ocorrências</th>				
+				<th>Ocorrências</th>			
 				<th>Destino de Alta</th>
-				<th>Alta</th>
+				<th>Retagd.</th>
+				<th>Acomp.</th>	
+				<th>Carat. Inter.</th>
 			</tr>
 			<hr>';
 			
@@ -388,15 +393,14 @@ date_default_timezone_set('America/Sao_Paulo');
 				<td>'.$row[5].'</td>
 				<td>'.$row[6].'</td>
 				<td>'.$row[7].'</td>
-				<td>'.$row[8].'</td>
-				<td>'.$row[9].'</td>
-				<td>'.$row[10].'</td>					
-				<td>'.$row[11].'</td>
+				<td>'.$row[8].'</td>													
 				<td>'.$row[12].'</td>
 				<td>'.$row[13].'</td>
 				<td>'.$row[14].'</td>
-				<td>'.$row[15].'</td>											
-				<td>'.$row[16].'</td>											
+				<td>'.$row[15].'</td>
+				<td>'.$row[9].'</td>
+				<td>'.$row[10].'</td>															
+				<td>'.$row[11].'</td>
 			</tr>
 			<hr>';
 			//echo $row[0];
@@ -406,8 +410,8 @@ date_default_timezone_set('America/Sao_Paulo');
 	
 	$html .= '</table>';
 
-// output the HTML content
-$pdf->writeHTML($html, true, 0, true, 0);
+
+$pdf->writeHTML($html, true, false, true, false, '');
 
 // reset pointer to the last page
 $pdf->lastPage();

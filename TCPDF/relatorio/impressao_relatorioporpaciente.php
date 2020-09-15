@@ -133,24 +133,22 @@ date_default_timezone_set('America/Sao_Paulo');
 	$html = ' 				
 		<h4>Data/Hora da Emissão: '. date("d/m/Y H:i:s").'<h4>
         <table>					
-			<tr>
+			<tr>			
 				<th>Leito</th>				
 				<th>Admissão</th>
-				<th>Paciente</th>				
+				<th width = "14%">Paciente</th>				
 				<th>Data de Nasc.</th>
 				<th>Convênio</th>
 				<th>Médico</th>
 				<th>Psicólogo</th>
 				<th>Terapeuta</th>
-				<th>Grupo de CID</th>
+				<th>CID</th>
 				<th>Fumante</th>
-				<th>Prvs. de Alta</th>					
-				<th>Retagd.</th>
-				<th>Acomp.</th>
-				<th>Cart. Inter.</th>
 				<th>Dieta</th>
-				<th>Consist.</th>
-				<th>Ocorrências</th>					
+				<th>Consist.</th>										
+				<th width = "5%">Retagd.</th>
+				<th width = "5%">Acomp.</th>
+				<th width = "5%">Carat. Inter</th>
 			</tr>
 			<hr>';
 	while($row = pg_fetch_row($ret)) {
@@ -158,23 +156,26 @@ date_default_timezone_set('America/Sao_Paulo');
 			<tr >
 				<td>'.$row[0].'</td>				
 				<td>'.$row[1].'</td>
-				<td>'.$row[2].'</td>				
+				<td width = "15%">'.substr($row[2], 0, 30).'</td>				
 				<td>'.$row[3].'</td>
-				<td>'.$row[4].'</td>
+				<td>'.substr($row[4], 0, 10).'</td>
 				<td>'.$row[5].'</td>
 				<td>'.$row[6].'</td>
 				<td>'.$row[7].'</td>
 				<td>'.$row[8].'</td>
-				<td>'.$row[9].'</td>
-				<td>'.$row[10].'</td>					
-				<td>'.$row[11].'</td>
-				<td>'.$row[12].'</td>
-				<td>'.$row[13].'</td>
+				<td>'.$row[9].'</td>															
 				<td>'.$row[14].'</td>
-				<td>'.$row[15].'</td>							
-				<td>'.$row[16].'</td>							
-			</tr>
-			<hr>';
+				<td>'.$row[15].'</td>											
+				<td width = "5%">'.$row[11].'</td>
+				<td width = "5%">'.$row[12].'</td>
+				<td width = "5%">'.substr($row[13], 0, 5).'</td>
+			</tr><br><br>';
+			if ($row[16]!=null){
+				$html .= '<tr class="spacer"><td></td></tr>';
+				$html .= '<tr><td colspan="14">OCORRÊNCIAS:  '.$row[16].'</td></tr><br><br>';
+			}
+			$html .= ' <hr>';
+			$html .= '<tr class="spacer"><td></td></tr>';
 			//echo $row[0];
 	}
 		$html .= '</table>';

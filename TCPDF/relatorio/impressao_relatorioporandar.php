@@ -132,86 +132,97 @@ date_default_timezone_set('America/Sao_Paulo');
 
 	$html = ' 				
 		<h5>Data/Hora da Emissão: '. date("d/m/Y H:i:s").'<h5>
-        <table>					
+        <table style="border-collapse: collapse">					
 			<tr>
 				<th>Leito</th>				
 				<th>Admissão</th>
-				<th>Paciente</th>				
+				<th width = "15%">Paciente</th>				
 				<th>Data de Nasc.</th>
 				<th>Convênio</th>
 				<th>Médico</th>
 				<th>Psicólogo</th>
 				<th>Terapeuta</th>
-				<th>Grupo de CID</th>
+				<th>CID</th>
 				<th>Fumante</th>
-				<th>Prvs. de Alta</th>					
-				<th>Retagd.</th>
-				<th>Acomp.</th>
-				<th>Cart. Inter.</th>
 				<th>Dieta</th>
-				<th>Consist.</th>
-				<th>Ocorrências</th>						
+				<th>Consist.</th>										
+				<th width = "5%">Retagd.</th>
+				<th width = "5%">Acomp.</th>
+				<th width = "5%">Carat. Inter</th>
 			</tr>
 			<hr>';
 	$contalinha = 0;
+	
+	$cor=1;
+	$color='';
+	
 	while($row = pg_fetch_row($ret)) {
+		
+		/*if ($cor==1){
+			$color="background-color: #dddddd";
+			$cor=2;
+		} else {
+			$color="background-color: white";
+			$cor=1;
+		}*/
+		
 		$html .= ' 
 			<tr >
 				<td>'.$row[0].'</td>				
 				<td>'.$row[1].'</td>
-				<td>'.$row[2].'</td>				
+				<td width = "15%">'.substr($row[2], 0, 25).'</td>				
 				<td>'.$row[3].'</td>
-				<td>'.$row[4].'</td>
+				<td>'.substr($row[4], 0, 10).'</td>
 				<td>'.$row[5].'</td>
 				<td>'.$row[6].'</td>
 				<td>'.$row[7].'</td>
 				<td>'.$row[8].'</td>
-				<td>'.$row[9].'</td>
-				<td>'.$row[10].'</td>					
-				<td>'.$row[11].'</td>
-				<td>'.$row[12].'</td>
-				<td>'.$row[13].'</td>
+				<td>'.$row[9].'</td>															
 				<td>'.$row[14].'</td>
-				<td>'.$row[15].'</td>							
-				<td>'.$row[16].'</td>
+				<td>'.$row[15].'</td>											
+				<td width = "5%">'.$row[11].'</td>
+				<td width = "5%">'.$row[12].'</td>
+				<td width = "5%">'.substr($row[13], 0, 5).'</td>
 			</tr>';
-			$contalinha = $contalinha + 1;
+			if ($row[16]!=null){
+				$html .= '<tr class="spacer"><td></td></tr>';
+				$html .= '<tr style="'.$color.'"><td colspan="14">OCORRÊNCIAS:  '.$row[16].'</td></tr><br><br>';
+			}
+			/*$contalinha = $contalinha + 1;
 			
-			if ($contalinha == 10){
+			if ($contalinha == 12){
 				$contalinha = 0;
 				$html .= ' <div style="page-break-after: always"></div>';			
 				
 				$html .= ' 				
 				<h5>Data/Hora da Emissão: '. date("d/m/Y H:i:s"). '<h5>
-				<table>					
+				<table style="border-collapse: collapse">					
 					<tr>
 						<th>Leito</th>				
 						<th>Admissão</th>
-						<th>Paciente</th>				
+						<th width = "15%">Paciente</th>				
 						<th>Data de Nasc.</th>
 						<th>Convênio</th>
 						<th>Médico</th>
 						<th>Psicólogo</th>
 						<th>Terapeuta</th>
-						<th>Grupo de CID</th>
+						<th>CID</th>
 						<th>Fumante</th>
-						<th>Prvs. de Alta</th>					
-						<th>Retagd.</th>
-						<th>Acomp.</th>
-						<th>Cart. Inter.</th>
 						<th>Dieta</th>
-						<th>Consist.</th>
-						<th>Ocorrências</th>						
+						<th>Consist.</th>										
+						<th width = "3%">Retagd.</th>
+						<th width = "3%">Acomp.</th>																		
 					</tr>
 					<hr>';				
 				
-			}
-			$html .= ' <hr>';						
+			}*/
+			$html .= ' <hr>';	
+			$html .= '<tr class="spacer"><td></td></tr>';			
 	}
 		$html .= '</table>';
 
 // output the HTML content
-$pdf->writeHTML($html, true, 0, true, 0);
+$pdf->writeHTML($html, true, false, true, false, '');
 
 // reset pointer to the last page
 $pdf->lastPage();

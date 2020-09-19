@@ -236,9 +236,9 @@
 	
 	$sqlCtrlLeito = "SELECT ds_leito
 	, pac_reg
-	, nm_mdco
-	, nm_psco
-	, nm_trpa
+	, case when nm_mdco='' then '-' else nm_mdco end nm_mdco
+	, case when nm_psco='' then '-' else nm_psco end nm_psco 
+	, case when nm_trpa='' then '-' else nm_trpa end nm_trpa 
 	, ds_ocorr
 	, ds_cid
 	, ds_dieta
@@ -705,7 +705,7 @@
 						exit;
 					}
 				?>
-					<select id="sl_tp_carater_inter" style="width: 150px;" onchange="BuscaExato(4, 'sl_tp_carater_inter')">
+					<select id="sl_tp_carater_inter" style="width: 100px; font-size: 11px;" onchange="BuscaExato(4, 'sl_tp_carater_inter')">
 					<option value=""></option>
 								
 					<?php
@@ -723,7 +723,7 @@
 				
 				&nbsp;&nbsp;
 				<label style="font-weight:bold; font-size: 11px;">Dieta:</label>&nbsp;
-				<input style="width: 150px; font-size: 11px;" type="text" id="buscadieta" onkeyup="Busca(12, 'buscadieta')" placeholder="Dieta..." title="Texto da Busca"> &nbsp;
+				<input style="width: 100px; font-size: 11px;" type="text" id="buscadieta" onkeyup="Busca(12, 'buscadieta')" placeholder="Dieta..." title="Texto da Busca"> &nbsp;
 				<!--<input class="btn btn-primary" type="submit" value="1 Andar" id="1andar" onclick="BuscaAndar( '1')">
 				&nbsp;
 				<input class="btn btn-primary" type="submit" value="2 Andar" id="2andar" onclick="BuscaAndar( '2')">
@@ -788,6 +788,7 @@
 				?>
 						<select id="sl_tp_mdco" style="width: 90px; font-size: 11px;" onchange="Busca(7, 'sl_tp_mdco')">
 					<option value=""></option>
+					<option value="-">-</option>
 								
 					<?php
 						$cont=1;	
@@ -819,6 +820,7 @@
 				?>
 						<select id="sl_tp_psco" style="width: 90px; font-size: 11px;" onchange="Busca(8, 'sl_tp_psco')">
 					<option value=""></option>
+					<option value="-">-</option>
 								
 					<?php
 						$cont=1;	
@@ -848,6 +850,7 @@
 				?>
 						<select id="sl_tp_trpa" style="width: 90px; font-size: 11px;" onchange="Busca(9, 'sl_tp_trpa')">
 					<option value=""></option>
+					<option value="-">-</option>
 								
 					<?php
 						$cont=1;	
@@ -859,7 +862,9 @@
 						}
 						 ?>	
 						
-				</select>&nbsp;	
+				</select>&nbsp;&nbsp;
+				
+				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Atendimento" name="atendimento" data-toggle="modal" data-target="#modalatendimento">
 				
 				<br>
 				<br>
@@ -1094,6 +1099,80 @@
 					}
 			 </script>
 			 <!-- Modal -->
+			 <div class="modal fade" id="modalatendimento">
+				<div class="modal-dialog">			
+				<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+						  <button type="button" class="close" data-dismiss="modal">&times;</button>
+						  <h4 class="modal-title">Núm. de Pac em Atdm. Por Prof.</h4>
+						</div>
+						<div class="container">
+							<?php
+								$sqlAlocacaoPaciente = "SELECT * FROM (
+								SELECT 'Médico' as TipoProfissional
+									 , nm_mdco as NomeProfissional
+									 , count(nm_mdco) as QtdePacAlocado	 
+								FROM integracao.tb_ctrl_leito
+								group by TipoProfissional
+										, nm_mdco	   
+								union
+								SELECT 'Psicólogo' as TipoProfissional
+									 , nm_psco as NomeProfissional
+									 , count(nm_psco) as QtdePacAlocado	 
+								FROM integracao.tb_ctrl_leito 
+								group by TipoProfissional
+									   , nm_psco	   
+								union
+								SELECT 'Terapeuta' as TipoProfissional
+									 , nm_trpa as NomeProfissional
+									 , count(nm_trpa) as QtdePacAlocado
+								FROM integracao.tb_ctrl_leito 
+								group by TipoProfissional
+									   , nm_trpa
+							) as alocacao
+							where alocacao.QtdePacAlocado <> 0
+							  and NomeProfissional <> '' 
+							  and NomeProfissional <> '-'
+							order by 1, 2 ";			
+							
+							if ($pdo==null){
+								header(Config::$webLogin);
+							}
+							
+							$retAlocacaoPaciente = pg_query($pdo, $sqlAlocacaoPaciente);
+							if(!$retAlocacaoPaciente) {
+								echo pg_last_error($pdo);
+								exit;
+							}	
+							?> 
+							
+							<table cellspacing="10px" cellpadding="10px">					
+								<tr>
+									<th>Profissional</th>				
+									<th>Nome do Profissional</th>
+									<th>Qtde Pac. em Atdm</th>											
+								</tr>
+							<?php
+								while($rowAlocacaoPaciente = pg_fetch_row($retAlocacaoPaciente)) {
+								?>
+									<tr>
+										<td><?php echo $rowAlocacaoPaciente[0];?></td>				
+										<td><?php echo $rowAlocacaoPaciente[1];?></td>
+										<td><?php echo $rowAlocacaoPaciente[2];?></td>
+									</tr>								
+								<?php
+								}
+
+							?>
+							</table>						
+						</div>
+						<div class="modal-footer">
+						  <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+						</div>
+					 </div>				  
+				</div>
+			</div>
 			<div class="modal fade" id="modallegenda">
 				<div class="modal-dialog">			
 				<!-- Modal content-->

@@ -62,15 +62,10 @@
 
 	//Page header
 	public function Header() {
-		// Logo
-		$image_file = K_PATH_IMAGES.'logo_vilaverde.png';
-		$this->Image($image_file, 15, 5, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-		// Set font
+				
 		$this->SetFont('helvetica', 'B', 20);
-		// Title
-		$this->Cell(0, 0, 'Relatório de Gestão de Leitos', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+		
 	}
-
 	// Page footer
 	public function Footer() {
 		// Position at 15 mm from bottom
@@ -87,10 +82,10 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('Nicola Asuni');
-$pdf->SetTitle('Gestão de Leitos');
-$pdf->SetSubject('TCPDF Tutorial');
-$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+$pdf->SetAuthor('Hospital Vila Verde Saúde Mental');
+$pdf->SetTitle('Relatorio Por Andar');
+$pdf->SetSubject('Relatório em PDF');
+$pdf->SetKeywords('Por Andar');
 
 // set default header data
 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -124,101 +119,100 @@ if (@file_exists(dirname(__FILE__).'/lang/por.php')) {
 $pdf->SetDisplayMode('fullpage', 'SinglePage', 'UseNone');
 
 // set font
-$pdf->SetFont('times', 'N', 9);
+$pdf->SetFont('helvetica', 'N', 9);
 
 $pdf->AddPage('L', 'A4');
 
 date_default_timezone_set('America/Sao_Paulo');
 
-	$html = ' 				
+	$html = ' 	<!DOCTYPE html>
+				<html>
+				<head>
+				<style>		
+				table {			
+					width: 100%;
+				}
+				
+				th {
+					text-align: left;													
+				}
+				
+				td {
+					word-wrap: break-word;
+					font-weight: normal;
+				}
+
+		</style>
+		</head>
+		<body>
+		<img src="images/logo_vilaverde.png" border="0" height="80" width="80" ALIGN="left" HSPACE="50" VSPACE="50"/>
+		<h4>Relatorio Por  andar. Andar = '.$_SESSION['numeroandar'].'<h4>			
 		<h5>Data/Hora da Emissão: '. date("d/m/Y H:i:s").'<h5>
+		<hr>
         <table style="border-collapse: collapse">					
 			<tr>
-				<th>Leito</th>				
-				<th>Admissão</th>
-				<th width = "15%">Paciente</th>				
-				<th>Data de Nasc.</th>
-				<th>Convênio</th>
-				<th>Médico</th>
-				<th>Psicólogo</th>
-				<th>Terapeuta</th>
+				<th>LEITO</th>				
+				<th>ADMISSÃO</th>
+				<th>PACIENTE</th>				
+				<th>DATA NASC.</th>
+				<th>CONVÊNIO</th>
+				<th>MÉDICO</th>
+				<th>PSICÓL.</th>
+				<th>TERAP.</th>
 				<th>CID</th>
-				<th>Fumante</th>
-				<th>Dieta</th>
-				<th>Consist.</th>										
-				<th width = "5%">Retagd.</th>
-				<th width = "5%">Acomp.</th>
-				<th width = "5%">Carat. Inter</th>
+				<th>FUMANTE</th>
+				<th colspan="2">DIETA</th>													
+				<th>RET.</th>
+				<th >ACOM.</th>
+				<th>CAR INT.</th>				
+				<th>OCORR.</th>								
 			</tr>
-			<hr>';
-	$contalinha = 0;
-	
-	$cor=1;
-	$color='';
-	
-	while($row = pg_fetch_row($ret)) {
+			<tr style="background-color: #ffffff;"> <td colspan="16" height="5">&nbsp;</td> </tr>';
+		$contalinha = 0;
+		$color = "background-color: #f2f2f2;";
+		while($row = pg_fetch_row($ret)) {
+			if ($color == ""){
+				$color = "background-color: #f2f2f2;";					
+			} else {
+				$color = "background-color: #ffffff;";
+				$color="";
+			}
 		
-		/*if ($cor==1){
-			$color="background-color: #dddddd";
-			$cor=2;
-		} else {
-			$color="background-color: white";
-			$cor=1;
-		}*/
-		
-		$html .= ' 
-			<tr >
-				<td>'.$row[0].'</td>				
+			$html .= ' 
+			<tr style="'.$color.'">
+				<td style="font-weight: bold;">'.$row[0].'</td>				
 				<td>'.$row[1].'</td>
-				<td width = "15%">'.substr($row[2], 0, 25).'</td>				
+				<td style="font-weight: bold;">'.substr($row[2], 0, 30).'</td>				
 				<td>'.$row[3].'</td>
-				<td>'.substr($row[4], 0, 10).'</td>
+				<td style="font-weight: bold;">'.substr($row[4], 0, 30).'</td>
 				<td>'.$row[5].'</td>
 				<td>'.$row[6].'</td>
 				<td>'.$row[7].'</td>
-				<td>'.$row[8].'</td>
-				<td>'.$row[9].'</td>															
-				<td>'.$row[14].'</td>
-				<td>'.$row[15].'</td>											
-				<td width = "5%">'.$row[11].'</td>
-				<td width = "5%">'.$row[12].'</td>
-				<td width = "5%">'.substr($row[13], 0, 5).'</td>
-			</tr>';
-			if ($row[16]!=null){
-				$html .= '<tr class="spacer"><td></td></tr>';
-				$html .= '<tr style="'.$color.'"><td colspan="14">OCORRÊNCIAS:  '.$row[16].'</td></tr><br><br>';
-			}
-			/*$contalinha = $contalinha + 1;
-			
-			if ($contalinha == 12){
-				$contalinha = 0;
-				$html .= ' <div style="page-break-after: always"></div>';			
+				<td>'.$row[8].'</td>';
+				if ($row[9]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}																		
+				$html.='<td>'.$row[14].'</td>
+				<td>'.$row[15].'</td>';				
+				if ($row[11]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}
+				if ($row[12]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}
+				$html.='<td>'.substr($row[13], 0, 5).'</td>
+				<td>'.$row[16].'</td>
+				</tr>
+				<tr style="background-color: #ffffff;"> <td colspan="16" height="5">&nbsp;</td> </tr>';									
 				
-				$html .= ' 				
-				<h5>Data/Hora da Emissão: '. date("d/m/Y H:i:s"). '<h5>
-				<table style="border-collapse: collapse">					
-					<tr>
-						<th>Leito</th>				
-						<th>Admissão</th>
-						<th width = "15%">Paciente</th>				
-						<th>Data de Nasc.</th>
-						<th>Convênio</th>
-						<th>Médico</th>
-						<th>Psicólogo</th>
-						<th>Terapeuta</th>
-						<th>CID</th>
-						<th>Fumante</th>
-						<th>Dieta</th>
-						<th>Consist.</th>										
-						<th width = "3%">Retagd.</th>
-						<th width = "3%">Acomp.</th>																		
-					</tr>
-					<hr>';				
-				
-			}*/
-			$html .= ' <hr>';	
-			$html .= '<tr class="spacer"><td></td></tr>';			
-	}
+				$contalinha = $contalinha + 1;			
+		}
 		$html .= '</table>';
 
 // output the HTML content

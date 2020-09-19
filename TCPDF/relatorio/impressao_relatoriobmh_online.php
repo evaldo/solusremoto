@@ -78,13 +78,9 @@
 
 	//Page header
 	public function Header() {
-		// Logo
-		$image_file = K_PATH_IMAGES.'logo_vilaverde.png';
-		$this->Image($image_file, 15, 5, 25, '', 'PNG', '', 'T', false, 300, '', false, false, 0, false, false, false);
-		// Set font
+				
 		$this->SetFont('helvetica', 'B', 20);
-		// Title
-		$this->Cell(0, 0, 'Relatório de Gestão de Leitos', 0, false, 'C', 0, '', 0, false, 'M', 'M');
+		
 	}
 
 	// Page footer
@@ -103,10 +99,10 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('Nicola Asuni');
-$pdf->SetTitle('Gestão de Leitos');
-$pdf->SetSubject('TCPDF Tutorial');
-$pdf->SetKeywords('TCPDF, PDF, example, test, guide');
+$pdf->SetAuthor('Hospital Vila Verde Saúde Mental');
+$pdf->SetTitle('BMH Online');
+$pdf->SetSubject('Relatório em PDF');
+$pdf->SetKeywords('BMH Online');
 
 // set default header data
 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -140,7 +136,7 @@ if (@file_exists(dirname(__FILE__).'/lang/por.php')) {
 $pdf->SetDisplayMode('fullpage', 'SinglePage', 'UseNone');
 
 // set font
-$pdf->SetFont('times', 'N', 9);
+$pdf->SetFont('helvetica', 'N', 9);
 
 $pdf->AddPage('L', 'A4');
 
@@ -151,14 +147,32 @@ date_default_timezone_set('America/Sao_Paulo');
 	$row = pg_fetch_row($ret);
 
 	$html = ' 				
-		<h5>Data/Hora da Emissão		: '. date("d/m/Y H:i:s").'<h5>
-		<h5>Período de Emissão - Início	:'.$_SESSION['dataInicio'].' a Fim:'.$_SESSION['dataFim'].'</h5>
-		<h5>Quantidade de Admissões	: '.$nuadmss.'<h5>		
-		<hr>
-		<h5>Tipo de BMHOnline		: Admissao<h5>		
-		<hr>
+			<!DOCTYPE html>
+			<html>
+			<head>
+			<style>		
+			table {			
+				width: 100%;
+			}
+			
+			th {
+				text-align: left;													
+			}
+			
+			td {
+				word-wrap: break-word;
+				font-weight: normal;
+			}
+
+			</style>
+			</head>
+			<body>
+			<img src="images/logo_vilaverde.png" border="0" height="80" width="80" ALIGN="left" HSPACE="50" VSPACE="50"/>
+			<h4>BMH Online<h4>
+			<h5>Período de Emissão - Início	:'.$_SESSION['dataInicio'].' a Fim:'.$_SESSION['dataFim'].'</h5>
+			<h5>Quantidade de Altas	: '.$nuadmss.'<h5>		
         <table>					
-			<tr>
+			<tr>			
 				<th>Paciente</th>				
 				<th>Admissão</th>
 				<th>Data de Nasc.</th>
@@ -173,9 +187,10 @@ date_default_timezone_set('America/Sao_Paulo');
 				<th>Ocorrências</th>			
 				<th>Retagd.</th>
 				<th>Acomp.</th>	
-				<th>Carat. Inter.</th>
+				<th>Carat. Inter.</th>							
 			</tr>
 			<hr>';
+			
 	$html .= ' 
 			<tr >
 				<td>'.$row[0].'</td>				
@@ -185,14 +200,26 @@ date_default_timezone_set('America/Sao_Paulo');
 				<td>'.$row[4].'</td>
 				<td>'.$row[5].'</td>
 				<td>'.$row[6].'</td>
-				<td>'.$row[7].'</td>
-				<td>'.$row[8].'</td>													
-				<td>'.$row[12].'</td>
+				<td>'.$row[7].'</td>';
+				if ($row[8]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}																		
+				$html.='<td>'.$row[12].'</td>																	
 				<td>'.$row[13].'</td>
-				<td>'.$row[14].'</td>
-				<td>'.$row[9].'</td>
-				<td>'.$row[10].'</td>				
-				<td>'.$row[11].'</td>
+				<td>'.$row[14].'</td>';
+				if ($row[9]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}
+				if ($row[10]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}				
+				$html.='<td>'.$row[11].'</td>
 											
 			</tr>
 			<hr>';
@@ -202,7 +229,7 @@ date_default_timezone_set('America/Sao_Paulo');
 	$color='';
 	while($row = pg_fetch_row($ret)) {
 		
-		if ($contalinha == 8){
+		if ($contalinha == 10){
 			$contalinha = 0;
 			$html .= ' <div style="page-break-after: always"></div>';
 			$html .= '<h5>Tipo de BMHOnline		: Admissao<h5>		
@@ -246,14 +273,26 @@ date_default_timezone_set('America/Sao_Paulo');
 				<td>'.$row[4].'</td>
 				<td>'.$row[5].'</td>
 				<td>'.$row[6].'</td>
-				<td>'.$row[7].'</td>
-				<td>'.$row[8].'</td>													
-				<td>'.$row[12].'</td>
+				<td>'.$row[7].'</td>';
+				if ($row[8]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}																		
+				$html.='<td>'.$row[12].'</td>				
 				<td>'.$row[13].'</td>
-				<td>'.$row[14].'</td>
-				<td>'.$row[9].'</td>
-				<td>'.$row[10].'</td>
-				<td>'.$row[11].'</td>
+				<td>'.$row[14].'</td>';
+				if ($row[9]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}
+				if ($row[10]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}				
+				$html.='<td>'.$row[11].'</td>
 			</tr>
 			<hr>';
 			//echo $row[0];
@@ -338,22 +377,34 @@ date_default_timezone_set('America/Sao_Paulo');
 				<td>'.$row[4].'</td>
 				<td>'.$row[5].'</td>
 				<td>'.$row[6].'</td>
-				<td>'.$row[7].'</td>
-				<td>'.$row[8].'</td>													
-				<td>'.$row[12].'</td>
+				<td>'.$row[7].'</td>';
+				if ($row[8]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}																		
+				$html.='<td>'.$row[12].'</td>
 				<td>'.$row[13].'</td>
 				<td>'.$row[14].'</td>
-				<td>'.$row[15].'</td>
-				<td>'.$row[9].'</td>
-				<td>'.$row[10].'</td>															
-				<td>'.$row[11].'</td>
+				<td>'.$row[15].'</td>';
+				if ($row[9]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}
+				if ($row[10]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}				
+				$html.='<td>'.$row[11].'</td>
 			</tr>
 			<hr>';
 	$cabecalho='';	
 	$contalinha = 0;
 	while($row = pg_fetch_row($ret)) {
 			
-		if ($contalinha == 8){
+		if ($contalinha == 10){
 			$contalinha = 0;
 			$html .= ' <div style="page-break-after: always"></div>';
 			$html .= '<h5>Tipo de BMHOnline		: Alta<h5>		
@@ -392,15 +443,27 @@ date_default_timezone_set('America/Sao_Paulo');
 				<td>'.$row[4].'</td>
 				<td>'.$row[5].'</td>
 				<td>'.$row[6].'</td>
-				<td>'.$row[7].'</td>
-				<td>'.$row[8].'</td>													
-				<td>'.$row[12].'</td>
+				<td>'.$row[7].'</td>';
+				if ($row[8]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}																		
+				$html.='<td>'.$row[12].'</td>
 				<td>'.$row[13].'</td>
 				<td>'.$row[14].'</td>
-				<td>'.$row[15].'</td>
-				<td>'.$row[9].'</td>
-				<td>'.$row[10].'</td>															
-				<td>'.$row[11].'</td>
+				<td>'.$row[15].'</td>';
+				if ($row[9]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}
+				if ($row[10]=="Sim"){
+					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+				} else {
+					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+				}				
+				$html.='<td>'.$row[11].'</td>
 			</tr>
 			<hr>';
 			//echo $row[0];

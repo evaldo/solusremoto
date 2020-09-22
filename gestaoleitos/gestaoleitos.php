@@ -128,13 +128,7 @@
 					$sqlUpdateCtrlTemp.=" id_status_leito = null , ";				
 				} else {
 					$sqlUpdateCtrlTemp.="id_status_leito = " . $rowCtrlLeitoTemp['id_status_leito'] . " ,";
-				}
-				/*if ($rowCtrlLeitoTemp['id_memb_equip_hosptr_mdco']==null){
-					$sqlUpdateCtrlTemp.=" id_memb_equip_hosptr_mdco = null, ";
-				} else {
-					$sqlUpdateCtrlTemp.="id_memb_equip_hosptr_mdco = " . $rowCtrlLeitoTemp['id_memb_equip_hosptr_mdco'] . " ,";
-				}
-				$sqlUpdateCtrlTemp.="nm_mdco = '" . $rowCtrlLeitoTemp['nm_mdco'] . "' , ";				*/
+				}				
 				if ($rowCtrlLeitoTemp['id_memb_equip_hosptr_psco']==null){
 					$sqlUpdateCtrlTemp.=" id_memb_equip_hosptr_psco = null, ";
 				} else {

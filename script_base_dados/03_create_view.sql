@@ -362,3 +362,26 @@ CREATE OR REPLACE VIEW integracao.vw_bmh_online_media_alta AS
 ALTER TABLE integracao.vw_bmh_online_media_alta
     OWNER TO postgres;
 
+---------------------------------------------------------------------------------------------------------
+--View para controle de acesso à transações
+
+create or replace view integracao.vw_acesso_transac_integracao as 
+	select grupo.nm_grupo_acesso
+		 , usua.nm_usua_acesso
+		 , transac.nm_acesso_transac_integracao
+		 , transac.cd_transac_integracao
+		 , transac.cd_form_transac_integracao
+		FROM integracao.tb_c_grupo_usua_transac_acesso grupo_usua_transac
+		   , integracao.tb_c_grupo_acesso grupo
+		   , integracao.tb_c_usua_acesso usua
+		   , integracao.tb_c_grupo_usua_acesso grupo_usua
+		   , integracao.tb_c_acesso_transac_integracao transac
+	where grupo_usua_transac.id_grupo_acesso = grupo.id_grupo_acesso
+	  and grupo_usua_transac.id_acesso_transac_integracao = transac.id_acesso_transac_integracao
+	  and grupo.id_grupo_acesso = grupo_usua.id_grupo_acesso
+	  and grupo_usua.cd_usua_acesso = usua.cd_usua_acesso;
+
+--select 'grant select on integracao.vw_acesso_transac_integracao to '||usename||';'
+--from pg_shadow
+--order by usename;
+

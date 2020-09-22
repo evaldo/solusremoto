@@ -1457,3 +1457,124 @@ ALTER TABLE integracao.tb_ctrl_leito
 
 COMMENT ON CONSTRAINT uk_ctrl_leito_01 ON integracao.tb_ctrl_leito
     IS 'Chave única da tabela de controle de leito do campo ds_leito';
+	
+--------------------------------------------------------------------------------------------------
+-- Table: integracao.tb_c_acesso_transac_integracao
+
+-- DROP TABLE integracao.tb_c_acesso_transac_integracao;
+
+CREATE TABLE integracao.tb_c_acesso_transac_integracao
+(
+    id_acesso_transac_integracao integer NOT NULL,
+    id_menu_sist_integracao integer NOT NULL,
+    nm_acesso_transac_integracao character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    cd_transac_integracao character varying(255) COLLATE pg_catalog."default",
+    cd_form_transac_integracao character varying(255) COLLATE pg_catalog."default",
+    cd_usua_incs character varying(255) COLLATE pg_catalog."default",
+    dt_incs timestamp without time zone,
+    cd_usua_altr character varying(255) COLLATE pg_catalog."default",
+    dt_altr timestamp without time zone,
+    CONSTRAINT pk_acesso_transac_integracao PRIMARY KEY (id_acesso_transac_integracao),
+    CONSTRAINT fk_transac_integracao_menu_sist FOREIGN KEY (id_menu_sist_integracao)
+        REFERENCES integracao.tb_c_menu_sist_integracao (id_menu_sist_integracao) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE integracao.tb_c_acesso_transac_integracao
+    OWNER to postgres;
+
+COMMENT ON COLUMN integracao.tb_c_acesso_transac_integracao.id_acesso_transac_integracao
+    IS 'Identificador da tabela de acesso às transações do sistema integração.';
+
+COMMENT ON COLUMN integracao.tb_c_acesso_transac_integracao.id_menu_sist_integracao
+    IS 'Identificador da tabela de menu do sistema sistema de integracao.';
+
+COMMENT ON COLUMN integracao.tb_c_acesso_transac_integracao.nm_acesso_transac_integracao
+    IS 'Nome da transação de acesso ao sistema integração.';
+
+COMMENT ON COLUMN integracao.tb_c_acesso_transac_integracao.cd_transac_integracao
+    IS 'Código da transação de acesso no sistema integração.,';
+
+COMMENT ON COLUMN integracao.tb_c_acesso_transac_integracao.cd_form_transac_integracao
+    IS 'Código do formulário de transação do integração';
+
+COMMENT ON COLUMN integracao.tb_c_acesso_transac_integracao.cd_usua_incs
+    IS 'Código do usuário que incluiu o registro';
+
+COMMENT ON COLUMN integracao.tb_c_acesso_transac_integracao.dt_incs
+    IS 'Data de inclusão do registro';
+
+COMMENT ON COLUMN integracao.tb_c_acesso_transac_integracao.cd_usua_altr
+    IS 'Código do usuário que alterou o registro';
+
+COMMENT ON COLUMN integracao.tb_c_acesso_transac_integracao.dt_altr
+    IS 'Data da última alteração do registro';
+COMMENT ON CONSTRAINT pk_acesso_transac_integracao ON integracao.tb_c_acesso_transac_integracao
+    IS 'Chave primária da tabela de transação das funcionalidades do sistema integração';
+
+COMMENT ON CONSTRAINT fk_transac_integracao_menu_sist ON integracao.tb_c_acesso_transac_integracao
+    IS 'Chave estrangeira da funcionalidade de transação de um menu do sistema integração';
+-------------------------------------------------------------------------------------------------------------
+
+-- Table: integracao.tb_c_grupo_usua_transac_acesso
+
+-- DROP TABLE integracao.tb_c_grupo_usua_transac_acesso;
+
+CREATE TABLE integracao.tb_c_grupo_usua_transac_acesso
+(
+    id_grupo_usua_transac_acesso integer NOT NULL,
+    id_acesso_transac_integracao integer NOT NULL,
+    id_grupo_acesso integer NOT NULL,
+    cd_usua_incs character varying(255) COLLATE pg_catalog."default",
+    dt_incs timestamp without time zone,
+    cd_usua_altr character varying(255) COLLATE pg_catalog."default",
+    dt_altr timestamp without time zone,
+    CONSTRAINT pk_grupo_usua_transac_acesso PRIMARY KEY (id_grupo_usua_transac_acesso),
+    CONSTRAINT fk_acesso_transac_integracao FOREIGN KEY (id_grupo_usua_transac_acesso)
+        REFERENCES integracao.tb_c_acesso_transac_integracao (id_acesso_transac_integracao) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_grupo_acesso_transac_integracao FOREIGN KEY (id_grupo_acesso)
+        REFERENCES integracao.tb_c_grupo_acesso (id_grupo_acesso) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE integracao.tb_c_grupo_usua_transac_acesso
+    OWNER to postgres;
+COMMENT ON TABLE integracao.tb_c_grupo_usua_transac_acesso
+    IS 'Tabela do grupo de usuários que possuem direito de acesso às transações do sistema integração.';
+
+COMMENT ON COLUMN integracao.tb_c_grupo_usua_transac_acesso.id_grupo_usua_transac_acesso
+    IS 'Identificador do grupo de usuários que possuem acesso às transações do sistema integração.';
+
+COMMENT ON COLUMN integracao.tb_c_grupo_usua_transac_acesso.id_acesso_transac_integracao
+    IS 'Identificador da tabela de acesso às transações do sistema integração.';
+
+COMMENT ON COLUMN integracao.tb_c_grupo_usua_transac_acesso.cd_usua_incs
+    IS 'Código do usuário que incluiu o registro.';
+
+COMMENT ON COLUMN integracao.tb_c_grupo_usua_transac_acesso.dt_incs
+    IS 'Data de inclusão do registro.';
+
+COMMENT ON COLUMN integracao.tb_c_grupo_usua_transac_acesso.cd_usua_altr
+    IS 'Código do usuário que alterou o registro pela última vez.';
+
+COMMENT ON COLUMN integracao.tb_c_grupo_usua_transac_acesso.dt_altr
+    IS 'Data da última alteração do registro.';
+COMMENT ON CONSTRAINT pk_grupo_usua_transac_acesso ON integracao.tb_c_grupo_usua_transac_acesso
+    IS 'Chave primária do grupo de acesso de acesso às transações do sistema integração';
+
+COMMENT ON CONSTRAINT fk_acesso_transac_integracao ON integracao.tb_c_grupo_usua_transac_acesso
+    IS 'Chave estrangeira para o cadastro de acesso à transações do sistema integração.';
+COMMENT ON CONSTRAINT fk_grupo_acesso_transac_integracao ON integracao.tb_c_grupo_usua_transac_acesso
+    IS 'Chave estrangeira para a tabela do acesso à transação do sistema integração.';

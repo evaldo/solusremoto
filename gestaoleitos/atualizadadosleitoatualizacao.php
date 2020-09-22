@@ -5,7 +5,8 @@
 	include '../database.php';
 	$pdo = database::connect();
 	
-	if (isset($_POST['nm_loc_nome'])){	
+	if (isset($_POST['nm_loc_nome'])){
+
 		//$_SESSION['nm_loc_nome']=$_POST['nm_loc_nome'];
 		$nm_loc_nome=$_POST['nm_loc_nome'];
 		
@@ -83,6 +84,35 @@
 		
 		
 		$id_status_leito = $row[15];
+		
+		$atualiza_psco="";
+		
+		$sql = "SELECT fl_sist_admn from integracao.tb_c_usua_acesso where nm_usua_acesso = '".$_SESSION['usuario']."'";
+		
+		$ret_usua = pg_query($pdo, $sql);	
+		if(!$ret_usua) {
+			echo pg_last_error($pdo);
+			exit;
+		}
+		
+		$ret_usua_row = pg_fetch_row($ret_usua);
+		
+		if ($ret_usua_row[0]=="S"){
+			$fl_sist_admn="S";						
+		}else{
+			$fl_sist_admn="N";			
+			$sql = "SELECT distinct cd_transac_integracao from integracao.vw_acesso_transac_integracao where nm_usua_acesso = '".$_SESSION['usuario']."' and cd_transac_integracao = 'sl_memb_equip_hosptr_psco'";	
+			
+			$rettransac = pg_query($pdo, $sql);
+			if(pg_num_rows($rettransac)==0) {
+				$atualiza_psco = "nao_acessa_psco";
+			} else {
+				$rettransac_row = pg_fetch_row($rettransac);
+				$atualiza_psco = $rettransac_row[0];						
+			}
+		}
+		
+		//echo $atualiza_psco;
 		
 	}
 ?>
@@ -164,30 +194,44 @@
 											echo pg_last_error($pdo);
 											exit;
 										}
-										?>
-										<td style="width:150px">
-											<select  id="sl_memb_equip_hosptr_psco" class="form-control" onchange=" 
-														var selObj = document.getElementById('sl_memb_equip_hosptr_psco');
-														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('id_memb_equip_hosptr_psco').value = selValue;">
-											<option value="null"></option>
-														
-											<?php
-												$cont=1;																
-											
-												while($row = pg_fetch_row($ret)) {
-													if($row[0]==$id_memb_equip_hosptr_psco){														
-												?>												
-													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[1]; ?></option>
-												<?php																		
-													} else {
-												?>
-													<option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option>												
-													<?php } 
-												$cont=$cont+1;} ?>	
-											</select>
 										
-										</td> 							
+										if ($atualiza_psco == "nao_acessa_psco"){
+											while($row = pg_fetch_row($ret)) {
+												if($row[0]==$id_memb_equip_hosptr_psco){
+											
+													?>
+													<td style="width:150px; align:left"><?php echo $row[1]; ?></td>
+													
+													<?php
+													break;
+												}
+											}
+										}else{
+										?>
+											<td style="width:150px">
+												<select  id="sl_memb_equip_hosptr_psco" class="form-control" onchange=" 
+															var selObj = document.getElementById('sl_memb_equip_hosptr_psco');
+															var selValue = selObj.options[selObj.selectedIndex].value;
+															document.getElementById('id_memb_equip_hosptr_psco').value = selValue;">
+												<option value="null"></option>
+															
+												<?php
+													$cont=1;																
+												
+													while($row = pg_fetch_row($ret)) {
+														if($row[0]==$id_memb_equip_hosptr_psco){														
+													?>												
+														<option value="<?php echo $row[0]; ?>" selected><?php echo $row[1]; ?></option>
+													<?php																		
+														} else {
+													?>
+														<option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option>												
+														<?php } 
+													$cont=$cont+1;} ?>	
+												</select>
+											
+											</td> 							
+										<?php } ?>
 									   </tr>		
 									   <tr>  
 										<td style="width:150px"><label>Terapeuta:</label></td>  

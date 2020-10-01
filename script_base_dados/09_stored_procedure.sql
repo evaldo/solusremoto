@@ -73,6 +73,14 @@ ALTER FUNCTION integracao.prc_atualiza_medico()
 
 -- DROP FUNCTION integracao.prc_processa_bmh_online();
 
+-- FUNCTION: integracao.prc_processa_bmh_online()
+
+-- DROP FUNCTION integracao.prc_processa_bmh_online();
+
+-- FUNCTION: integracao.prc_processa_bmh_online()
+
+-- DROP FUNCTION integracao.prc_processa_bmh_online();
+
 CREATE OR REPLACE FUNCTION integracao.prc_processa_bmh_online(
 	)
     RETURNS character
@@ -175,6 +183,7 @@ BEGIN
 					id_memb_equip_hosptr_trpa = rec_leito.id_memb_equip_hosptr_trpa , 				
 					nm_trpa =   rec_leito.nm_trpa ,				
 					ds_cid = 	rec_leito.ds_cid ,
+					ds_leito = 	rec_leito.ds_leito ,
 					ds_dieta =  rec_leito.ds_dieta ,
 					ds_const = rec_leito.ds_const ,
 					ds_ocorr = rec_leito.ds_ocorr , 
@@ -229,9 +238,18 @@ BEGIN
 				ds_ocorr = null, 
 				ds_crtr_intnc = null,				 
 				pac_reg = null
-				WHERE pac_reg =rec_smart_alta.pac_reg; 			 
+				WHERE pac_reg =rec_smart_alta.pac_reg; 	
+				
+			delete from pts.tb_agdmto_atvd_pts 
+			where nu_pac_reg = rec_smart_alta.pac_reg 
+			  and dt_agdmto_atvd_pts >= dt_alta_smart;
+			  
+			update pts.tb_agdmto_atvd_pts
+			set dt_hsp_dthra = dt_alta_smart
+			where nu_pac_reg = rec_smart_alta.pac_reg
+			  and dt_hsp_dthre = rec_smart_alta.dt_admss;
 			 
-			 qtde_reg_smart:=qtde_reg_smart + 1;
+			qtde_reg_smart:=qtde_reg_smart + 1;
 			 
 		end if;		
 		

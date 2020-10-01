@@ -306,6 +306,37 @@
 		
 	} 
 	
+	
+	$atualizadadospcnt="";
+		
+	$sql = "SELECT fl_sist_admn from integracao.tb_c_usua_acesso where nm_usua_acesso = '".$_SESSION['usuario']."'";
+	
+	$ret_usua = pg_query($pdo, $sql);	
+	if(!$ret_usua) {
+		echo pg_last_error($pdo);
+		exit;
+	}
+	
+	$ret_usua_row = pg_fetch_row($ret_usua);
+	
+	if ($ret_usua_row[0]=="S"){
+		$fl_sist_admn="S";						
+	}else{
+		$fl_sist_admn="N";			
+		$sql = "SELECT distinct cd_transac_integracao from integracao.vw_acesso_transac_integracao where nm_usua_acesso = '".$_SESSION['usuario']."' and cd_transac_integracao = 'btn-xs classatualizaleito'";	
+		
+		$rettransac = pg_query($pdo, $sql);
+		if(pg_num_rows($rettransac)==0) {
+			$atualizadadospcnt = "nao_altera_dado_paciente";
+		} else {
+			$rettransac_row = pg_fetch_row($rettransac);
+			$atualizadadospcnt = $rettransac_row[0];						
+		}
+	}
+	
+	//echo $atualizadadospcnt;
+	
+	
 	$sql ="select  
 		ds_leito,
 		ds_andar,
@@ -999,10 +1030,21 @@
 										<input type="image" src="../img/lupa_1.png"  height="23" width="23" class="btn-xs visualiza"/>
 									</td>
 									
+									<!--<?php
+										if ($atualizadadospcnt=="nao_altera_dado_paciente"){
+									?>
+											<td class="actions">
+											<input type="image" src="../img/update_bloqueado.png"  height="23" width="23" name="atualizaleito" data-toggle="modal" data-target="#atualizaleito"/></td>
+											
+										<?php } else { ?>
+											
+											<td class="actions">
+											<input type="image" src="../img/Update_2.ico"  height="23" width="23" name="atualizaleito" data-toggle="modal" data-target="#atualizaleito" class="btn-xs classatualizaleito"/></td>	
+																			
+									<?php } ?>-->
+									
 									<td class="actions">
-										<input type="image" src="../img/Update_2.ico"  height="23" width="23" name="atualizaleito" data-toggle="modal" data-target="#atualizaleito" class="btn-xs classatualizaleito"/>
-										
-									</td>
+											<input type="image" src="../img/Update_2.ico"  height="23" width="23" name="atualizaleito" data-toggle="modal" data-target="#atualizaleito" class="btn-xs classatualizaleito"/></td>
 									
 									<td class="actions">
 										<input type="image" src="../img/imprimileito.png"  height="23" width="23"  class="btn-xs imprimileito"/>

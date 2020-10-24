@@ -1,15 +1,14 @@
 <?php
 //altera_cores.php
 	session_start();
-	$_SESSION['id_menu_sist_integracao']=$_POST['id_menu_sist_integracao'];
+	$_SESSION['id_acesso_transac_integracao']=$_POST['id_acesso_transac_integracao'];
 	
     include '../database.php';	
 	
-	error_reporting(0); 
-	
 	$pdo = database::connect();
 
-	$sql = "select menu.*, (select nm_menu_sist_integracao from integracao.tb_c_menu_sist_integracao where id_menu_sist_integracao = menu.id_menu_supr) from integracao.tb_c_menu_sist_integracao menu where menu.id_menu_sist_integracao = '".$_POST['id_menu_sist_integracao']."'";
+	$sql = "SELECT transac.id_acesso_transac_integracao, menu.nm_menu_sist_integracao, transac.nm_acesso_transac_integracao, transac.cd_transac_integracao, transac.cd_form_transac_integracao, transac.cd_usua_incs, transac.dt_incs, transac.cd_usua_altr, transac.dt_altr, transac.id_menu_sist_integracao
+	FROM integracao.tb_c_acesso_transac_integracao transac, integracao.tb_c_menu_sist_integracao menu where transac.id_menu_sist_integracao = menu.id_menu_sist_integracao and transac.id_acesso_transac_integracao = ".$_POST['id_acesso_transac_integracao']."";
 
 	if ($pdo==null){
 			header(Config::$webLogin);
@@ -22,10 +21,12 @@
 	
 	$row = pg_fetch_row($ret);	
 		
-	$id_menu_supr = $row[3];
-	$nm_objt = $row[4];
-	$nm_link_objt = $row[5];
-	$nm_menu_sist_integracao = $row[11];
+	$id_acesso_transac_integracao = $row[0];
+	$nm_menu_sist_integracao = $row[1];
+	$nm_acesso_transac_integracao = $row[2];
+	$cd_transac_integracao = $row[3];
+	$cd_form_transac_integracao = $row[4];	
+	$id_menu_sist_integracao = $row[9];	
 	
 ?>
 	<!DOCTYPE html>
@@ -40,36 +41,23 @@
 		  <div class="modal-dialog">
 				<div class="modal-content" style="width:800px">
 					<div class="container">						
-						<h4 class="modal-title">Alteração de Menus</h4>
+						<h4 class="modal-title">Alteração das Transações de Menu</h4>
 					</div>								
 					<form class="form-inline" method="post" >
 						<div class="modal-body">
 							<div class="table-responsive">  							
 								<table class="table table-bordered">			
 									 <tr>  
-										<td style="width:150px"><label>Identificador do Menu:</label></td>  
-										<td style="width:150px"><p class="form-control-static" name="id_menu_sist_integracao"><?php echo $_POST['id_menu_sist_integracao']; ?></p>
+										<td style="width:150px"><label>Identificador da Transação:</label></td>  
+										<td style="width:150px"><p class="form-control-static" name="id_acesso_transac_integracao"><?php echo $_POST['id_acesso_transac_integracao']; ?></p>
 										</td>  
 									 </tr>
+									 <tr>  
+										<td style="width:150px"><label>Nome da Transação:</label></td>  
+										<td style="width:400px"><input type="text" class="form-control" name="nm_acesso_transac_integracao" value="<?php echo $nm_acesso_transac_integracao; ?>"></td> 							
+									  </tr>									  									  
 									  <tr>  
-										<td style="width:150px"><label>Nome do Menu:</label></td>  
-										<td style="width:400px"><input type="text" class="form-control" name="nm_menu_sist_integracao" value="<?php echo $row[1]; ?>"></td> 							
-									  </tr>									  
-									  <tr>  
-										<td style="width:150px"><label>Menu Principal?</label></td> 
-										<?php if ($row[2]<>"S"){
-											?>
-											<td style="width:400px"><input type="checkbox" class="form-control" name="fl_menu_princ" id="fl_menu_princ" onchange=" 
-														
-														document.getElementById('fl_menu_princ_text').value = this.checked;"></td>
-										<?php } else { 
-											?>
-											<td style="width:400px"><input type="checkbox" class="form-control" name="fl_menu_princ" id="fl_menu_princ" checked onchange=" 
-														document.getElementById('fl_menu_princ_text').value = this.checked;"> 
-										<?php }	?>
-									  </tr>	
-									  <tr>  
-										<td style="width:150px"><label>Menu Superior:</label></td>  
+										<td style="width:150px"><label>Menu/Funcionalidade:</label></td>  
 										
 										<?php
 										
@@ -88,7 +76,7 @@
 											<select  id="gmenu" class="form-control" onchange=" 
 														var selObj = document.getElementById('gmenu');
 														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('id_menu_supr').value = selValue;">
+														document.getElementById('id_menu_sist_integracao').value = selValue;">
 											<option value="null"></option>
 														
 											<?php
@@ -109,15 +97,15 @@
 										</td> 							
 									  </tr>
 									  <tr>  
-										<td style="width:150px"><label>Nome do Objeto na Aplicação:</label></td>  
-										<td style="width:400px"><input type="text" class="form-control" name="nm_objt" value="<?php echo $nm_objt; ?>"></td> 							
+										<td style="width:150px"><label>Código da Transação:</label></td>  
+										<td style="width:400px"><input type="text" class="form-control" name="cd_transac_integracao" value="<?php echo $cd_transac_integracao; ?>"></td> 							
 									  </tr>									  
 									  <tr>  
-										<td style="width:150px"><label>Nome do Link para o Objeto:</label></td>  
-										<td style="width:400px"><input type="text" class="form-control" name="nm_link_objt" value="<?php echo $nm_link_objt; ?>" size="65"></td> 							
+										<td style="width:150px"><label>Cód da Func/Menu no Integração:</label></td>  
+										<td style="width:400px"><input type="text" class="form-control" name="cd_form_transac_integracao" value="<?php echo $cd_form_transac_integracao; ?>" size="65"></td> 							
 									  </tr>
-									  <input type="text" id="fl_menu_princ_text" name="fl_menu_princ_text" style="display:none"> 
-									  <input type="text" id="id_menu_supr" name="id_menu_supr" value="<?php echo $id_menu_supr; ?>" style="display:none"> 
+									   
+									  <input type="text" id="id_menu_sist_integracao" name="id_menu_sist_integracao" value="<?php echo $id_menu_sist_integracao; ?>" style="display:none"> 
 								</table>																
 							</div>								
 							<div class="modal-footer">	

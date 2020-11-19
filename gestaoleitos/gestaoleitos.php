@@ -894,7 +894,7 @@
 				<br>
 				<br>
 				
-				<label style="font-weight:bold; font-size: 11px;">Imprimir consulta do último filtro por:</label>&nbsp;
+				<label style="font-weight:bold; font-size: 11px;">Imprimir último filtro por:</label>&nbsp;
 				<select  style="font-weight:bold; font-size: 11px;" name="tprelatorio" id="tprelatorio">
 				  <option value="andar" selected>Andar</option>
 				  <option value="medico">Médico</option>
@@ -906,17 +906,18 @@
 				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Imprimir" id="imprimir">&nbsp;				
 				
 				
-				<label style="font-weight:bold; font-size: 11px;">Imprimir BMHOnline - </label>&nbsp;			
-				<label style="font-weight:bold; font-size: 11px;">Data Inicial:</label>&nbsp;
+				<label style="font-weight:bold; font-size: 11px;">BMHOnline - </label>&nbsp;			
+				<label style="font-weight:bold; font-size: 11px;">Dt Inicial:</label>&nbsp;
 				<input style="font-weight:bold; font-size: 11px;" type="date" id="dataInicio" name="dataInicio"> &nbsp;&nbsp;
 				<label style="font-weight:bold; font-size: 11px;">a</label>&nbsp;
-				<label style="font-weight:bold; font-size: 11px;">Data Final:</label>&nbsp;
+				<label style="font-weight:bold; font-size: 11px;">Dt Final:</label>&nbsp;
 				<input style="font-weight:bold; font-size: 11px;" type="date" id="dataFim" name="dataFim">&nbsp;&nbsp;
 				<input style="font-size: 11px;" class="btn btn-primary" type="button" value="Imprimir" id="imprimirbmh">&nbsp;
 				
 				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Exp. BMHOnline" id="exportarbmhonline">&nbsp;
 				
 				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Exp. Leito" id="exportar">&nbsp;
+				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Status/Acomp/Retarg." name="consultaleitostatusflag" data-toggle="modal" data-target="#modalstatusacmptertgrd">&nbsp;
 				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Legenda" name="legenda" data-toggle="modal" data-target="#modallegenda">
 				
 				<!--<input class="btn btn-primary" type="submit" value="BMHOnline" id="bmhonline">-->
@@ -1261,12 +1262,65 @@
 			</div>
 		</div>
 	</div>
-</div>			
+</div>	
+<div class="modal fade" id="modalstatusacmptertgrd" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="model-title" id="leito_acmpte_rtgrd">Leitos por Status, Acompanhante, Retaguarda</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>				
+			</div>			
+			<form action=""> 
+			
+				<div class="modal-body">
+					<div class="form-group">
+						<select name="tipoconsultaleito" onchange="mostraLeitoPaciente(this.value)">
+							<option value="">Selecione o tipo de consulta:</option>
+							<option value="acmpt">Acompanhante</option>
+							<option value="rtgrd">Retaguarda</option>
+							<option value="status">Por Status</option>
+						</select>
+					</div>
+					<div class="form-group" id="retornoconsulta">
+						
+					</div>					
+				</div>
+			</form>	
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 	
 	$(document).ready(function(){	  
-		$('[data-toggle="tooltip"]').tooltip();		
+		$('[data-toggle="tooltip"]').tooltip();	
+
+		$('.consultaleitostatusflag').on('click',function(){
+			$('#modalstatusacmptertgrd').modal('show');
+		});
+		
 	});
+	
+	function mostraLeitoPaciente(str) {
+	  var xhttp;    
+	  if (str == "") {
+		document.getElementById("retornoconsulta").innerHTML = "";
+		return;
+	  }
+	  xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		  document.getElementById("retornoconsulta").innerHTML = this.responseText;
+		}
+	  };	  
+	  //xhttp.open("GET", "../gestaoleitos/recupera_leito_paciente.txt", true);
+	  xhttp.open("GET", "../gestaoleitos/recupera_leito_paciente.php?tipoconsultaleito="+str, true);
+	  xhttp.send();
+	}
 	
 	$('#exportarbmhonline').click(function(){
 			

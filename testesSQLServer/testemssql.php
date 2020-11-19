@@ -1,28 +1,41 @@
 <?php
 // 52.67.44.208
-$serverName = "52.67.44.208, 1433";
-$connectionInfo = array( "Database"=>"Sd_ClinVilaVerde", "UID"=>"vilaverde", "PWD"=>"*!zEtRebe6hA");
-$conn = sqlsrv_connect( $serverName, $connectionInfo);
 
-if( $conn ) {
-     echo "Connection established.<br />";
-}else{
-     echo "Connection could not be established.<br />";
-     die( print_r( sqlsrv_errors(), true));
-}
-	$result = sqlsrv_query($conn,"select * FROM dbo.view_db_gest_leitos;");
+$connection_string = 'DRIVER={SQL Server};SERVER=191.235.100.131,2071;DATABASE=Sd_ClinVilaVerde';
+
+$user = 'vilaverde';
+$pass = '&tH5#@06bJT';
+
+$conn = odbc_connect( $connection_string, $user, $pass );
+
+//$serverName = "191.235.100.131,2071";
+//$connectionInfo = array( "Database"=>"Sd_ClinVilaVerde", "UID"=>"vilaverde", "PWD"=>"&tH5#@06bJT");
+//$conn = sqlsrv_connect( $serverName, $connectionInfo);
+
+	if( $conn ) {
+		 echo "Connection established.<br />";
+		 $result = odbc_exec($conn, 'select * FROM dbo.view_db_gest_leitos;');
 	
-	if($result === false) {
-		die( print_r( sqlsrv_errors(), true) );
+		if(!$result) {
+			exit("Erro ao abrir a consulta no Smart");
+		}
+		
+		$output = array();
+		while($row=odbc_fetch_object($result))  {     
+			echo "".$row->PAC_REG." - ".$row->PAC_NOME." </br>" ;					
+		}
+		
+		echo(json_encode($output));
+		
+		unset($conn); 
+		unset($result);
+		
+	}else{
+		
+		 exit("Connection could not be established.");     
+		 
 	}
 	
-	while( $row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC) ) {
-		echo $row['PAC_REG'].", ".$row['PAC_NOME']."<br />";
-	}
- 
-    unset($conn); 
-    unset($result);
-
 ?>
 
 

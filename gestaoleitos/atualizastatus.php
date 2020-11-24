@@ -16,7 +16,9 @@
 		
 			$sql = "UPDATE integracao.tb_ctrl_leito SET id_status_leito = ".$_POST['id_status_leito'].", fl_status_leito = (select ds_status_leito from integracao.tb_status_leito where id_status_leito = " . $_POST['id_status_leito'] . "), cd_usua_altr = '" . $_SESSION['usuario'] . "', dt_altr = current_timestamp WHERE ds_leito = '".$_POST['ds_leito']."'";			
 			$result = pg_query($pdo, $sql);
-
+			
+			//echo $sql;
+			
 			if($result){
 				echo "";
 			}
@@ -27,6 +29,8 @@
 				echo "";
 			}
 			
+			//echo $sql;
+			
 			$sqlHstrStatusLeito = "INSERT INTO integracao.tb_f_hstr_ocpa_leito_status VALUES ((select NEXTVAL('integracao.sq_hstr_ocpa_leito_status')), '". $_POST['ds_leito']."', current_timestamp, (select ds_status_leito from integracao.tb_status_leito where id_status_leito = " . $_POST['id_status_leito'] . "))";
 						
 			$resultHstrStatusLeito = pg_query($pdo, $sqlHstrStatusLeito);
@@ -34,6 +38,8 @@
 			if($resultHstrStatusLeito){
 				echo "";
 			}
+			
+			//echo $sqlHstrStatusLeito;
 			
 			
 			$secondsWait = 0;
@@ -126,12 +132,12 @@
 															var selObj = document.getElementById('sl_status_leito');
 															var selValue = selObj.options[selObj.selectedIndex].value;
 															document.getElementById('id_status_leito').value = selValue;">	
+													<option value="0" selected></option>
 												<?php
-													$cont=1;
-													
+													$cont=1;													
 													while($row = pg_fetch_row($ret)) {
 													?>												
-														<option value="<?php echo $row[0]; ?>" selected><?php echo $row[1]; ?></option>
+														<option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option>
 													<?php
 														$cont=$cont+1;
 													} 
@@ -142,8 +148,7 @@
 										</tr>
 										
 										<!--style="display:none"-->
-										<input type="text" id="ds_leito" name="ds_leito" style="display:none"> 
-										
+										<input type="text" id="ds_leito" name="ds_leito" style="display:none"> 										
 										<input type="text" id="id_status_leito" name="id_status_leito" style="display:none">
 										
 								 								 

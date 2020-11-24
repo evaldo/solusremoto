@@ -517,6 +517,8 @@
 						
 						$resultHstrStatusLeito = pg_query($pdo, $sqlHstrStatusLeito);
 						
+						//echo $sqlHstrStatusLeito;
+						
 						if($resultHstrStatusLeito){
 							echo "";
 						}
@@ -971,8 +973,8 @@
 												$corStatus="orange";
 								
 											} else{
-												if ($row[17]=="Reservado"){
-													$corStatus="white";
+												if ($row[17]=="Isolamento"){
+													$corStatus="black";
 												} else{
 													$corStatus="gray";
 										
@@ -1224,7 +1226,7 @@
 							<div class="card text-white bg-success mb-3">Livre</div>
 							<div class="card text-white bg-danger mb-3">Em Manutenção</div>
 							<div class="card text-white bg-warning mb-3">Em Higienização</div>
-							<div class="card text-dark bg-light mb-3">Reservado</div>
+							<div class="card text-white bg-dark mb-3">Isolamento</div>
 							<div class="card text-white bg-secondary mb-3">Interditado</div>						
 						</div>
 						<div class="modal-footer">

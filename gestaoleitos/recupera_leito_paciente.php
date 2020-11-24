@@ -31,7 +31,7 @@ if(isset($_GET['tipoconsultaleito'])) {
 			exit;
 		}   
 		   
-		$row = pg_fetch_row($ret);
+		//$row = pg_fetch_row($ret);
 		while($row = pg_fetch_row($ret)) {
 			$output .= '		
 						 <tr>  							
@@ -66,7 +66,7 @@ if(isset($_GET['tipoconsultaleito'])) {
 			exit;
 		}   
 		   
-		$row = pg_fetch_row($ret);
+		//$row = pg_fetch_row($ret);
 		while($row = pg_fetch_row($ret)) {
 			$output .= '		
 						 <tr>  							
@@ -100,7 +100,7 @@ if(isset($_GET['tipoconsultaleito'])) {
 			exit;
 		}   
 		   
-		$row = pg_fetch_row($ret);
+		//$row = pg_fetch_row($ret);
 		while($row = pg_fetch_row($ret)) {
 			$output .= '		
 						 <tr>  							

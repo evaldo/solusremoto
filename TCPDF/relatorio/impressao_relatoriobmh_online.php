@@ -170,7 +170,7 @@ date_default_timezone_set('America/Sao_Paulo');
 			<img src="images/logo_vilaverde.png" border="0" height="80" width="80" ALIGN="left" HSPACE="50" VSPACE="50"/>
 			<h4>BMH Online<h4>
 			<h5>Período de Emissão - Início	:'.$_SESSION['dataInicio'].' a Fim:'.$_SESSION['dataFim'].'</h5>
-			<h5>Quantidade de Altas	: '.$nuadmss.'<h5>		
+			<h5>Quantidade de Admissões	: '.$nuadmss.'<h5>		
         <table>					
 			<tr>			
 				<th>Paciente</th>				

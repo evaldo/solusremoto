@@ -919,7 +919,7 @@
 				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Exp. BMHOnline" id="exportarbmhonline">&nbsp;
 				
 				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Exp. Leito" id="exportar">&nbsp;
-				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Status/Acomp/Retarg." name="consultaleitostatusflag" data-toggle="modal" data-target="#modalstatusacmptertgrd">&nbsp;
+				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Pac. por Tipos de Cons." name="consultaleitostatusflag" data-toggle="modal" data-target="#modalstatusacmptertgrd">&nbsp;
 				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Legenda" name="legenda" data-toggle="modal" data-target="#modallegenda">
 				
 				<!--<input class="btn btn-primary" type="submit" value="BMHOnline" id="bmhonline">-->
@@ -1269,7 +1269,7 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="model-title" id="leito_acmpte_rtgrd">Leitos por Status, Acompanhante, Retaguarda</h5>
+				<h5 class="model-title" id="leito_acmpte_rtgrd">Números de Pacientes e Leitos</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>				
@@ -1283,6 +1283,8 @@
 							<option value="acmpt">Acompanhante</option>
 							<option value="rtgrd">Retaguarda</option>
 							<option value="status">Por Status</option>
+							<option value="mdco_assite">Médico Assistente</option>
+							<option value="mdco_horiz">Médico Horizontal</option>
 						</select>
 					</div>
 					<div class="form-group" id="retornoconsulta">

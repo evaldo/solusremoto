@@ -7,19 +7,22 @@
 	
 	$pdo = database::connect();
 
-	$sql = "SELECT id_memb_equip_hosptr
-			 , nm_memb_equip_hosptr
-			 , tp_memb_equip_hosptr
-			 , case when tp_memb_equip_hosptr = 'MDCO' then
+	$sql = "SELECT equip.id_memb_equip_hosptr
+			 , equip.nm_memb_equip_hosptr
+			 , equip.tp_memb_equip_hosptr
+			 , case when equip.tp_memb_equip_hosptr = 'MDCO' then
 					'MEDICO'
-			   else	case when tp_memb_equip_hosptr = 'PSCO' then
+			   else	case when equip.tp_memb_equip_hosptr = 'PSCO' then
 						'PSICÓLOGO'
-					else case when tp_memb_equip_hosptr = 'TRPA' then 
+					else case when equip.tp_memb_equip_hosptr = 'TRPA' then 
 							'TERAPEUTA'
 						 else ''
 			   end end end ds_memb_equip_hosptr
-		from integracao.tb_equip_hosptr 
-		where id_memb_equip_hosptr = '".$_POST['id_memb_equip_hosptr']."'";
+			 , (select nm_memb_equip_hosptr FROM integracao.tb_equip_hosptr where id_memb_equip_hosptr = equip.id_mdco_horiz) as nm_mdco_horiz
+			 , equip.id_mdco_horiz
+			 , equip.fl_mdco_assite_horiz
+		from integracao.tb_equip_hosptr equip
+		where equip.id_memb_equip_hosptr = '".$_POST['id_memb_equip_hosptr']."'";
 
 	if ($pdo==null){
 			header(Config::$webLogin);
@@ -30,7 +33,11 @@
 		exit;
 	}
 	
-	$row = pg_fetch_row($ret);	
+	$row = pg_fetch_row($ret);
+
+	$nm_mdco_horiz = $row[4];
+	$id_mdco_horiz = $row[5];
+	$fl_mdco_assite_horiz = $row[6];
 	
 ?>
 	<!DOCTYPE html>
@@ -87,8 +94,76 @@
 																							  
 											</select>
 										</td> 
+									  </tr>
+
+									  <tr>  
+										<td style="width:150px"><label>Médico Horizontal/Assistente?</label></td>
+											<td style="width:400px">
+												<select id="sl_mdco_assite_horiz" class="form-control" onchange=" 
+															var selObj = document.getElementById('sl_mdco_assite_horiz');
+															var selValue = selObj.options[selObj.selectedIndex].value;
+															document.getElementById('fl_mdco_assite_horiz').value = selValue;">
+													<option value="null"></option>
+													<?php if ($fl_mdco_assite_horiz=='A') { ?>
+														<option value="A" selected>Assistente</option>													
+													<?php } else { ?>
+														<option value="A">Assistente</option>
+													<?php } ?>													
+													<?php if ($fl_mdco_assite_horiz=='H') { ?>
+														<option value="H" selected>Horizontal</option>													
+													<?php } else { ?>
+														<option value="H">Horizontal</option>
+													<?php } ?>
+												</select>
+											</td>
+										</td>
 									  </tr>	
-									  <input type="text" id="tp_memb_equip_hosptr" name="tp_memb_equip_hosptr" value="<?php echo $_POST['tp_memb_equip_hosptr']; ?>" style="display:none">									  
+
+									  
+									  <tr>  
+										<td style="width:150px"><label>Médico Horizontal:</label></td>  										
+										<?php
+										
+										$sql = "SELECT id_memb_equip_hosptr, nm_memb_equip_hosptr from integracao.tb_equip_hosptr order by 1";
+										
+										if ($pdo==null){
+												header(Config::$webLogin);
+										}	
+										$ret = pg_query($pdo, $sql);
+										if(!$ret) {
+											echo pg_last_error($pdo);
+											exit;
+										}
+										?>
+										<td style="width:150px">
+											<select  id="sel_mdco_horiz" class="form-control" onchange=" 
+														var selObj = document.getElementById('sel_mdco_horiz');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('id_mdco_horiz').value = selValue;">
+											<option value="null"></option>
+														
+											<?php
+												$cont=1;																	
+											
+												while($row = pg_fetch_row($ret)) {
+													if($row[1]==$nm_mdco_horiz){														
+												?>												
+													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[1]; ?></option>
+												<?php																		
+													} else {
+												?>
+													<option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option>												
+													<?php } 
+												$cont=$cont+1;} ?>	
+											</select>
+										
+										</td> 							
+									  </tr>
+									  </tr>	
+									  <input type="text" id="tp_memb_equip_hosptr" name="tp_memb_equip_hosptr" value="<?php echo $_POST['tp_memb_equip_hosptr']; ?>" style="display:none">							
+									  <!--style="display:none"-->
+									  <input type="text" id="id_mdco_horiz" name="id_mdco_horiz" value="<?php echo $id_mdco_horiz; ?>" style="display:none">
+									  <input type="text" id="fl_mdco_assite_horiz" name="fl_mdco_assite_horiz" value="<?php echo $fl_mdco_assite_horiz ; ?>" style="display:none">																				
 								</table>																
 							</div>								
 							<div class="modal-footer">	

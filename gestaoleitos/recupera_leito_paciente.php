@@ -154,17 +154,19 @@ if(isset($_GET['tipoconsultaleito'])) {
 	if ($tipoconsultaleito == "mdco_assite") {
 		
 		$query = "SELECT nm_mdco_assite
+		         , nm_mdco_horiz
 				 , count(nm_mdco_assite)     	 
 			FROM integracao.tb_bmh_online 
 			where nm_mdco_assite is not null
 			  and dt_alta is null
-			group by nm_mdco_assite";
+			group by nm_mdco_assite, nm_mdco_horiz";
 			
 		$output .= '  
 		<div class="table-responsive">  
            <table class="table table-bordered">
 		   <tr>
 			<th>Médico Assistente</th>
+			<th>Médico Horizontal</th>
 			<th>Pacientes Atendidos</th>
 		   </tr>';
 		$ret = pg_query($pdo, $query);
@@ -178,7 +180,8 @@ if(isset($_GET['tipoconsultaleito'])) {
 			$output .= '		
 						 <tr>  							
 							<td width="50%">'.$row[0].'</td>  							
-							<td width="200%" align="center">'.$row[1].'</td>  
+							<td width="50%">'.$row[1].'</td> 
+							<td width="200%" align="center">'.$row[2].'</td>  
 						 </tr>';
 		}
 		$output .= '</table></div>';

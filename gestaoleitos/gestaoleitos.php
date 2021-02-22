@@ -159,73 +159,86 @@
 			}
 		}
 		
-	}
+	}	
 	
-	
-	$sql = "select ds_leito from integracao.vw_ctrl_leito where pac_reg=0";		
-	$retSmart = pg_query($pdo, $sql);	
-	if(!$retSmart) {
+	$sqlQtdeLeitoSmart = "SELECT count(1) FROM integracao.tb_ctrl_leito_smart";
+	$retQtdeLeitoSmart = pg_query($pdo, $sqlQtdeLeitoSmart);	
+	if(!$retQtdeLeitoSmart) {
 		echo pg_last_error($pdo);
 		
 		exit;
-	}				
+	}	
 	
-	while($rowSmart = pg_fetch_row($retSmart)) {
+	$rowQtdeLeitoSmart = pg_fetch_row($retQtdeLeitoSmart)
 	
-		$sqlUpdateCtrl = "UPDATE integracao.tb_ctrl_leito SET 
-		dt_prvs_alta = null,
-		nm_pcnt = null,
-		ds_sexo = null,
-		dt_nasc_pcnt = null,
-		nm_cnvo = null,
-		pac_reg = null,
-		dt_admss = null,
-		fl_fmnte = null, 
-		fl_rtgrd = null, 
-		fl_acmpte = null, 		
-		id_memb_equip_hosptr_mdco = null, 
-		id_memb_equip_hosptr_psco = null, 
-		id_memb_equip_hosptr_trpa = null,
-		nm_mdco=null, 		
-		nm_psco=null,
-		nm_trpa=null,
-		ds_cid = null,	
-		ds_dieta = null,
-		ds_const = null,
-		ds_ocorr = null, 
-		ds_crtr_intnc = null				 
-		WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
+	if ($rowQtdeLeitoSmart > 0) {
+	
+		$sql = "select ds_leito from integracao.vw_ctrl_leito where pac_reg=0";		
+		$retSmart = pg_query($pdo, $sql);	
+		if(!$retSmart) {
+			echo pg_last_error($pdo);
+			
+			exit;
+		}				
+		
+		while($rowSmart = pg_fetch_row($retSmart)) {
+		
+			$sqlUpdateCtrl = "UPDATE integracao.tb_ctrl_leito SET 
+			dt_prvs_alta = null,
+			nm_pcnt = null,
+			ds_sexo = null,
+			dt_nasc_pcnt = null,
+			nm_cnvo = null,
+			pac_reg = null,
+			dt_admss = null,
+			fl_fmnte = null, 
+			fl_rtgrd = null, 
+			fl_acmpte = null, 		
+			id_memb_equip_hosptr_mdco = null, 
+			id_memb_equip_hosptr_psco = null, 
+			id_memb_equip_hosptr_trpa = null,
+			nm_mdco=null, 		
+			nm_psco=null,
+			nm_trpa=null,
+			ds_cid = null,	
+			ds_dieta = null,
+			ds_const = null,
+			ds_ocorr = null, 
+			ds_crtr_intnc = null				 
+			WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
 
-		$resultUpdateCtrl = pg_query($pdo, $sqlUpdateCtrl);
-	
-		if($resultUpdateCtrl){
-			echo "";
+			$resultUpdateCtrl = pg_query($pdo, $sqlUpdateCtrl);
+		
+			if($resultUpdateCtrl){
+				echo "";
+			}
+			
+			$sqlUpdateCtrl = "UPDATE integracao.tb_ctrl_leito_temp SET 						
+			pac_reg = null,		
+			fl_fmnte = null, 
+			fl_rtgrd = null, 
+			fl_acmpte = null, 		
+			id_memb_equip_hosptr_mdco = null, 
+			id_memb_equip_hosptr_psco = null, 
+			id_memb_equip_hosptr_trpa = null,
+			nm_mdco=null, 		
+			nm_psco=null,
+			nm_trpa=null,
+			ds_cid = null,	
+			ds_dieta = null,
+			ds_const = null,
+			ds_ocorr = null, 
+			ds_crtr_intnc = null				 
+			WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
+			
+			$resultUpdateCtrl = pg_query($pdo, $sqlUpdateCtrl);
+
+			if($resultUpdateCtrl){
+				echo "";
+			}
+
 		}
 		
-		$sqlUpdateCtrl = "UPDATE integracao.tb_ctrl_leito_temp SET 						
-		pac_reg = null,		
-		fl_fmnte = null, 
-		fl_rtgrd = null, 
-		fl_acmpte = null, 		
-		id_memb_equip_hosptr_mdco = null, 
-		id_memb_equip_hosptr_psco = null, 
-		id_memb_equip_hosptr_trpa = null,
-		nm_mdco=null, 		
-		nm_psco=null,
-		nm_trpa=null,
-		ds_cid = null,	
-		ds_dieta = null,
-		ds_const = null,
-		ds_ocorr = null, 
-		ds_crtr_intnc = null				 
-		WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
-		
-		$resultUpdateCtrl = pg_query($pdo, $sqlUpdateCtrl);
-
-		if($resultUpdateCtrl){
-			echo "";
-		}
-
 	}
 	
 	$sqlCtrlLeito = "SELECT ds_leito

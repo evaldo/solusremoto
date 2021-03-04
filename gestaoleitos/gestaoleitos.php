@@ -22,7 +22,7 @@
 			, smart.dt_admss
 			, smart.id_memb_equip_hosptr_mdco
 			, trim(smart.nm_memb_equip_hosptr) as nm_memb_equip_hosptr
-		FROM  integracao.tb_ctrl_leito_smart smart
+		FROM  integracao.vw_ctrl_leito_smart smart
 		union
 		select leito.ds_leito
 			, substring(leito.loc_leito_id, 1,1) as ds_andar
@@ -36,7 +36,7 @@
 			, null
 			, null
 		from integracao.tb_leito leito
-		where leito.ds_leito not in (select trim(ds_leito) from integracao.tb_ctrl_leito_smart)
+		where leito.ds_leito not in (select trim(ds_leito) from integracao.vw_ctrl_leito_smart)
 		order by 1";
 	
 	$retSmart = pg_query($pdo, $sql);
@@ -161,7 +161,7 @@
 		
 	}	
 	
-	$sqlQtdeLeitoSmart = "SELECT count(1) FROM integracao.tb_ctrl_leito_smart";
+	$sqlQtdeLeitoSmart = "SELECT count(1) FROM integracao.vw_ctrl_leito_smart";
 	$retQtdeLeitoSmart = pg_query($pdo, $sqlQtdeLeitoSmart);	
 	if(!$retQtdeLeitoSmart) {
 		echo pg_last_error($pdo);
@@ -169,7 +169,7 @@
 		exit;
 	}	
 	
-	$rowQtdeLeitoSmart = pg_fetch_row($retQtdeLeitoSmart)
+	$rowQtdeLeitoSmart = pg_fetch_row($retQtdeLeitoSmart);
 	
 	if ($rowQtdeLeitoSmart > 0) {
 	

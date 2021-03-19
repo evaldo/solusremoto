@@ -1,10 +1,9 @@
 <?php
 
-include '../database.php';	
 session_start();		
-//error_reporting(0); 
-
-global $pdo;	
+	
+include '../database.php';
+$pdo = database::connect();
 
 $curl = curl_init();
 
@@ -35,6 +34,13 @@ if ($err) {
 
 $json_array=json_decode($response,true); 
 
+$sql = "delete from integracao.tb_moskit_cnto";
+
+$result = pg_query($pdo, $sql);
+
+if($result){
+	echo "";
+} 
 
 display_array_recursive_parte_1($json_array);
 display_array_recursive_parte_2($json_array);
@@ -48,7 +54,6 @@ function display_array_recursive_parte_1($json_rec){
 	$dt_fchto=0;
 	$sql='';
 	$sql_value='';
-		
 	
 	$pdo = database::connect();
 	

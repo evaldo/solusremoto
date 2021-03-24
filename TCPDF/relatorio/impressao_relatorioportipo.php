@@ -82,6 +82,8 @@
 			
 		$ret = pg_query($pdo, $sql);
 		
+		//echo $sql;
+		
 		if(!$ret) {
 			echo pg_last_error($pdo);
 			header(Config::$webLogin);
@@ -205,44 +207,48 @@ date_default_timezone_set('America/Sao_Paulo');
 	$contalinha = 0;
 	$color = "background-color: #f2f2f2;";
 	while($row = pg_fetch_row($ret)) {
+		
 		if ($color == ""){
 			$color = "background-color: #f2f2f2;";					
 		} else {
 			$color = "background-color: #ffffff;";
 			$color="";
 		}
-		$html .= ' 
-			<tr style="'.$color.'">
-				<td style="font-weight: bold;">'.$row[0].'</td>				
-				<td>'.$row[1].'</td>
-				<td style="font-weight: bold;">'.substr($row[2], 0, 30).'</td>				
-				<td>'.$row[3].'</td>
-				<td style="font-weight: bold;">'.substr($row[4], 0, 30).'</td>
-				<td>'.$row[5].'</td>
-				<td>'.$row[6].'</td>
-				<td>'.$row[7].'</td>
-				<td>'.$row[8].'</td>';
-				if ($row[9]=="Sim"){
-					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
-				} else {
-					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
-				}																		
-				$html.='<td>'.$row[14].'</td>
-				<td>'.$row[15].'</td>';				
-				if ($row[11]=="Sim"){
-					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
-				} else {
-					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
-				}
-				if ($row[12]=="Sim"){
-					$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
-				} else {
-					$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
-				}
-				$html.='<td>'.substr($row[13], 0, 5).'</td>
-				<td>'.$row[16].'</td>
-			</tr>
-			<tr style="background-color: #ffffff;"> <td colspan="16" height="5">&nbsp;</td> </tr>';									
+		
+		//if ($row[0] <> ' 301-B'){
+			$html .= ' 
+				<tr style="'.$color.'">
+					<td style="font-weight: bold;">'.$row[0].'</td>				
+					<td>'.$row[1].'</td>
+					<td style="font-weight: bold;">'.substr($row[2], 0, 30).'</td>				
+					<td>'.$row[3].'</td>
+					<td style="font-weight: bold;">'.substr($row[4], 0, 30).'</td>
+					<td>'.$row[5].'</td>
+					<td>'.$row[6].'</td>
+					<td>'.$row[7].'</td>
+					<td>'.$row[8].'</td>';
+					if ($row[9]=="Sim"){
+						$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+					} else {
+						$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+					}																		
+					$html.='<td>'.$row[14].'</td>
+					<td>'.$row[15].'</td>';				
+					if ($row[11]=="Sim"){
+						$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+					} else {
+						$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+					}
+					if ($row[12]=="Sim"){
+						$html.='<td style="text-align: center;"><img src="images/checkbox.png" border="0" height="10" width="10" /></td>';
+					} else {
+						$html.='<td style="text-align: center;"><img src="images/nocheckbox.png" border="0" height="10" width="10" /></td>';
+					}
+					$html.='<td>'.substr($row[13], 0, 5).'</td>
+					<td>'.$row[16].'</td>
+				</tr>
+				<tr style="background-color: #ffffff;"> <td colspan="16" height="5">&nbsp;</td> </tr>';									
+		//}
 			
 			$contalinha = $contalinha + 1;
 			
@@ -287,7 +293,7 @@ $pdf->lastPage();
 // ---------------------------------------------------------
 
 //Close and output PDF document
-$pdf->Output('gestao_leitos_2.pdf', 'I');
+$pdf->Output('gestao_leitos.pdf', 'I');
 
 //============================================================+
 // END OF FILE

@@ -402,7 +402,7 @@
 		ds_ocorr,
 		ds_sexo
 		FROM integracao.tb_ctrl_leito
-		ORDER BY 1, 3 ";//"LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina"
+		ORDER BY 2, 1 ";//"LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina"
 			
 	$ret = pg_query($pdo, $sql);
 	
@@ -777,7 +777,9 @@
 										
 				<?php
 				
-					$sqlandar = "select '1'
+					$sqlandar = "select '0'
+							union
+							select '1'
 							union
 							select '2'
 							union

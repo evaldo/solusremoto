@@ -352,7 +352,7 @@
 	
 	$sql ="select  
 		ds_leito,
-		ds_andar,
+		case when ds_andar = 'Q' then '0' else ds_andar end ds_andar,
 		to_char(dt_admss, 'dd/mm/yyyy hh24:mi') as dt_admss,
 		nm_pcnt,
 		ds_crtr_intnc,

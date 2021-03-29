@@ -5,6 +5,7 @@
 		include '../../database.php';
 		$pdo = database::connect();
 		
+		
 		$sql ="select  
 			replace(ds_leito, 'LEITO', '') as ds_leito,			
 			to_char(dt_admss,'dd/mm/yyyy hh24:mi') as dt_admss,
@@ -49,8 +50,15 @@
 		if ($_SESSION['stpimpressao'] == "andar"){
 			
 			$varfiltro=$_SESSION['varsl_tp_andar'];
-			$sql.="where ds_andar = '". $_SESSION['varsl_tp_andar'] ."'
-			ORDER BY 1, 3 ";			
+			
+			if ($_SESSION['varsl_tp_andar'] == '0' || $_SESSION['varsl_tp_andar'] == 'Q') {
+				$sql.="where ds_andar in ('0', 'Q')
+				ORDER BY 1, 3 ";			
+			} else {
+				$sql.="where ds_andar = '". $_SESSION['varsl_tp_andar'] ."'
+				ORDER BY 1, 3 ";			
+			}			
+			
 		}
 		
 		if ($_SESSION['stpimpressao'] == "medico"){

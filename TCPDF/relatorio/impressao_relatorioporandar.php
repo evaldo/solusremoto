@@ -44,9 +44,15 @@
 			ds_dieta,
 			ds_const,			
 			ds_ocorr			
-			FROM integracao.tb_ctrl_leito			
-			where ds_andar = '". $_SESSION['numeroandar'] ."'
+			FROM integracao.tb_ctrl_leito ";
+				
+		if ($_SESSION['numeroandar'] == '0' || $_SESSION['numeroandar'] == 'Q') {
+			$sql.="where ds_andar in ('0', 'Q')
 			ORDER BY 1, 3 ";			
+		} else {
+			$sql.="where ds_andar = '". $_SESSION['numeroandar'] ."'
+			ORDER BY 1, 3 ";			
+		}			
 		
 		$ret = pg_query($pdo, $sql);
 		

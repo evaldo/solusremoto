@@ -25,7 +25,7 @@
 		
 		$sql = "SELECT count(id_cnvo)
 				from integracao.tb_cnvo
-				where upper(nm_grupo_acesso) like '%" . $textoconsulta . "%'";
+				where upper(cd_cnvo) like '%" . $textoconsulta . "%'";
 			
 		if ($pdo==null){
 				header(Config::$webLogin);

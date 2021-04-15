@@ -10,7 +10,7 @@ if(isset($_POST["id_cnvo"]))
     $pdo = database::connect();
 	
     $query = "SELECT id_cnvo, cd_cnvo
-				from integracao.tb_grvd_risco_pcnt where id_cnvo = '".$_POST["id_cnvo"]."'";
+				from integracao.tb_cnvo where id_cnvo = '".$_POST["id_cnvo"]."'";
 	
     $ret = pg_query($pdo, $query);
     if(!$ret) {

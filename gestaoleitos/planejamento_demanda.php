@@ -180,7 +180,7 @@
 						exit;
 					}
 				?>
-					<select id="sl_tp_grvd_risco" style="width: 100px; font-size: 11px;" onchange="BuscaExato(9, 'sl_tp_grvd_risco')">
+					<select id="sl_tp_grvd_risco" style="width: 100px; font-size: 11px;" onchange="Busca(8, 'sl_tp_grvd_risco')">
 					<option value=""></option>
 								
 					<?php
@@ -199,7 +199,7 @@
 										
 				<?php
 				
-					$sqlorigdmnd = "SELECT nm_grvd_risco_pcnt FROM integracao.tb_grvd_risco_pcnt order by 1";	
+					$sqlorigdmnd = "SELECT ds_orig_dmnd_plnj_leito FROM integracao.tb_orig_dmnd_plnj_leito order by 1";	
 				
 					if ($pdo==null){
 							header(Config::$webLogin);
@@ -210,7 +210,7 @@
 						exit;
 					}
 				?>
-					<select id="sl_tp_orig_dmnd" style="width: 100px; font-size: 11px;" onchange="BuscaExato(8, 'sl_tp_orig_dmnd')">
+					<select id="sl_tp_orig_dmnd" style="width: 100px; font-size: 11px;" onchange="Busca(7, 'sl_tp_orig_dmnd')">
 					<option value=""></option>
 								
 					<?php
@@ -241,7 +241,7 @@
 						exit;
 					}
 				?>
-						<select id="sl_tp_cnvo" style="width: 90px; font-size: 11px;" onchange="BuscaExato(4, 'sl_tp_cnvo')">
+						<select id="sl_tp_cnvo" style="width: 90px; font-size: 11px;" onchange="BuscaExato(3, 'sl_tp_cnvo')">
 					<option value=""></option>
 					<option value="-">-</option>
 								
@@ -287,12 +287,12 @@
 					<table id="tabela" class="display table table-responsive table-striped table-bordered table-sm table-condensed">
 					
 						<tr style="font-size: 11px">
-							<th style="text-align:center">Id Planejamento</th>
-							<th style="text-align:center">Nome do Candidato a vaga</th>
+							<th style="text-align:center">Id.</th>
+							<th style="text-align:center">Candidato a vaga</th>
 							<th style="text-align:center">Data de Nasc</th>
 							<th style="text-align:center">Convênio</th>
 							<th style="text-align:center">Contato</th>							
-							<th style="text-align:center">Data de Previsão de Admissão</th>
+							<th style="text-align:center">Dt. Prev. de Admissão</th>
 							<th style="text-align:center">Leito Alocado</th>
 							<th style="text-align:center">Origem da Demanda</th>
 							<th style="text-align:center">Gravidade do Risco</th>							
@@ -306,32 +306,33 @@
 							$cont=1;										
 							while($row = pg_fetch_row($ret)) {
 								
-							?>						
+							?>
+
 								<tr >
-									<td data-toggle="tooltip" data-placement="top" title="Leito" style="font-weight:bold; color:red; background-color:#E0FFFF" id="loc_nome" value="<?php echo $row[0];?>" ><?php echo $row[0];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="Id do Planejamento" style="text-align=center; font-weight:bold; color:red; background-color:#E0FFFF" id="id_plnj_pcnt_leito" value="<?php echo $row[0];?>" ><?php echo $row[0];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="Andar" style="font-weight:bold; text-align:center" id="ds_andar" value="<?php echo $row[1];?>" ><?php echo $row[1];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="Candidato" style="font-weight:bold; text-align:center" id="nm_pcnt_cndat" value="<?php echo $row[1];?>" ><?php echo $row[1];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="Admissão" style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="hsp_dthre" value="<?php echo $row[2];?>" ><?php echo $row[2];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="Dt. Nascimento" style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="dt_nasc" value="<?php echo $row[2];?>" ><?php echo $row[2];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="Paciente" id="pac_nome" value="<?php echo $row[3];?>"><?php echo $row[3];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="Convênio" id="cd_cnvo" value="<?php echo $row[3];?>"><?php echo $row[3];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="Carater de Internação" id="ds_crtr_intnc" value="<?php echo $row[4];?>"><?php echo $row[4];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="Contato" id="nm_cnto" value="<?php echo $row[4];?>"><?php echo $row[4];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="Data de Nasc." style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="pac_nasc" value="<?php echo $row[5];?>"><?php echo $row[5];?></td>
-									<td data-toggle="tooltip" data-placement="top" title="Convênio" style="font-weight:bold; background-color:#C0C0C0"id="cnv_nome" value="<?php echo $row[6];?>"><?php echo $row[6];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="Dt. Previsao da Admissão" style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="dt_prvs_admss" value="<?php echo $row[5];?>"><?php echo $row[5];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="Leito Alocado" style="text-align=center; font-weight:bold; background-color:#C0C0C0" id="ds_leito" value="<?php echo $row[6];?>"><?php echo $row[6];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="Médico" id="ds_cnvo" value="<?php echo $row[7];?>"><input type="text" value="<?php echo $row[7];?>" style="display:none"/><?php echo $row[7];?></td>
-									
-									<td data-toggle="tooltip" data-placement="top" title="Psicólogo" id="ds_psgo" value="<?php echo $row[8];?>"><input type="text" value="<?php echo $row[8];?>" style="display:none"/><?php echo $row[8];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="Origem da Demanda" id="ds_orig_dmnd_plnj_leito" value="<?php echo $row[8];?>"><input type="text" value="<?php echo $row[8];?>" style="display:none"/><?php echo $row[8];?></td>
+																											
+									<td data-toggle="tooltip" data-placement="top" title="Gravidade do Risco" style="color:black; font-weight:bold; background-color:<?php echo $row[9];?>" id="nm_grvd_risco_pcnt" value="<?php echo $row[7];?>"><input type="text" value="<?php echo $row[7];?>" style="display:none"/><?php echo $row[7];?></td>
 									
 									<td class="actions">
 										<input type="image" src="../img/lupa_1.png"  height="23" width="23" class="btn-xs visualiza"/>
 									</td>
 									
 									<td class="actions">																		
-										<input type="button" value="Alterar" class="btn btn-warning btn-xs altera"/>								
-										<input type="button" value="Excluir" class="btn btn-danger btn-xs delecao"/>								
+										<input type="button" style="font-size: 11px;" value="Alterar" class="btn btn-warning btn-xs altera"/>								
+										<input type="button" style="font-size: 11px;" value="Excluir" class="btn btn-danger btn-xs delecao"/>								
 									</td>
 									
 								</tr>

@@ -1,6 +1,6 @@
 <?php
 //visualizacao_cores_risco.php
-if(isset($_POST['id_menu_sist_pts']))
+if(isset($_POST['id_menu_sist_integracao']))
 {
 	session_start();
     
@@ -9,16 +9,16 @@ if(isset($_POST['id_menu_sist_pts']))
 	
     $pdo = database::connect();
 	
-    $query = "select menu.id_menu_sist_pts
-			 , menu.nm_menu_sist_pts
+    $query = "select menu.id_menu_sist_integracao
+			 , menu.nm_menu_sist_integracao
 			 , menu.fl_menu_princ
-			 , (select nm_menu_sist_pts 
-				from integracao.tb_c_menu_sist_pts
-			   where id_menu_sist_pts = menu.id_menu_supr)
+			 , (select nm_menu_sist_integracao
+				from integracao.tb_c_menu_sist_integracao
+			   where id_menu_sist_integracao = menu.id_menu_supr)
 			 , menu.nm_objt
 			 , menu.nm_link_objt
-			 from integracao.tb_c_menu_sist_pts menu 
-				where id_menu_sist_pts = ".$_POST["id_menu_sist_pts"]." ";
+			 from integracao.tb_c_menu_sist_integracao menu
+				where menu.id_menu_sist_integracao = ".$_POST["id_menu_sist_integracao"]." ";
 	
     $ret = pg_query($pdo, $query);
     if(!$ret) {

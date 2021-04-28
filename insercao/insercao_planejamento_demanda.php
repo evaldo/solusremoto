@@ -95,7 +95,10 @@
 												}
 											?>
 											<!--display:none;--> 
-											<select class="form-control" id="id_moskit_deal" name="id_moskit_deal" style="width: 350px;display:none">
+											<select class="form-control" id="id_moskit_deal" name="id_moskit_deal" style="width: 350px;display:none" onchange=" 
+														var selObj = document.getElementById('id_moskit_deal');
+														var selText = selObj.options[selObj.selectedIndex].text;														
+														document.getElementById('nm_pcnt_cndat').value = selText;">
 											<option value=""></option>
 														
 											<?php
@@ -110,8 +113,7 @@
 											</select>&nbsp;	
 											
 											
-											<input type="text" class="form-control" style="width:500px;display:block" id="nm_pcnt_cndat" name="nm_pcnt_cndat">
-											
+											<input type="text" class="form-control" style="width:500px;display:block" id="nm_pcnt_cndat" name="nm_pcnt_cndat"/>
 											
 										</td>  
 										
@@ -187,7 +189,7 @@
 													exit;
 												}
 											?>
-												<select class="form-control" style="width:200px" id="ds_leito" style="width: 100px">
+												<select class="form-control" style="width:200px" id="ds_leito" name="ds_leito" style="width: 100px">
 												<option value=""></option>												
 															
 												<?php

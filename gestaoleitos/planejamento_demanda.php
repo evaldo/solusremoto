@@ -36,7 +36,7 @@
 		exit;
 	}
 	
-	if(isset($_POST['altera'])){					
+	if(isset($_POST['insere'])){					
 		
 		if ($pdo==null){
 			header(Config::$webLogin);
@@ -44,57 +44,9 @@
 		
 		try
 		{	
-		
-			$fl_status_leitoAnterior = "NENHUM";
-		
-			$sqlStatusLeito = "SELECT fl_status_leito FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '". $_POST['nm_loc_nome'] ."'";
 			
-			$retStatusLeito = pg_query($pdo, $sqlStatusLeito);
-		
-			if(!$retStatusLeito) {
-				echo pg_last_error($pdo);				
-				exit;
-			}	
+			$sql = "INSERT INTO integracao.tb_plnj_pcnt_leito(id_plnj_pcnt_leito, nm_pcnt_cndat, dt_nasc, id_cnvo, nm_cnto, dt_prvs_admss, ds_leito, cd_usua_incs, dt_incs, cd_usua_altr, dt_altr, id_grvd_risco_pcnt, id_orig_dmnd_plnj_leito, fl_pcnt_adtdo) VALUES ((select NEXTVAL('integracao.sq_plnj_pcnt_leito')), '".$_POST['nm_pcnt_cndat']."', '".$_POST['dt_nasc']."', ".$_POST['id_cnvo'].", '".$_POST['nm_cnto']."', '".$_POST['dt_prvs_admss']."', '".$_POST['ds_leito']."', '".$_SESSION['usuario']."', current_timestamp, null, null, ".$_POST['id_grvd_risco_pcnt'].", ".$_POST['id_orig_dmnd_plnj_leito'].", 0);";
 			
-			if (pg_numrows($retStatusLeito)>0) {
-				
-				$rowStatusLeito = pg_fetch_assoc($retStatusLeito);	
-				$fl_status_leitoAnterior = $rowStatusLeito['fl_status_leito'];
-				
-			}			
-			
-			if ($_POST['fl_fmnte']=='null' || $_POST['fl_fmnte']==''){
-				$fl_fmnte = 'null';
-			} else {
-				$fl_fmnte = $_POST['fl_fmnte'];
-			}
-			
-			if ($_POST['fl_rtgrd']=='null' || $_POST['fl_rtgrd']==''){
-				$fl_rtgrd = 'null';
-			} else {
-				$fl_rtgrd = $_POST['fl_rtgrd'];
-			}
-			
-			if ($_POST['fl_acmpte']=='null' || $_POST['fl_acmpte']==''){
-				$fl_acmpte = 'null';
-			} else {
-				$fl_acmpte = $_POST['fl_acmpte'];
-			}
-			
-			$sql = "UPDATE integracao.tb_ctrl_leito SET 
-			fl_fmnte = " . $fl_fmnte . ", 
-			fl_rtgrd = " . $fl_rtgrd . ", 
-			fl_acmpte = " . $fl_acmpte . ",			
-			ds_cid = '" . $_POST['ds_cid'] . "'	,
-			ds_dieta = '" . $_POST['ds_dieta'] . "',
-			ds_const = '" . $_POST['ds_const'] . "',
-			ds_ocorr = '" . $_POST['ds_ocorr'] . "', 
-			ds_crtr_intnc = '" . $_POST['ds_crtr_intnc'] . "', 
-			cd_usua_altr = '" . $_SESSION['usuario'] . "', 
-            dt_altr = current_timestamp
-			WHERE trim(ds_leito) = '". $_POST['nm_loc_nome'] ."'";
-			
-			//retirar aqui
 			//echo $sql;
 			
 			$result = pg_query($pdo, $sql);

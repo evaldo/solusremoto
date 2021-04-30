@@ -320,7 +320,7 @@
 			$.ajax({
 				 type: "POST",
 				 url: "../alteracao/alteracao_origem_demanda.php", //
-				 data: {id_orig_dmnd_plnj_leito:id_orig_dmnd_plnj_leito, ds_orig_dmnd_plnj_leito:ds_orig_dmnd_plnj_leito, cd_cor_grvd_risco:cd_cor_grvd_risco},
+				 data: {id_orig_dmnd_plnj_leito:id_orig_dmnd_plnj_leito, ds_orig_dmnd_plnj_leito:ds_orig_dmnd_plnj_leito},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();

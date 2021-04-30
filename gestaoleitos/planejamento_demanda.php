@@ -27,7 +27,8 @@
 		   , integracao.tb_cnvo cnvo
 	WHERE plnj_leito.id_grvd_risco_pcnt = grvd_risco.id_grvd_risco_pcnt
 	  and plnj_leito.id_orig_dmnd_plnj_leito = orig_dmnd.id_orig_dmnd_plnj_leito
-	  and plnj_leito.id_cnvo = cnvo.id_cnvo		";
+	  and plnj_leito.id_cnvo = cnvo.id_cnvo		
+	 order by 5 desc";
 			
 	$ret = pg_query($pdo, $sql);
 	
@@ -46,6 +47,36 @@
 		{	
 			
 			$sql = "INSERT INTO integracao.tb_plnj_pcnt_leito(id_plnj_pcnt_leito, nm_pcnt_cndat, dt_nasc, id_cnvo, nm_cnto, dt_prvs_admss, ds_leito, cd_usua_incs, dt_incs, cd_usua_altr, dt_altr, id_grvd_risco_pcnt, id_orig_dmnd_plnj_leito, fl_pcnt_adtdo) VALUES ((select NEXTVAL('integracao.sq_plnj_pcnt_leito')), '".$_POST['nm_pcnt_cndat']."', '".$_POST['dt_nasc']."', ".$_POST['id_cnvo'].", '".$_POST['nm_cnto']."', '".$_POST['dt_prvs_admss']."', '".$_POST['ds_leito']."', '".$_SESSION['usuario']."', current_timestamp, null, null, ".$_POST['id_grvd_risco_pcnt'].", ".$_POST['id_orig_dmnd_plnj_leito'].", 0);";
+			
+			echo $sql;
+			
+			$result = pg_query($pdo, $sql);
+
+			if($result){
+				echo "";
+			}  
+			
+			//voltar aqui
+			$secondsWait = 0;
+			header("Refresh:$secondsWait");
+
+				
+		} catch(PDOException $e)
+		{
+			die($e->getMessage());
+		}
+	}
+	
+	if(isset($_POST['altera'])){					
+		
+		if ($pdo==null){
+			header(Config::$webLogin);
+		}
+		
+		try
+		{	
+			
+			$sql = "UPDATE integracao.tb_plnj_pcnt_leito set nm_pcnt_cndat = '".$_POST['nm_pcnt_cndat']."', dt_nasc = '".$_POST['dt_nasc']."', id_cnvo = ".$_POST['id_cnvo'].", nm_cnto = '".$_POST['nm_cnto']."', dt_prvs_admss = '".$_POST['dt_prvs_admss']."', ds_leito = '".$_POST['ds_leito']."', id_grvd_risco_pcnt = ".$_POST['id_grvd_risco_pcnt'].", id_orig_dmnd_plnj_leito = ".$_POST['id_orig_dmnd_plnj_leito'].", cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp, fl_pcnt_adtdo = ".$_POST['fl_pcnt_adtdo']." WHERE id_plnj_pcnt_leito = ".$_POST['id_plnj_pcnt_leito']." ";
 			
 			//echo $sql;
 			
@@ -116,7 +147,7 @@
 			<div class="container" style="margin-left: 0px; margin-right: 0px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 130px; border: 1px solid #E6E6E6;">
 				<br>
 				<label style="font-weight:bold; font-size: 11px;">Nome:</label>&nbsp;
-				<input style="width: 200px; font-size: 11px;" type="text" id="buscapac" onkeyup="Busca(2, 'buscapac')" placeholder="Paciente..." title="Texto da Busca"> &nbsp;
+				<input style="width: 200px; font-size: 11px;" type="text" id="buscapac" onkeyup="Busca(1, 'buscapac')" placeholder="Paciente..." title="Texto da Busca"> &nbsp;
 				<label style="font-weight:bold; font-size: 11px;">Gravidade do Risco:</label>&nbsp;
 				
 				<?php
@@ -193,7 +224,7 @@
 						exit;
 					}
 				?>
-						<select id="sl_tp_cnvo" style="width: 90px; font-size: 11px;" onchange="BuscaExato(3, 'sl_tp_cnvo')">
+						<select id="sl_tp_cnvo" style="width: 90px; font-size: 11px;" onchange="Busca(3, 'sl_tp_cnvo')">
 					<option value=""></option>
 					<option value="-">-</option>
 								
@@ -221,7 +252,7 @@
 					   			   
 				<label style="font-weight:bold; font-size: 11px;">Exportar/Imprimir Por Período - </label>&nbsp;			
 				<label style="font-weight:bold; font-size: 11px;">Dt Inicial:</label>&nbsp;
-				<input style="font-weight:bold; font-size: 11px;" type="date" id="dataInicio" name="dataInicio"> &nbsp;&nbsp;
+				<input style="font-weight:bold; font-size: 11px;" type="date" id="dataInicio" name="dataInicio"> &nbsp;
 				<label style="font-weight:bold; font-size: 11px;">a</label>&nbsp;
 				<label style="font-weight:bold; font-size: 11px;">Dt Final:</label>&nbsp;
 				<input style="font-weight:bold; font-size: 11px;" type="date" id="dataFim" name="dataFim">&nbsp;&nbsp;
@@ -248,6 +279,7 @@
 							<th style="text-align:center">Leito Alocado</th>
 							<th style="text-align:center">Origem da Demanda</th>
 							<th style="text-align:center">Gravidade do Risco</th>							
+							<th style="text-align:center">Paciente Admitido?</th>
 							<th colspan="3" style="text-align:center">Ações</th>
 							
 						</tr>
@@ -260,10 +292,10 @@
 								
 							?>
 
-								<tr >
+								<tr>
 									<td data-toggle="tooltip" data-placement="top" title="Id do Planejamento" style="text-align=center; font-weight:bold; color:red; background-color:#E0FFFF" id="id_plnj_pcnt_leito" value="<?php echo $row[0];?>" ><?php echo $row[0];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="Candidato" style="font-weight:bold; text-align:center" id="nm_pcnt_cndat" value="<?php echo $row[1];?>" ><?php echo $row[1];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="Candidato" style="font-weight:bold" id="nm_pcnt_cndat" value="<?php echo $row[1];?>" ><?php echo $row[1];?></td>
 									
 									<td data-toggle="tooltip" data-placement="top" title="Dt. Nascimento" style="text-align:center; font-weight:bold; background-color:#C0C0C0" id="dt_nasc" value="<?php echo $row[2];?>" ><?php echo $row[2];?></td>
 									
@@ -278,12 +310,11 @@
 																											
 									<td data-toggle="tooltip" data-placement="top" title="Gravidade do Risco" style="color:black; font-weight:bold; background-color:<?php echo $row[9];?>" id="nm_grvd_risco_pcnt" value="<?php echo $row[7];?>"><input type="text" value="<?php echo $row[7];?>" style="display:none"/><?php echo $row[7];?></td>
 									
-									<td class="actions">
-										<input type="image" src="../img/lupa_1.png"  height="23" width="23" class="btn-xs visualiza"/>
-									</td>
 									
-									<td class="actions">																		
-										<input type="button" style="font-size: 11px;" value="Alterar" class="btn btn-warning btn-xs altera"/>								
+									<td data-toggle="tooltip" data-placement="top" title="Paciente Admitido?" style="text-align:center; color:black; font-weight:bold" id="fl_pcnt_adtdo" value="<?php echo $row[10];?>"><input type="text" value="<?php echo $row[10];?>" style="display:none"/><?php if ($row[10]==0) {echo "Não";} else {echo "Sim";} ?></td>
+									
+									<td class="actions">
+										<!--<input type="button" style="font-size: 11px;" value="Visualizar" class="btn btn-primary btn-xs visualiza"/>-->										 	<input type="button" style="font-size: 11px;" value="Alterar" class="btn btn-warning btn-xs altera"/>
 										<input type="button" style="font-size: 11px;" value="Excluir" class="btn btn-danger btn-xs delecao"/>								
 									</td>
 									

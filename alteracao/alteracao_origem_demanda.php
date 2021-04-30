@@ -7,7 +7,7 @@
 	
 	$pdo = database::connect();
 
-	$sql = "SELECT id_orig_dmnd_plnj_leito, ds_orig_dmnd_plnj_leito, cd_cor_grvd_risco from integracao.tb_orig_dmnd_plnj_leito where id_orig_dmnd_plnj_leito = ".$_POST['id_orig_dmnd_plnj_leito']." ";
+	$sql = "SELECT id_orig_dmnd_plnj_leito, ds_orig_dmnd_plnj_leito from integracao.tb_orig_dmnd_plnj_leito where id_orig_dmnd_plnj_leito = ".$_POST['id_orig_dmnd_plnj_leito']." ";
 
 	if ($pdo==null){
 			header(Config::$webLogin);
@@ -21,9 +21,9 @@
 	$row = pg_fetch_row($ret);
 		
 	$id_orig_dmnd_plnj_leito = $row[0];
-	$ds_orig_dmnd_plnj_leito = $row[1];	$
+	$ds_orig_dmnd_plnj_leito = $row[1];	
 	
-	$sql = "SELECT id_orig_dmnd_plnj_leito, ds_orig_dmnd_plnj_leito, cd_cor_grvd_risco from integracao.tb_orig_dmnd_plnj_leito order by 1";
+	$sql = "SELECT id_orig_dmnd_plnj_leito, ds_orig_dmnd_plnj_leito from integracao.tb_orig_dmnd_plnj_leito order by 1";
 	
 	if ($pdo==null){
 			header(Config::$webLogin);

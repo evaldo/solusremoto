@@ -137,6 +137,9 @@
 		try
 		{	
 			$sql = "insert into integracao.tb_grvd_risco_pcnt values ((select NEXTVAL('integracao.sq_grvd_risco_pcnt')), '". $_POST['nm_grvd_risco_pcnt']."', '". $_POST['cd_cor_grvd_risco']."', '".$_SESSION['usuario']."', current_timestamp, null,null);";				
+			
+			//echo $sql;
+			
 			$result = pg_query($pdo, $sql);
 
 			if($result){
@@ -229,7 +232,7 @@
 						<tr>
 							<td id="id_grupo_usua" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
 							<td id="nm_grupo_usua" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
-							<td id="nm_grupo_usua" value="<?php echo $row[2];?>"><?php echo $row[1];?></td>
+							<td id="nm_grupo_usua" value="<?php echo $row[2];?>"><?php echo $row[2];?></td>
 														
 							<td class="actions">								
 								<input type="button" value="Visualizar" class="btn btn-success btn-xs visualiza"/>
@@ -286,6 +289,7 @@
 			
 			var id_grvd_risco_pcnt = currentRow.find("td:eq(0)").text();				
 			var nm_grvd_risco_pcnt = currentRow.find("td:eq(1)").text();			
+			var cd_cor_grvd_risco = currentRow.find("td:eq(2)").text();
 			
 			// AJAX code to submit form.
 			$.ajax({
@@ -318,6 +322,7 @@
 			
 			var id_grvd_risco_pcnt = currentRow.find("td:eq(0)").text();				
 			var nm_grvd_risco_pcnt = currentRow.find("td:eq(1)").text();	
+			var cd_cor_grvd_risco = currentRow.find("td:eq(2)").text();
 			
 			// AJAX code to submit form.
 			$.ajax({

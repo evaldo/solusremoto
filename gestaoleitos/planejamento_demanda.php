@@ -250,7 +250,7 @@
 				  <option value="cnvo">Convênio</option>				  
 				</select>
 					   			   
-				<label style="font-weight:bold; font-size: 11px;">Exportar/Imprimir Por Período - </label>&nbsp;			
+				<label style="font-weight:bold; font-size: 11px;">Exportar/Imprimir Por Período de Previsão da Admss - </label>&nbsp;			
 				<label style="font-weight:bold; font-size: 11px;">Dt Inicial:</label>&nbsp;
 				<input style="font-weight:bold; font-size: 11px;" type="date" id="dataInicio" name="dataInicio"> &nbsp;
 				<label style="font-weight:bold; font-size: 11px;">a</label>&nbsp;

@@ -95,7 +95,7 @@
 												}
 											?>
 											<!--display:none;--> 
-											<select class="form-control" id="id_moskit_deal" name="id_moskit_deal" style="width: 350px;display:none" onchange=" 
+											<!--<select class="form-control" id="id_moskit_deal" name="id_moskit_deal" style="width: 350px;display:none" onchange=" 
 														var selObj = document.getElementById('id_moskit_deal');
 														var selText = selObj.options[selObj.selectedIndex].text;														
 														document.getElementById('nm_pcnt_cndat').value = selText;">
@@ -110,7 +110,7 @@
 													$cont=$cont+1;
 												}
 											?>														
-											</select>&nbsp;	
+											</select>&nbsp;	-->
 											
 											
 											<input type="text" class="form-control" style="width:500px;display:block" id="nm_pcnt_cndat" name="nm_pcnt_cndat"/>
@@ -240,6 +240,11 @@
 											</select>
 											
 									   </td>  
+									</tr>
+									
+									<tr>  
+									   <td style="width:200px; text-align:left"><label>Quadro Psiquiátrico:</label></td>  
+									   <td style="width:200px"><textarea style="width:500px" class="form-control" name="ds_quadro_psqtr" value="<?php echo $ds_quadro_psqtr; ?>"></textarea></td>  
 									</tr>
 									
 								</table>																

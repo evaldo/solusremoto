@@ -6,7 +6,7 @@
 	
 	error_reporting(0); 
 	
-	$itens_por_pagina=5;
+	$itens_por_pagina=50;
 	$pagina=intval($_GET['pagina']);
 	
     global $pdo;	
@@ -39,7 +39,7 @@
 		$num_total = $row[0];	
 		$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-		$sql ="SELECT cd_grupo_cid, ds_grupo_cid 
+		$sql ="SELECT cd_grupo_cid, ds_grupo_cid, ds_dtlh_cid
 				from integracao.tb_c_grupo_cid 
 				where upper(ds_grupo_cid) like '%" . $textoconsulta . "%' order by ds_grupo_cid LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
 		
@@ -60,7 +60,7 @@
 			$num_total = $row[0];	
 			$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-			$sql ="SELECT cd_grupo_cid, ds_grupo_cid from integracao.tb_c_grupo_cid order by ds_grupo_cid LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
+			$sql ="SELECT cd_grupo_cid, ds_grupo_cid, ds_dtlh_cid from integracao.tb_c_grupo_cid order by ds_grupo_cid LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
 	}
 	
 	if ($pdo==null){
@@ -93,7 +93,7 @@
 				$fl_acesso_ip = 'N';
 			}
 		
-			$sql = "insert into integracao.tb_c_grupo_cid (cd_grupo_cid, ds_grupo_cid, cd_usua_incs, dt_incs) values ('". $_POST['cd_grupo_cid']."', '". $_POST['ds_grupo_cid']."', '".$_SESSION['usuario']."', current_timestamp);";
+			$sql = "insert into integracao.tb_c_grupo_cid (cd_grupo_cid, ds_grupo_cid, ds_dtlh_cid, cd_usua_incs, dt_incs) values ('". $_POST['cd_grupo_cid']."', '". $_POST['ds_grupo_cid']."',  '". $_POST['ds_dtlh_cid']."', '".$_SESSION['usuario']."', current_timestamp);";
 
 			$result = pg_query($pdo, $sql);
 
@@ -120,7 +120,7 @@
 		try
 		{	
 			
-			$sql = "update integracao.tb_c_grupo_cid set ds_grupo_cid = '". $_POST['ds_grupo_cid']."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where cd_grupo_cid = '". $_SESSION['cd_grupo_cid']."'";	
+			$sql = "update integracao.tb_c_grupo_cid set ds_grupo_cid = '". $_POST['ds_grupo_cid']."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where cd_grupo_cid = '". $_SESSION['cd_grupo_cid']."' and ds_dtlh_cid = '". $_SESSION['ds_dtlh_cid']."'";	
 			
 			//echo $sql;
 			
@@ -177,7 +177,7 @@
 			} else {
 		
 				// remove do banco			
-				$sql = "DELETE FROM integracao.tb_c_grupo_cid WHERE cd_grupo_cid = '".$_SESSION['cd_grupo_cid']."'";			
+				$sql = "DELETE FROM integracao.tb_c_grupo_cid WHERE cd_grupo_cid = '".$_SESSION['cd_grupo_cid']."' and ds_dtlh_cid = '".$_SESSION['ds_dtlh_cid']."'";			
 				$result = pg_query($pdo, $sql);
 
 				if($result){
@@ -231,6 +231,7 @@
 					<tr>
 						<th>Código do Grupo de CID</th>
 						<th>Descrição do Grupo de CID</th>												
+						<th>Detalhe do Código de CID</th>
 						<th class="actions">Ações</th>
 					</tr>
 				</thead>				
@@ -243,6 +244,7 @@
 						<tr>
 							<td id="cd_grupo_cid" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
 							<td id="ds_grupo_cid" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
+							<td id="ds_grupo_cid" value="<?php echo $row[2];?>"><?php echo $row[2];?></td>
 														
 							<td class="actions">								
 								<input type="button" value="Visualizar" class="btn btn-success btn-xs visualiza"/>
@@ -299,12 +301,13 @@
 			
 			var cd_grupo_cid = currentRow.find("td:eq(0)").text();
 			var ds_grupo_cid = currentRow.find("td:eq(1)").text();	
+			var ds_dtlh_cid = currentRow.find("td:eq(2)").text();
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
 				 url: "../delecao/delecao_grupo_cid.php", //
-				 data: {cd_grupo_cid:cd_grupo_cid, ds_grupo_cid:ds_grupo_cid},
+				 data: {cd_grupo_cid:cd_grupo_cid, ds_grupo_cid:ds_grupo_cid, ds_dtlh_cid:ds_dtlh_cid},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();
@@ -330,13 +333,14 @@
 			var currentRow=$(this).closest("tr"); 
 			
 			var cd_grupo_cid = currentRow.find("td:eq(0)").text();
-			var ds_grupo_cid = currentRow.find("td:eq(1)").text();			
+			var ds_grupo_cid = currentRow.find("td:eq(1)").text();
+			var ds_dtlh_cid = currentRow.find("td:eq(2)").text();
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
 				 url: "../alteracao/alteracao_grupo_cid.php", //
-				 data: {cd_grupo_cid:cd_grupo_cid, ds_grupo_cid:ds_grupo_cid},
+				 data: {cd_grupo_cid:cd_grupo_cid, ds_grupo_cid:ds_grupo_cid, ds_dtlh_cid:ds_dtlh_cid},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();
@@ -350,11 +354,12 @@
 			
 			var currentRow=$(this).closest("tr"); 			
 			var cd_grupo_cid = currentRow.find("td:eq(0)").text();							
+			var ds_dtlh_cid = currentRow.find("td:eq(2)").text();	
 						
 			$.ajax({
 				url:"../visualizacao/visualizacao_grupo_cid.php",
 				method:"POST",
-				data:{cd_grupo_cid:cd_grupo_cid},
+				data:{cd_grupo_cid:cd_grupo_cid, ds_dtlh_cid:ds_dtlh_cid},
 				success:function(data){
 					$('#visualizacao').html(data);
 					$('#visualiza').modal('show');

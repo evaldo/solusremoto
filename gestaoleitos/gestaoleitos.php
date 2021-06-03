@@ -22,6 +22,7 @@
 			, smart.dt_admss
 			, smart.id_memb_equip_hosptr_mdco
 			, trim(smart.nm_memb_equip_hosptr) as nm_memb_equip_hosptr
+			, smart.ds_dtlh_cid
 		FROM  integracao.vw_ctrl_leito_smart smart
 		union
 		select leito.ds_leito
@@ -32,6 +33,7 @@
 			, null
 			, null
 			, 0
+			, null
 			, null
 			, null
 			, null
@@ -67,11 +69,11 @@
 			
 			if ($rowSmart[2]==null){
 			
-				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS, id_memb_equip_hosptr_mdco, nm_mdco) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', null, '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .$rowSmart[7] . ", '" . $rowSmart[8] . "', " .$rowSmart[9] . ", '".$rowSmart[10]."')";	
+				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS, id_memb_equip_hosptr_mdco, nm_mdco, ds_dtlh_cid) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', null, '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .$rowSmart[7] . ", '" . $rowSmart[8] . "', " .$rowSmart[9] . ", '".$rowSmart[10]."', '".$rowSmart[11]."')";	
 				
 			} else {
 				
-				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS, id_memb_equip_hosptr_mdco, nm_mdco) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', '" . $rowSmart[2] . "', '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .$rowSmart[7] . ", '" . $rowSmart[8] . "', " .$rowSmart[9] . ", '".$rowSmart[10]."')";	
+				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS, id_memb_equip_hosptr_mdco, nm_mdco, ds_dtlh_cid) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', '" . $rowSmart[2] . "', '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .$rowSmart[7] . ", '" . $rowSmart[8] . "', " .$rowSmart[9] . ", '".$rowSmart[10]."', '".$rowSmart[11]."')";	
 				
 			}
 			
@@ -84,7 +86,7 @@
 			
 			if ($rowSmart[2]==null){
 			
-				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = null, NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "', id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."' WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
+				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = null, NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "', id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."', ds_dtlh_cid = '".$rowSmart[11]."' WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
 				
 				//retirar aqui	
 				//if ( $rowSmart[0]=='LEITO 307-B'){
@@ -93,7 +95,7 @@
 				
 			} else {
 				
-				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = '" . $rowSmart[2] . "', NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "' , id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."' WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
+				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = '" . $rowSmart[2] . "', NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "' , id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."', ds_dtlh_cid = '".$rowSmart[11]."' WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
 				
 			}
 							
@@ -106,7 +108,7 @@
 				echo "";
 			}
 			
-			$sqlCtrlLeitoTemp="SELECT nm_mdco, nm_psco, nm_trpa, ds_ocorr, ds_cid, ds_dieta, fl_fmnte, ds_const, ds_crtr_intnc, fl_status_leito, fl_acmpte, fl_rtgrd, pac_reg, id_status_leito, id_memb_equip_hosptr_mdco, id_memb_equip_hosptr_psco, id_memb_equip_hosptr_trpa FROM integracao.tb_ctrl_leito_temp WHERE pac_reg = " . $rowSmart[7] . "";
+			$sqlCtrlLeitoTemp="SELECT nm_mdco, nm_psco, nm_trpa, ds_ocorr, ds_cid, ds_dieta, fl_fmnte, ds_const, ds_crtr_intnc, fl_status_leito, fl_acmpte, fl_rtgrd, pac_reg, id_status_leito, id_memb_equip_hosptr_mdco, id_memb_equip_hosptr_psco, id_memb_equip_hosptr_trpa, ds_dtlh_cid FROM integracao.tb_ctrl_leito_temp WHERE pac_reg = " . $rowSmart[7] . "";
 		
 			$retCtrlLeitoTemp = pg_query($pdo, $sqlCtrlLeitoTemp);
 		
@@ -144,7 +146,7 @@
 				ds_dieta = '" . $rowCtrlLeitoTemp['ds_dieta'] . "',
 				ds_const = '" . $rowCtrlLeitoTemp['ds_const'] . "',
 				ds_ocorr = '" . $rowCtrlLeitoTemp['ds_ocorr'] . "', 
-				ds_crtr_intnc = '" . $rowCtrlLeitoTemp['ds_crtr_intnc'] . "'				 
+				ds_crtr_intnc = '" . $rowCtrlLeitoTemp['ds_crtr_intnc'] . "'
 				WHERE pac_reg = " . $rowSmart[7] . "";
 
 				$resultUpdateCtrlTemp = pg_query($pdo, $sqlUpdateCtrlTemp);
@@ -204,7 +206,8 @@
 			ds_dieta = null,
 			ds_const = null,
 			ds_ocorr = null, 
-			ds_crtr_intnc = null				 
+			ds_crtr_intnc = null,
+			ds_dtlh_cid = null
 			WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
 
 			$resultUpdateCtrl = pg_query($pdo, $sqlUpdateCtrl);
@@ -228,7 +231,7 @@
 			ds_dieta = null,
 			ds_const = null,
 			ds_ocorr = null, 
-			ds_crtr_intnc = null				 
+			ds_crtr_intnc = null
 			WHERE trim(ds_leito) = trim('" . $rowSmart[0] . "')";
 			
 			$resultUpdateCtrl = pg_query($pdo, $sqlUpdateCtrl);

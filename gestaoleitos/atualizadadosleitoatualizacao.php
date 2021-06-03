@@ -280,7 +280,7 @@
 											<td><label>Grupo de CID:</label></td>
 											<?php
 										
-												$sql = "SELECT cd_grupo_cid from integracao.tb_c_grupo_cid order by 1";
+												$sql = "SELECT distinct cd_grupo_cid from integracao.tb_c_grupo_cid order by 1";
 												
 												if ($pdo==null){
 														header(Config::$webLogin);

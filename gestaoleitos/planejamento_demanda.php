@@ -439,9 +439,9 @@
 									
 									<td class="actions"  style="width:170px">
 										<!--<input type="button" style="font-size: 11px;" value="Visualizar" class="btn btn-primary btn-xs visualiza"/>-->										 	
-										<input type="button" style="font-size: 11px;" value="Auditoria" class="btn btn-success btn-xs visualiza"/>
-										<input type="button" style="font-size: 11px;" value="Alterar" class="btn btn-warning btn-xs altera"/>
-										<input type="button" style="font-size: 11px;" value="Excluir" class="btn btn-danger btn-xs delecao"/>								
+										<input type="button" style="font-size: 11px;" value="Audit" class="btn btn-success btn-xs visualiza"/>
+										<input type="button" style="font-size: 11px;" value="Alt." class="btn btn-warning btn-xs altera"/>
+										<input type="button" style="font-size: 11px;" value="Excl." class="btn btn-danger btn-xs delecao"/>								
 									</td>
 									
 								</tr>

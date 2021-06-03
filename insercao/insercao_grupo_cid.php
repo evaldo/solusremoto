@@ -8,7 +8,7 @@
 	$optconsulta = "";
 	$textoconsulta = "";
 	
-	$sql = "SELECT cd_grupo_cid, ds_grupo_cid, ds_grupo_cid from integracao.tb_c_grupo_cid  order by 1";
+	$sql = "SELECT cd_grupo_cid, ds_grupo_cid, ds_grupo_cid, ds_dtlh_cid from integracao.tb_c_grupo_cid  order by 1";
 	
 	if ($pdo==null){
 			header(Config::$webLogin);
@@ -46,6 +46,10 @@
 									 <tr>  
 										<td style="width:150px"><label>Descrição do Grupo de CID:</label></td>  
 										<td style="width:200px"><input type="text" class="form-control" name="ds_grupo_cid"></td>   
+									 </tr>	
+									 <tr>  
+										<td style="width:150px"><label>Detalhe do Código de CID:</label></td>  
+										<td style="width:200px"><input type="text" class="form-control" name="ds_dtlh_cid"></td>   
 									 </tr>									 
 								</table>																
 							</div>								

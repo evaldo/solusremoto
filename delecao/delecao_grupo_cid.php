@@ -2,6 +2,7 @@
 //delete_cores.php
 	session_start();
 	$_SESSION['cd_grupo_cid']=$_POST['cd_grupo_cid'];
+	$_SESSION['ds_dtlh_cid']=$_POST['ds_dtlh_cid'];
 		
 ?>
 	<!DOCTYPE html>
@@ -28,7 +29,11 @@
 								  <tr>  
 									<td width="50%"><label>Descrição do Grupo de CID:</label></td>  
 									<td width="500%"><?php echo $_POST['ds_grupo_cid']; ?></td>  
-								 </tr>								 
+								 </tr>	
+								 <tr>  
+									<td width="50%"><label>Detalhe do Código de CID:</label></td>  
+									<td width="500%"><?php echo $_POST['ds_dtlh_cid']; ?></td>  
+								 </tr>									 
 							</table>
 						</div>
 					</div>

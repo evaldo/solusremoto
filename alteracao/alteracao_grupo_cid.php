@@ -2,12 +2,13 @@
 //altera_cores.php
 	session_start();
 	$_SESSION['cd_grupo_cid']=$_POST['cd_grupo_cid'];
+	$_SESSION['ds_dtlh_cid']=$_POST['ds_dtlh_cid'];
 	
     include '../database.php';	
 	
 	$pdo = database::connect();
 
-	$sql = "SELECT cd_grupo_cid, ds_grupo_cid from integracao.tb_c_grupo_cid where cd_grupo_cid = '".$_POST['cd_grupo_cid']."'";
+	$sql = "SELECT cd_grupo_cid, ds_grupo_cid, ds_dtlh_cid from integracao.tb_c_grupo_cid where cd_grupo_cid = '".$_POST['cd_grupo_cid']."'";
 
 	if ($pdo==null){
 			header(Config::$webLogin);
@@ -47,7 +48,11 @@
 									  <tr>  
 										<td style="width:150px"><label>Descrição do Grupo CID:</label></td>  
 										<td style="width:400px"><input type="text" class="form-control" name="ds_grupo_cid" value="<?php echo $_POST['ds_grupo_cid']; ?>"></td> 							
-									  </tr>									  									   
+									  </tr>	
+									<tr>  
+										<td style="width:150px"><label>Detalhe do Código de CID:</label></td> 
+										<td style="width:150px"><p class="form-control-static" name="ds_dtlh_cid"><?php echo $_POST['ds_dtlh_cid']; ?></p>
+									  </tr>										  
 								</table>																
 							</div>								
 							<div class="modal-footer">	

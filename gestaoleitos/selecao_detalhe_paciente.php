@@ -32,7 +32,8 @@ if(isset($_POST["nm_loc_nome"]))
 			ds_crtr_intnc,
 			fl_status_leito,
 			cd_usua_altr,
-			to_char(dt_altr, 'dd/mm/yyyy hh24:mi') as dt_altr
+			to_char(dt_altr, 'dd/mm/yyyy hh24:mi') as dt_altr,
+			ds_dtlh_cid
 			FROM integracao.tb_ctrl_leito WHERE TRIM(replace(ds_leito, 'LEITO', '')) = '". $_POST["nm_loc_nome"] ."' ";
 		
     $ret = pg_query($pdo, $query);
@@ -71,8 +72,8 @@ if(isset($_POST["nm_loc_nome"]))
         <td width="200%">'.$row[5].'</td>  
       </tr>
       <tr>  
-        <td width="30%"><label><b>CID</b></label></td>  
-        <td width="200%">'.$row[6].'</td>  
+        <td width="30%"><label><b>Grupo de CID (CID)</b></label></td>  
+        <td width="200%">'.$row[6].' ('.$row[19].')</td>  
       </tr>
       <tr>  
         <td width="30%"><label><b>Fumante</b></label></td>  

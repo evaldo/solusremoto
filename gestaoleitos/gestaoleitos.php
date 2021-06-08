@@ -69,11 +69,11 @@
 			
 			if ($rowSmart[2]==null){
 			
-				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS, id_memb_equip_hosptr_mdco, nm_mdco, ds_dtlh_cid) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', null, '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .$rowSmart[7] . ", '" . $rowSmart[8] . "', " .$rowSmart[9] . ", '".$rowSmart[10]."', '".$rowSmart[11]."')";	
+				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS, id_memb_equip_hosptr_mdco, nm_mdco, ds_dtlh_cid, ds_cid) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', null, '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .$rowSmart[7] . ", '" . $rowSmart[8] . "', " .$rowSmart[9] . ", '".$rowSmart[10]."', '".$rowSmart[11]."', (SELECT max(ds_grupo_cid) FROM integracao.tb_c_grupo_cid where ds_dtlh_cid = '".$rowSmart[11]."'))";	
 				
 			} else {
 				
-				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS, id_memb_equip_hosptr_mdco, nm_mdco, ds_dtlh_cid) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', '" . $rowSmart[2] . "', '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .$rowSmart[7] . ", '" . $rowSmart[8] . "', " .$rowSmart[9] . ", '".$rowSmart[10]."', '".$rowSmart[11]."')";	
+				$sql = "INSERT INTO integracao.tb_ctrl_leito (cd_ctrl_leito, DS_LEITO, DS_ANDAR, DT_PRVS_ALTA, NM_PCNT, DS_SEXO, DT_NASC_PCNT, NM_CNVO, PAC_REG, DT_ADMSS, id_memb_equip_hosptr_mdco, nm_mdco, ds_dtlh_cid, ds_cid) VALUES ((SELECT MAX(cd_ctrl_leito)+1 FROM integracao.tb_ctrl_leito), '" . $rowSmart[0] . "', '" . $rowSmart[1] . "', '" . $rowSmart[2] . "', '" . $rowSmart[3] . "', '" . $rowSmart[4] . "', '" . $rowSmart[5] . "', '" . $rowSmart[6] . "', " .$rowSmart[7] . ", '" . $rowSmart[8] . "', " .$rowSmart[9] . ", '".$rowSmart[10]."', '".$rowSmart[11]."', (SELECT max(ds_grupo_cid) FROM integracao.tb_c_grupo_cid where ds_dtlh_cid = '".$rowSmart[11]."'))";	
 				
 			}
 			
@@ -86,7 +86,7 @@
 			
 			if ($rowSmart[2]==null){
 			
-				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = null, NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "', id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."', ds_dtlh_cid = '".$rowSmart[11]."' WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
+				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = null, NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "', id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."', ds_dtlh_cid = '".$rowSmart[11]."', ds_cid = (SELECT max(ds_grupo_cid) FROM integracao.tb_c_grupo_cid where ds_dtlh_cid = '".$rowSmart[11]."') WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
 				
 				//retirar aqui	
 				//if ( $rowSmart[0]=='LEITO 307-B'){
@@ -95,7 +95,7 @@
 				
 			} else {
 				
-				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = '" . $rowSmart[2] . "', NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "' , id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."', ds_dtlh_cid = '".$rowSmart[11]."' WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
+				$sql = "UPDATE integracao.tb_ctrl_leito SET pac_reg = " . $rowSmart[7] . ", DS_ANDAR = '" . $rowSmart[1] . "', DT_PRVS_ALTA = '" . $rowSmart[2] . "', NM_PCNT = '" . $rowSmart[3] . "', DS_SEXO = '" . $rowSmart[4] . "', DT_NASC_PCNT = '" . $rowSmart[5] . "', NM_CNVO = '" . $rowSmart[6] . "', DT_ADMSS = '" .$rowSmart[8] . "' , id_memb_equip_hosptr_mdco = " .$rowSmart[9] . ", nm_mdco =  '".$rowSmart[10]."', ds_dtlh_cid = '".$rowSmart[11]."' , ds_cid = (SELECT max(ds_grupo_cid) FROM integracao.tb_c_grupo_cid where ds_dtlh_cid = '".$rowSmart[11]."') WHERE trim(DS_LEITO) = '" . $rowSmart[0] . "' ";
 				
 			}
 							
@@ -141,13 +141,13 @@
 					$sqlUpdateCtrlTemp.=" id_memb_equip_hosptr_trpa = null, ";
 				} else {
 					$sqlUpdateCtrlTemp.="id_memb_equip_hosptr_trpa = " . $rowCtrlLeitoTemp['id_memb_equip_hosptr_trpa'] . " ,";				}				
-				$sqlUpdateCtrlTemp.="nm_trpa = '" . $rowCtrlLeitoTemp['nm_trpa'] . "'  ,				
-				ds_cid = '" . $rowCtrlLeitoTemp['ds_cid'] . "'	,
-				ds_dieta = '" . $rowCtrlLeitoTemp['ds_dieta'] . "',
-				ds_const = '" . $rowCtrlLeitoTemp['ds_const'] . "',
-				ds_ocorr = '" . $rowCtrlLeitoTemp['ds_ocorr'] . "', 
-				ds_crtr_intnc = '" . $rowCtrlLeitoTemp['ds_crtr_intnc'] . "'
-				WHERE pac_reg = " . $rowSmart[7] . "";
+				$sqlUpdateCtrlTemp.="nm_trpa = '" . $rowCtrlLeitoTemp['nm_trpa'] . "'  , ";				
+				//$sqlUpdateCtrlTemp.=" ds_cid = '".$rowCtrlLeitoTemp['ds_cid']."'	, ";
+				$sqlUpdateCtrlTemp.=" ds_dieta = '" . $rowCtrlLeitoTemp['ds_dieta'] . "',
+						ds_const = '" . $rowCtrlLeitoTemp['ds_const'] . "',
+						ds_ocorr = '" . $rowCtrlLeitoTemp['ds_ocorr'] . "', 
+						ds_crtr_intnc = '" . $rowCtrlLeitoTemp['ds_crtr_intnc'] . "'
+						WHERE pac_reg = " . $rowSmart[7] . "";
 
 				$resultUpdateCtrlTemp = pg_query($pdo, $sqlUpdateCtrlTemp);
 			
@@ -300,14 +300,14 @@
 			$sqlUpdateCtrlLeitoTemp.=" id_memb_equip_hosptr_trpa = null, ";
 		} else {
 			$sqlUpdateCtrlLeitoTemp.="id_memb_equip_hosptr_trpa = " . $rowctrlleito['id_memb_equip_hosptr_trpa'] . " ,";				}				
-		$sqlUpdateCtrlLeitoTemp.="nm_trpa = '" . $rowctrlleito['nm_trpa'] . "'  ,				
-		ds_cid = '" . $rowctrlleito['ds_cid'] . "'	,
-		ds_dieta = '" . $rowctrlleito['ds_dieta'] . "',
-		ds_const = '" . $rowctrlleito['ds_const'] . "',
-		ds_ocorr = '" . $rowctrlleito['ds_ocorr'] . "', 
-		ds_crtr_intnc = '" . $rowctrlleito['ds_crtr_intnc'] . "',				 
-		pac_reg = ". $rowctrlleito['pac_reg'] . "
-		WHERE ds_leito = '" . $rowctrlleito['ds_leito'] . "'";
+		$sqlUpdateCtrlLeitoTemp.=" nm_trpa = '" . $rowctrlleito['nm_trpa'] . "'  ,";			
+		$sqlUpdateCtrlLeitoTemp.=" ds_cid = '" . $rowctrlleito['ds_cid'] . "'	, ";
+		$sqlUpdateCtrlLeitoTemp.=" ds_dieta = '" . $rowctrlleito['ds_dieta'] . "',
+			ds_const = '" . $rowctrlleito['ds_const'] . "',
+			ds_ocorr = '" . $rowctrlleito['ds_ocorr'] . "', 
+			ds_crtr_intnc = '" . $rowctrlleito['ds_crtr_intnc'] . "',				 
+			pac_reg = ". $rowctrlleito['pac_reg'] . "
+			WHERE ds_leito = '" . $rowctrlleito['ds_leito'] . "'";
 		
 		$resultUpdateCtrlLeito = pg_query($pdo, $sqlUpdateCtrlLeitoTemp);
 		
@@ -364,7 +364,7 @@
 		nm_mdco,
 		nm_psco,
 		nm_trpa,
-		case when ds_cid is null then '' else ds_cid end as ds_cid,
+		case when ds_cid is null then '' else ds_cid||' ('||ds_dtlh_cid||')' end as ds_cid,
 		case when fl_fmnte = 'true' then 
 				'Sim' 
 			  else 
@@ -492,14 +492,14 @@
 				$sql.="id_memb_equip_hosptr_trpa = " . $_POST['id_memb_equip_hosptr_trpa'] . " , 
 				nm_trpa = (select nm_memb_equip_hosptr from integracao.tb_equip_hosptr where id_memb_equip_hosptr = " . $_POST['id_memb_equip_hosptr_trpa'] . ") , ";
 			}
-			$sql.="ds_cid = '" . $_POST['ds_cid'] . "'	,
-			ds_dieta = '" . $_POST['ds_dieta'] . "',
-			ds_const = '" . $_POST['ds_const'] . "',
-			ds_ocorr = '" . $_POST['ds_ocorr'] . "', 
-			ds_crtr_intnc = '" . $_POST['ds_crtr_intnc'] . "', 
-			cd_usua_altr = '" . $_SESSION['usuario'] . "', 
-            dt_altr = current_timestamp
-			WHERE trim(ds_leito) = '". $_POST['nm_loc_nome'] ."'";
+			$sql.=" ds_cid = '" . $_POST['ds_cid'] . "'	, ";
+			$sql.=" ds_dieta = '" . $_POST['ds_dieta'] . "',
+				ds_const = '" . $_POST['ds_const'] . "',
+				ds_ocorr = '" . $_POST['ds_ocorr'] . "', 
+				ds_crtr_intnc = '" . $_POST['ds_crtr_intnc'] . "', 
+				cd_usua_altr = '" . $_SESSION['usuario'] . "', 
+				dt_altr = current_timestamp
+				WHERE trim(ds_leito) = '". $_POST['nm_loc_nome'] ."'";
 			
 			//retirar aqui
 			//echo $sql;
@@ -960,7 +960,7 @@
 							<th style="text-align:center">Médico</th>
 							<th style="text-align:center">Psicólogo</th>
 							<th style="text-align:center">Terapeuta</th>
-							<th style="text-align:center">Grupo de CID</th>
+							<th style="text-align:center">Grp CID e CID</th>
 							<th style="text-align:center">Fumante</th>
 							<th colspan="2" style="text-align:center">Dieta/Consistência</th>
 							<th style="text-align:center">Prvs. de Alta</th>

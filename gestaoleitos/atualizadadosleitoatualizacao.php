@@ -51,7 +51,8 @@
 				, nm_pcnt
 				, case when fl_fmnte = 'T' then 'true' else 'false' end fl_fmnte
 				, case when fl_rtgrd = 'T' then 'true' else 'false' end fl_rtgrd 
-				, case when fl_acmpte = 'T' then 'true' else 'false' end fl_acmpte  
+				, case when fl_acmpte = 'T' then 'true' else 'false' end fl_acmpte 
+				, ds_dtlh_cid
 		FROM integracao.tb_ctrl_leito WHERE trim(ds_leito) = '". $_POST['nm_loc_nome'] ."'";
 			
 		$ret = pg_query($pdo, $sql);
@@ -81,9 +82,10 @@
 		$fl_fmntelogico = $row[18];
 		$fl_rtgrdlogico = $row[19];
 		$fl_acmptelogico = $row[20];
-		
-		
+				
 		$id_status_leito = $row[15];
+		
+		$ds_dtlh_cid = $row[21];
 		
 		$atualiza_psco="";
 		
@@ -277,7 +279,7 @@
 									   <tr>  
 
 									   
-											<td><label>Grupo de CID:</label></td>
+											<td><label>Grupo de CID (CID):</label></td>
 											<?php
 										
 												$sql = "SELECT distinct cd_grupo_cid from integracao.tb_c_grupo_cid order by 1";
@@ -296,7 +298,7 @@
 												<select  id="sl_cid" class="form-control" onchange="
 														var selObj = document.getElementById('sl_cid');
 														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('ds_cid').value = selValue;">
+														document.getElementById('ds_cid').value = selValue;" disabled>
 												<option value="null"></option>
 															
 												<?php
@@ -311,7 +313,7 @@
 														<option value="<?php echo $row[0]; ?>"><?php echo $row[0]; ?></option>												
 														<?php } 
 													$cont=$cont+1;} ?>	
-												</select>
+												</select> - (<?php echo $ds_dtlh_cid; ?>)
 										
 											</td> 													
 											

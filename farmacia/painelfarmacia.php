@@ -190,7 +190,7 @@
 		  <form class="form-inline" action="#" method="post" >
 				<p><h1><font color="black">Painel da Farmárcia - Solicitações</h1></p>
 				<p align = "left"><b><font color="black">Opções para consulta</b></p>
-				<font color="black">Por Período de Solicitação:
+				<font color="black">Filtro Por Dt de Solicit.:
 				<!--<select class="form-control" name="cmdoptconsulta">					
 					<option value="paciente" id="cmboptpaciente">Paciente</option>								
 					<option value="paciente" id="cmboptpaciente">Período</option>								
@@ -199,7 +199,8 @@
 				<input type="date" class="form-control" id="dtinicio" name="dtinicio" placeholder="Formato: dd/mm/yyyy">&nbsp;a&nbsp;
 				<input type="date" class="form-control" id="dtfim" name="dtfim" placeholder="Formato: dd/mm/yyyy">
 				<input class="btn btn-primary" type="submit" value="Consultar" name="botaoconsultar">&nbsp;&nbsp;	
-				Última consulta elaborada:&nbsp;&nbsp;<?php echo $data_1; ?>&nbsp;&nbsp;e&nbsp;&nbsp;<?php echo $data_2; ?>
+				Última consulta:&nbsp;&nbsp;<?php echo $data_1; ?>&nbsp;&nbsp;e&nbsp;&nbsp;<?php echo $data_2; ?>&nbsp;&nbsp;
+				<input class="btn btn-primary" type="button" value="Legenda" name="legenda" data-toggle="modal" data-target="#modallegenda">
 		  </form>		  
 		</div>
 		<hr>
@@ -263,6 +264,30 @@
 	?>
 	
 	</body>
+	<div class="modal fade" id="modallegenda">
+		<div class="modal-dialog">			
+		<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+				  <button type="button" class="close" data-dismiss="modal">&times;</button>
+				  <h4 class="modal-title">Legenda</h4>
+				</div>
+				<div class="col-sm-10 col-md-10 col-lg-10">
+					<div class="card text-white bg-success mb-2">
+						<div class="card-body"  style="height: 14rem">
+							<input type="button" name="view" value="Núm da Solicit" class="btn btn-secondary btn-xs" />
+							<?php
+								echo "<p class=\"card-text\">Nome do Paciente</p>";
+							?>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+				  <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+				</div>
+			 </div>				  
+		</div>
+	</div>
 </html>
 <div id="dataModal" class="modal fade">
 	<div class="modal-dialog">

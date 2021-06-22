@@ -38,7 +38,7 @@
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>							
 	</head>
-	<body style="background-color:#3CB371">						
+	<body style="background-color:MediumSeaGreen">						
 		<br><br>
 		<div class="container" style="width:50%; border:2px solid black;  border-radius:5px">						
 			<h4>Alterar Senha</h4>

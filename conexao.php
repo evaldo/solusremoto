@@ -19,7 +19,7 @@ class conexao
             {
 				if(isset($_POST["usuario"]) and isset($_POST["senha"]))
 				{
-					self::$pg = @pg_connect("host=".Config::$dbHost." port=".Config::$dbPort." dbname=vila_verde user=".$_POST["usuario"]. " password=".$_POST["senha"]."");
+					self::$pg = @pg_connect("host=".Config::$dbHost." port=".Config::$dbPort." dbname=desenv user=".$_POST["usuario"]. " password=".$_POST["senha"]."");
 					
 				}
 				session_start();

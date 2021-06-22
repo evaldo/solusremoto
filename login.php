@@ -19,8 +19,9 @@
 			header(Config::$webLogin);
 		}	
 		
-		$sql="SELECT cd_faixa_ip_1, cd_faixa_ip_2, fl_acesso_ip FROM integracao.tb_c_usua_acesso where nm_usua_acesso = '" . $_SESSION['usuario'] . "'";
+		$sql="SELECT cd_faixa_ip_1, cd_faixa_ip_2, fl_acesso_ip FROM tratamento.tb_c_usua_acesso where nm_usua_acesso = '" . $_SESSION['usuario'] . "'";
 		
+				
 		$ret = pg_query($pdo, $sql);
 		if(!$ret) {
 			echo pg_last_error($pdo);
@@ -30,7 +31,6 @@
 		$ip_1 = $row[0];	
 		$ip_2 = $row[1];
 		$fl_acesso_ip = $row[2];
-		
 		
 		//echo substr($user_ip, 0, 9);
 		//echo substr($ip_1, 0, 9); 
@@ -43,7 +43,7 @@
 						<strong>Sucesso!</strong>  Login realizado.</div>";
 
 
-				$sql = "insert into integracao.tb_c_log_acesso (id_log_acesso, cd_usua_acesso, nm_usua_acesso, dt_log_acesso) values ((select NEXTVAL('integracao.sq_log_acesso')), (select cd_usua_acesso from integracao.tb_c_usua_acesso where nm_usua_acesso = '". $_SESSION['usuario']."'), '". $_SESSION['usuario']."', current_timestamp)";
+				$sql = "insert into tratamento.tb_c_log_acesso (id_log_acesso, cd_usua_acesso, nm_usua_acesso, dt_log_acesso) values ((select NEXTVAL('tratamento.sq_log_acesso')), (select cd_usua_acesso from tratamento.tb_c_usua_acesso where nm_usua_acesso = '". $_SESSION['usuario']."'), '". $_SESSION['usuario']."', current_timestamp)";
 
 				$result = pg_query($pdo, $sql);
 
@@ -68,7 +68,7 @@
 			}
 		}else{
 			
-			$sql = "insert into integracao.tb_c_log_acesso (id_log_acesso, cd_usua_acesso, nm_usua_acesso, dt_log_acesso) values ((select NEXTVAL('integracao.sq_log_acesso')), (select cd_usua_acesso from integracao.tb_c_usua_acesso where nm_usua_acesso = '". $_SESSION['usuario']."'), '". $_SESSION['usuario']."', current_timestamp)";
+			$sql = "insert into tratamento.tb_c_log_acesso (id_log_acesso, cd_usua_acesso, nm_usua_acesso, dt_log_acesso) values ((select NEXTVAL('tratamento.sq_log_acesso')), (select cd_usua_acesso from tratamento.tb_c_usua_acesso where nm_usua_acesso = '". $_SESSION['usuario']."'), '". $_SESSION['usuario']."', current_timestamp)";
 
 			$result = pg_query($pdo, $sql);
 
@@ -84,19 +84,19 @@
 	<!DOCTYPE html>
 	<html>
 	<head>
-		<link rel="shortcut icon" href="./img/integracao_2.ico" type="image/x-icon" />
+		<link rel="shortcut icon" href="./img/tratamento.ico" type="image/x-icon" />
 		<meta charset="utf-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 	    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>					
-		<title>Sistema Integração Web</title>
+		<title>Acompanhamento de Tratamento</title>
 	</head>
-	<body style="background-color:#3CB371">						
+	<body style="background-color:white">						
 		<br><br><br><br>
 		<div class="container" style="width:50%; border:2px solid black;  border-radius:5px">
-			<div align="center"><img src="./img/vilaverde_fundo.png" style="width:30%;opacity:0.5;position:relative;"></div>
+			<div align="center"><img src="./img/logosolus.jpg" style="width:30%;opacity:1;position:relative;"></div>
 			<br>			
 			<h4>Login</h4>
 			<form  class="was-validated" method="post">

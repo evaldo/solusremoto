@@ -19,7 +19,7 @@ class database
             {
 				if(isset($_SESSION['usuario']))
 				{
-					self::$pg = @pg_connect("host=".Config::$dbHost." port=".Config::$dbPort." dbname=vila_verde user=".$_SESSION['usuario']. " password=".$_SESSION['senha']."");
+					self::$pg = @pg_connect("host=".Config::$dbHost." port=".Config::$dbPort." dbname=desenv user=".$_SESSION['usuario']. " password=".$_SESSION['senha']."");
 				}				
             }
             catch(PDOException $e)

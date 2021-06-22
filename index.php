@@ -9,7 +9,7 @@
 	$menu_princ_anterior="";
 	$fl_sist_admn="";
 	
-	$sql = "SELECT fl_sist_admn from integracao.tb_c_usua_acesso where nm_usua_acesso = '".$_SESSION['usuario']."'";
+	$sql = "SELECT fl_sist_admn from tratamento.tb_c_usua_acesso where nm_usua_acesso = '".$_SESSION['usuario']."'";
 	
 	try {
 		if ($pdo==null){
@@ -19,11 +19,11 @@
 		$ret_usua_row = pg_fetch_row($ret_usua);
 		if ($ret_usua_row[0]=="S"){
 			$fl_sist_admn="S";			
-			$sql = "SELECT * from integracao.vw_menu_princ_integracao order by nu_pcao_menu, menu_principal asc ";			
+			$sql = "SELECT * from tratamento.vw_menu_princ_tratamento order by nu_pcao_menu, menu_principal asc ";			
 			$ret_menu_princ = pg_query($pdo, $sql);	
 		}else{
 			$fl_sist_admn="N";			
-			$sql = "SELECT distinct * from integracao.vw_menu_princ_usua where nm_usua_acesso = '".$_SESSION['usuario']."' order by nu_pcao_menu, menu_principal asc ";			
+			$sql = "SELECT distinct * from tratamento.vw_menu_princ_usua where nm_usua_acesso = '".$_SESSION['usuario']."' order by nu_pcao_menu, menu_principal asc ";			
 			$ret_menu_princ = pg_query($pdo, $sql);	
 		}					
 	} catch (PDOException $e) {
@@ -34,7 +34,7 @@
 	<!DOCTYPE html>
 	<html>
 	<head>
-		<link rel="shortcut icon" href="./img/integracao_2.ico" type="image/x-icon" />
+		<link rel="shortcut icon" href="./img/tratamento.ico" type="image/x-icon" />
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">		
 		<link rel="stylesheet" href="./css/font-awesome.min.css">
@@ -162,7 +162,7 @@
 			  border: 16px solid #f3f3f3;
 			  border-radius: 50%;
 			  border-top: 16px solid blue;
-			  border-right: 16px solid green;
+			  border-right: 16px solid gray;
 			  border-bottom: 16px solid red;
 			  border-left: 16px solid pink;
 			  width: 120px;
@@ -200,30 +200,30 @@
 
 			li a {
 				display: block;
-				color: white;
+				color: black;
 				text-align: center;
 				padding: 14px 16px;
 				text-decoration: none;
 			}
 
 			li a:hover:not(.active) {
-				background-color: green;
+				background-color: gray;
 			}
 
 			.active {
-				background-color: green;
+				background-color: gray;
 			}
 
 			li a, .dropbtn {
 				display: inline-block;
-				color: white;
+				color: black;
 				text-align: center;
 				padding: 14px 16px;
 				text-decoration: none;
 			}
 
 			li a:hover, .dropdown:hover .dropbtn {
-				background-color: green;
+				background-color: gray;
 			}
 
 			li.dropdown {
@@ -241,7 +241,7 @@
 			body {margin:0;font-family:Helvetica}
 
 			.topnav {
-				background-color: #333;
+				background-color: DarkSlateGray;
 				overflow: hidden; 	
 				font-size: 17px;	
 			}
@@ -256,8 +256,8 @@
 			}
 
 			.active {
-			  background-color: #4CAF50;
-			  color: white;
+			  background-color: black;
+			  color: black;
 			}
 
 			.topnav .icon {
@@ -299,12 +299,12 @@
 			}
 
 			.topnav a:hover, .dropdown:hover .dropbtn {
-			  background-color: #ddd;
+			  background-color: orange;
 			  color: black;
 			}
 
 			.dropdown-content a:hover {
-			  background-color: green;
+			  background-color: orange;
 			  color: black;
 			}
 
@@ -344,7 +344,7 @@
 			}
 			.icon-bar {
 			  width: 90px;
-			  background-color: #555;
+			  background-color: gray;
 			}
 
 			.icon-bar a {
@@ -352,23 +352,23 @@
 			  text-align: center;
 			  padding: 16px;
 			  transition: all 0.3s ease;
-			  color: white;
+			  color: black;
 			  font-size: 36px;
 			}
 
 			.icon-bar a:hover {
-			  background-color: #000;
+			  background-color: gray;
 			}
 
 			.active {
-			  background-color: #4CAF50;
+			  background-color: gray;
 			}
 			
 			.container {
 			  position: relative;
 			  text-align: center;
-			  color: white;
-			  background-color:green;
+			  color: black;
+			  background-color:white;
 			}					
 
 			/* Bottom left text */
@@ -440,9 +440,9 @@
 				border: 0;
 			}
 			#divbox {
-			  background-color: green ;
+			  background-color: gray ;
 			  padding: 5px ;
-			  border: 0px solid green ;
+			  border: 0px solid gray ;
 			  left: 5;
 			  width: 80%;
 			  margin-left:100px; 
@@ -592,12 +592,12 @@
 				}				
 			
 	</style>
-		<title>integracao</title>
+		<title>Acompanhamento do Tratamento</title>
 	</head>
-	<body  bgcolor="#cfc" id="bd">		
+	<body  bgcolor="MediumSeaGreen" id="bd">		
 		<div class="container" id="divcabec">			
 			<div class="left">
-				<img src="./img/vilaverde_fundo.png" style="width:15%;opacity:0.5" onclick="recarregar()">
+				<img src="./img/logosolus.jpg" style="width:15%;opacity:1" onclick="recarregar()">
 			</div>					  		  
 		</div>
 		<div class="topnav" id="topnav">		
@@ -615,9 +615,9 @@
 							$sql="";
 							
 							if ($fl_sist_admn=="S"){
-								$sql = "SELECT distinct * from integracao.vw_menu_princ_integracao where menu_principal = '" .$row_menu_princ[0]."' order by nu_pcao_menu, sub_menu asc" ;
+								$sql = "SELECT distinct * from tratamento.vw_menu_princ_tratamento where menu_principal = '" .$row_menu_princ[0]."' order by nu_pcao_menu, sub_menu asc" ;
 							} else {
-								$sql = "SELECT distinct * from integracao.vw_menu_princ_usua where nm_usua_acesso = '".$_SESSION['usuario']."' and menu_principal='" .$row_menu_princ[0]."' order by nu_pcao_menu, menu_principal asc ";								
+								$sql = "SELECT distinct * from tratamento.vw_menu_princ_usua where nm_usua_acesso = '".$_SESSION['usuario']."' and menu_principal='" .$row_menu_princ[0]."' order by nu_pcao_menu, menu_principal asc ";								
 							}
 							
 							$ret_submenu = pg_query($pdo, $sql);

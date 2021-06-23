@@ -29,13 +29,13 @@ if(isset($_POST["id_status_equipe"]))
      <tr>  
         <td width="30%"><label><b>Id Status da Equipe:</b></label></td>  
         <td width="200%">'.$row[0].'</td>  
-     </tr>
-     <tr>  
-        <td width="30%"><label><b>Descrição do Status:</b></label></td>  
-        <td width="200%">'.$row[1].'</td>  
-      </tr>
+     </tr>     
 	 <tr>  
         <td width="30%"><label><b>Descrição da Equipe:</b></label></td>  
+        <td width="200%">'.$row[1].'</td>  
+      </tr>
+	  <tr>  
+        <td width="30%"><label><b>Descrição do Status:</b></label></td>  
         <td width="200%">'.$row[2].'</td>  
       </tr>
 	  <tr>  

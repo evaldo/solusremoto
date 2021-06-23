@@ -195,9 +195,9 @@
 			<table class="table table-striped" cellspacing="0" cellpadding="0" id="tabela">
 				<thead>
 					<tr style="font-size: 11px">
-						<th>Id Status da Equipe</th>
-						<th>Descrição do Status</th>
-						<th>Descrição da Equipe</th>	
+						<th>Id Status da Equipe</th>						
+						<th>Descrição da Equipe</th>
+						<th>Descrição do Status</th>						
 						<th>Flag Ativo?</th>
 						<th>Flag Interrompe o Tratamento?</th>
 						<th>Flag Finaliza o Tratamento?</th>

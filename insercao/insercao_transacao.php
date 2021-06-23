@@ -29,14 +29,14 @@
 								<table class="table table-bordered">												 
 									  <tr>  
 										<td style="width:150px"><label>Nome da Transação:</label></td>  
-										<td style="width:400px"><input type="text" class="form-control" name="nm_acesso_transac_integracao"></td> 							
+										<td style="width:400px"><input type="text" class="form-control" name="nm_acesso_transac_tratamento"></td> 							
 									  </tr>									  								  
 									  <tr>  
 										<td style="width:150px"><label>Funcionalidade/Menu:</label></td>  
 										
 										<?php
 										
-										$sql = "SELECT nm_menu_sist_integracao, id_menu_sist_integracao from integracao.tb_c_menu_sist_integracao order by 1";
+										$sql = "SELECT nm_menu_sist_tratamento, id_menu_sist_tratamento from tratamento.tb_c_menu_sist_tratamento order by 1";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -51,7 +51,7 @@
 											<select  id="gmenu" class="form-control" onchange=" 
 														var selObj = document.getElementById('gmenu');
 														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('id_menu_sist_integracao').value = selValue;">
+														document.getElementById('id_menu_sist_tratamento').value = selValue;">
 											<option value="null"></option>
 														
 											<?php
@@ -68,14 +68,14 @@
 									  </tr>
 									  <tr>  
 										<td style="width:150px"><label>Código da Transação:</label></td>  
-										<td style="width:400px"><input type="text" class="form-control" name="cd_transac_integracao"></td> 							
+										<td style="width:400px"><input type="text" class="form-control" name="cd_transac_tratamento"></td> 							
 									  </tr>									  
 									  <tr>  
 										<td style="width:150px"><label>Cód da Func/Menu no Integração:</label></td>  
-										<td style="width:400px"><input type="text" class="form-control" name="cd_form_transac_integracao" size="65"></td> 							
+										<td style="width:400px"><input type="text" class="form-control" name="cd_form_transac_tratamento" size="65"></td> 							
 									  </tr>
 									   
-									  <input type="text" id="id_menu_sist_integracao" name="id_menu_sist_integracao" style="display:none"> 
+									  <input type="text" id="id_menu_sist_tratamento" name="id_menu_sist_tratamento" style="display:none"> 
 								</table>																
 							</div>								
 							<div class="modal-footer">	

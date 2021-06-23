@@ -23,8 +23,8 @@
 		
 		$textoconsulta = strtoupper($_POST['textoconsulta']);
 		
-		$sql = "SELECT count(transac.id_acesso_transac_integracao)
-				FROM integracao.tb_c_acesso_transac_integracao transac where upper(transac.nm_acesso_transac_integracao) like '%" . $textoconsulta . "%'";
+		$sql = "SELECT count(transac.id_acesso_transac_tratamento)
+				FROM tratamento.tb_c_acesso_transac_tratamento transac where upper(transac.nm_acesso_transac_tratamento) like '%" . $textoconsulta . "%'";
 			
 		if ($pdo==null){
 				header(Config::$webLogin);
@@ -38,12 +38,12 @@
 		$num_total = $row[0];	
 		$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-		$sql ="SELECT transac.id_acesso_transac_integracao, menu.nm_menu_sist_integracao, transac.nm_acesso_transac_integracao, transac.cd_transac_integracao, transac.cd_form_transac_integracao FROM integracao.tb_c_acesso_transac_integracao transac, integracao.tb_c_menu_sist_integracao menu where transac.id_menu_sist_integracao = menu.id_menu_sist_integracao and   upper(transac.nm_acesso_transac_integracao) like '%" . $textoconsulta . "%' order by transac.nm_acesso_transac_integracao LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
+		$sql ="SELECT transac.id_acesso_transac_tratamento, menu.nm_menu_sist_tratamento, transac.nm_acesso_transac_tratamento, transac.cd_transac_tratamento, transac.cd_form_transac_tratamento FROM tratamento.tb_c_acesso_transac_tratamento transac, tratamento.tb_c_menu_sist_tratamento menu where transac.id_menu_sist_tratamento = menu.id_menu_sist_tratamento and   upper(transac.nm_acesso_transac_tratamento) like '%" . $textoconsulta . "%' order by transac.nm_acesso_transac_tratamento LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
 		
 	} else{
 		
-			$sql = "SELECT count(transac.id_acesso_transac_integracao)
-				FROM integracao.tb_c_acesso_transac_integracao transac";
+			$sql = "SELECT count(transac.id_acesso_transac_tratamento)
+				FROM tratamento.tb_c_acesso_transac_tratamento transac";
 			
 			if ($pdo==null){
 					header(Config::$webLogin);
@@ -57,7 +57,7 @@
 			$num_total = $row[0];	
 			$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-			$sql ="SELECT transac.id_acesso_transac_integracao, menu.nm_menu_sist_integracao, transac.nm_acesso_transac_integracao, transac.cd_transac_integracao, transac.cd_form_transac_integracao FROM integracao.tb_c_acesso_transac_integracao transac, integracao.tb_c_menu_sist_integracao menu where transac.id_menu_sist_integracao = menu.id_menu_sist_integracao order by transac.nm_acesso_transac_integracao LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
+			$sql ="SELECT transac.id_acesso_transac_tratamento, menu.nm_menu_sist_tratamento, transac.nm_acesso_transac_tratamento, transac.cd_transac_tratamento, transac.cd_form_transac_tratamento FROM tratamento.tb_c_acesso_transac_tratamento transac, tratamento.tb_c_menu_sist_tratamento menu where transac.id_menu_sist_tratamento = menu.id_menu_sist_tratamento order by transac.nm_acesso_transac_tratamento LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
 	}
 	
 	if ($pdo==null){
@@ -78,7 +78,7 @@
 		try
 		{	
 		
-			$sql = "insert into integracao.tb_c_acesso_transac_integracao values ((select NEXTVAL('integracao.sq_acesso_transac_integracao')), ".$_POST['id_menu_sist_integracao'].", '". $_POST['nm_acesso_transac_integracao']."', '". $_POST['cd_transac_integracao'] ."', '". $_POST['cd_form_transac_integracao'] ."', '". $_SESSION['usuario'] ."', current_timestamp, null,null);";
+			$sql = "insert into tratamento.tb_c_acesso_transac_tratamento values ((select NEXTVAL('tratamento.sq_acesso_transac_tratamento')), ".$_POST['id_menu_sist_tratamento'].", '". $_POST['nm_acesso_transac_tratamento']."', '". $_POST['cd_transac_tratamento'] ."', '". $_POST['cd_form_transac_tratamento'] ."', '". $_SESSION['usuario'] ."', current_timestamp, null,null);";
 
 			$result = pg_query($pdo, $sql);
 			
@@ -105,7 +105,7 @@
 		try
 		{	
 						
-			$sql = "update integracao.tb_c_acesso_transac_integracao set nm_acesso_transac_integracao = '". $_POST['nm_acesso_transac_integracao']."', id_menu_sist_integracao = ".$_POST['id_menu_sist_integracao'].", cd_transac_integracao = '". $_POST['cd_transac_integracao'] ."', cd_form_transac_integracao = '". $_POST['cd_form_transac_integracao'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_acesso_transac_integracao = ". $_SESSION['id_acesso_transac_integracao']."";	
+			$sql = "update tratamento.tb_c_acesso_transac_tratamento set nm_acesso_transac_tratamento = '". $_POST['nm_acesso_transac_tratamento']."', id_menu_sist_tratamento = ".$_POST['id_menu_sist_tratamento'].", cd_transac_tratamento = '". $_POST['cd_transac_tratamento'] ."', cd_form_transac_tratamento = '". $_POST['cd_form_transac_tratamento'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_acesso_transac_tratamento = ". $_SESSION['id_acesso_transac_tratamento']."";	
 			
 			$result = pg_query($pdo, $sql);
 
@@ -133,7 +133,7 @@
 		try
 		{
 			// remove do banco			
-			$sql = "DELETE FROM integracao.tb_c_acesso_transac_integracao WHERE id_acesso_transac_integracao = ".$_SESSION['id_acesso_transac_integracao']."";			
+			$sql = "DELETE FROM tratamento.tb_c_acesso_transac_tratamento WHERE id_acesso_transac_tratamento = ".$_SESSION['id_acesso_transac_tratamento']."";			
 
 			$result = pg_query($pdo, $sql);
 
@@ -200,11 +200,11 @@
 					while($row = pg_fetch_row($ret)) {
 					?>						
 						<tr>
-							<td id="id_acesso_transac_integracao" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
-							<td id="nm_menu_sist_integracao" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
-							<td id="nm_acesso_transac_integracao" value="<?php echo $row[2];?>"><?php echo $row[2];?></td>				
-							<td id="cd_transac_integracao" value="<?php echo $row[3];?>"><?php echo $row[3];?></td>							
-							<td id="cd_form_transac_integracao" value="<?php echo $row[4];?>"><?php echo $row[3];?></td>
+							<td id="id_acesso_transac_tratamento" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
+							<td id="nm_menu_sist_tratamento" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
+							<td id="nm_acesso_transac_tratamento" value="<?php echo $row[2];?>"><?php echo $row[2];?></td>				
+							<td id="cd_transac_tratamento" value="<?php echo $row[3];?>"><?php echo $row[3];?></td>							
+							<td id="cd_form_transac_tratamento" value="<?php echo $row[4];?>"><?php echo $row[3];?></td>
 							<td class="actions">								
 								<input type="button" value="Visualizar" class="btn btn-success btn-xs visualiza"/>
 								<input type="button" value="Alterar" class="btn btn-warning btn-xs altera"/>								
@@ -258,18 +258,18 @@
 		
 			var currentRow=$(this).closest("tr"); 
 			
-			var id_acesso_transac_integracao = currentRow.find("td:eq(0)").text();
-			var nm_menu_sist_integracao = currentRow.find("td:eq(1)").text();	
-			var nm_acesso_transac_integracao = currentRow.find("td:eq(2)").text();
-			var cd_transac_integracao = currentRow.find("td:eq(3)").text();	
-			var cd_form_transac_integracao = currentRow.find("td:eq(4)").text();				
+			var id_acesso_transac_tratamento = currentRow.find("td:eq(0)").text();
+			var nm_menu_sist_tratamento = currentRow.find("td:eq(1)").text();	
+			var nm_acesso_transac_tratamento = currentRow.find("td:eq(2)").text();
+			var cd_transac_tratamento = currentRow.find("td:eq(3)").text();	
+			var cd_form_transac_tratamento = currentRow.find("td:eq(4)").text();				
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
 				 url: "../delecao/delecao_transacao.php", //
-				 data: {id_acesso_transac_integracao:id_acesso_transac_integracao, nm_menu_sist_integracao:nm_menu_sist_integracao,
-				 nm_acesso_transac_integracao:nm_acesso_transac_integracao, cd_transac_integracao:cd_transac_integracao, cd_form_transac_integracao:cd_form_transac_integracao},
+				 data: {id_acesso_transac_tratamento:id_acesso_transac_tratamento, nm_menu_sist_tratamento:nm_menu_sist_tratamento,
+				 nm_acesso_transac_tratamento:nm_acesso_transac_tratamento, cd_transac_tratamento:cd_transac_tratamento, cd_form_transac_tratamento:cd_form_transac_tratamento},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();
@@ -294,18 +294,18 @@
 		
 			var currentRow=$(this).closest("tr"); 
 			
-			var id_acesso_transac_integracao = currentRow.find("td:eq(0)").text();
-			var nm_menu_sist_integracao = currentRow.find("td:eq(1)").text();	
-			var nm_acesso_transac_integracao = currentRow.find("td:eq(2)").text();
-			var cd_transac_integracao = currentRow.find("td:eq(3)").text();	
-			var cd_form_transac_integracao = currentRow.find("td:eq(4)").text();		
+			var id_acesso_transac_tratamento = currentRow.find("td:eq(0)").text();
+			var nm_menu_sist_tratamento = currentRow.find("td:eq(1)").text();	
+			var nm_acesso_transac_tratamento = currentRow.find("td:eq(2)").text();
+			var cd_transac_tratamento = currentRow.find("td:eq(3)").text();	
+			var cd_form_transac_tratamento = currentRow.find("td:eq(4)").text();		
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
 				 url: "../alteracao/alteracao_transacao.php", //
-				 data: {id_acesso_transac_integracao:id_acesso_transac_integracao, nm_menu_sist_integracao:nm_menu_sist_integracao,
-				 nm_acesso_transac_integracao:nm_acesso_transac_integracao, cd_transac_integracao:cd_transac_integracao, cd_form_transac_integracao:cd_form_transac_integracao},
+				 data: {id_acesso_transac_tratamento:id_acesso_transac_tratamento, nm_menu_sist_tratamento:nm_menu_sist_tratamento,
+				 nm_acesso_transac_tratamento:nm_acesso_transac_tratamento, cd_transac_tratamento:cd_transac_tratamento, cd_form_transac_tratamento:cd_form_transac_tratamento},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();
@@ -318,12 +318,12 @@
 		$("#tabela").on('click', '.visualiza', function(){
 			
 			var currentRow=$(this).closest("tr"); 			
-			var id_acesso_transac_integracao = currentRow.find("td:eq(0)").text();							
+			var id_acesso_transac_tratamento = currentRow.find("td:eq(0)").text();							
 						
 			$.ajax({
 				url:"../visualizacao/visualizacao_transacao.php",
 				method:"POST",
-				data:{id_acesso_transac_integracao:id_acesso_transac_integracao},
+				data:{id_acesso_transac_tratamento:id_acesso_transac_tratamento},
 				success:function(data){
 					$('#visualizacao').html(data);
 					$('#visualiza').modal('show');

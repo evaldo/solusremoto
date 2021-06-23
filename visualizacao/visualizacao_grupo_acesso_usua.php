@@ -14,9 +14,9 @@ if(isset($_POST["id_grupo_usua_acesso"]))
 					 , id_grupo_usua_acesso
 					 , grupo_usua_acesso.id_grupo_acesso
 					 , grupo.id_grupo_acesso
-				  from integracao.tb_c_grupo_usua_acesso grupo_usua_acesso
-					 , integracao.tb_c_grupo_acesso grupo
-					 , integracao.tb_c_usua_acesso usua
+				  from tratamento.tb_c_grupo_usua_acesso grupo_usua_acesso
+					 , tratamento.tb_c_grupo_acesso grupo
+					 , tratamento.tb_c_usua_acesso usua
 				where grupo_usua_acesso.id_grupo_acesso = grupo.id_grupo_acesso
 				  and grupo_usua_acesso.cd_usua_acesso = usua.cd_usua_acesso
 				  and id_grupo_usua_acesso = '".$_POST["id_grupo_usua_acesso"]."'";

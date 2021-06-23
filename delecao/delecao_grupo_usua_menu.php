@@ -1,7 +1,7 @@
 <?php
 //delete_cores.php
 	session_start();
-	$_SESSION['id_grupo_usua_menu_sist_integracao']=$_POST['id_grupo_usua_menu_sist_integracao'];
+	$_SESSION['id_grupo_usua_menu_sist_tratamento']=$_POST['id_grupo_usua_menu_sist_tratamento'];
 		
 ?>
 	<!DOCTYPE html>
@@ -23,7 +23,7 @@
 							<table class="table table-bordered">
 								 <tr>  
 									<td width="50%"><label>Identificador:</label></td>  
-									<td width="500%"><?php echo $_POST['id_grupo_usua_menu_sist_integracao']; ?></td>  
+									<td width="500%"><?php echo $_POST['id_grupo_usua_menu_sist_tratamento']; ?></td>  
 								 </tr>
 								  <tr>  
 									<td width="50%"><label>Grupo de Acesso:</label></td>  
@@ -31,7 +31,7 @@
 								 </tr>								 
 								 <tr>  
 									<td width="50%"><label>Menu da Aplicação:</label></td>  
-									<td width="500%"><?php echo $_POST['id_menu_sist_integracao']; ?></td>  
+									<td width="500%"><?php echo $_POST['id_menu_sist_tratamento']; ?></td>  
 								 </tr>
 							</table>
 						</div>

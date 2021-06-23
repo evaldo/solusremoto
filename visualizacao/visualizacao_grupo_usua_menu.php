@@ -12,9 +12,9 @@ if(isset($_POST["id_grupo_usua_menu_sist_pts"]))
     $query = "SELECT grupo_menu.id_grupo_usua_menu_sist_pts
 					 , grupo.nm_grupo_acesso
 					 , menu.nm_menu_sist_pts
-				FROM integracao.tb_c_grupo_usua_menu_sist_pts grupo_menu
-				   , integracao.tb_c_grupo_acesso grupo
-				   , integracao.tb_c_menu_sist_pts menu
+				FROM tratamento.tb_c_grupo_usua_menu_sist_pts grupo_menu
+				   , tratamento.tb_c_grupo_acesso grupo
+				   , tratamento.tb_c_menu_sist_pts menu
 				where grupo_menu.id_grupo_acesso = grupo.id_grupo_acesso
 				  and grupo_menu.id_menu_sist_pts = menu.id_menu_sist_pts				 
 				  and id_grupo_usua_menu_sist_pts = ".$_POST["id_grupo_usua_menu_sist_pts"]." 

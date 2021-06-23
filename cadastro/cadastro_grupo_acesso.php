@@ -24,7 +24,7 @@
 		$textoconsulta = strtoupper($_POST['textoconsulta']);
 		
 		$sql = "SELECT count(id_grupo_acesso)
-				from integracao.tb_c_grupo_acesso
+				from tratamento.tb_c_grupo_acesso
 				where upper(nm_grupo_acesso) like '%" . $textoconsulta . "%'";
 			
 		if ($pdo==null){
@@ -40,13 +40,13 @@
 		$num_paginas = ceil($num_total/$itens_por_pagina);
 		
 		$sql ="SELECT id_grupo_acesso, nm_grupo_acesso 
-				from integracao.tb_c_grupo_acesso 
+				from tratamento.tb_c_grupo_acesso 
 				where upper(nm_grupo_acesso) like '%" . $textoconsulta . "%' order by nm_grupo_acesso LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
 		
 	} else{
 		
 			$sql = "SELECT count(id_grupo_acesso)
-				from integracao.tb_c_grupo_acesso";
+				from tratamento.tb_c_grupo_acesso";
 			
 			if ($pdo==null){
 					header(Config::$webLogin);
@@ -60,7 +60,7 @@
 			$num_total = $row[0];	
 			$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-			$sql ="SELECT id_grupo_acesso, nm_grupo_acesso from integracao.tb_c_grupo_acesso order by nm_grupo_acesso LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
+			$sql ="SELECT id_grupo_acesso, nm_grupo_acesso from tratamento.tb_c_grupo_acesso order by nm_grupo_acesso LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
 	}
 	
 	if ($pdo==null){
@@ -82,7 +82,7 @@
 		{
 
 			$sql = "SELECT count(id_grupo_acesso)
-				from integracao.tb_c_grupo_usua_acesso
+				from tratamento.tb_c_grupo_usua_acesso
 				where id_grupo_acesso = ".$_SESSION['id_grupo_acesso']." ";
 			
 			if ($pdo==null){
@@ -109,7 +109,7 @@
 			} else {
 		
 				// remove do banco			
-				$sql = "DELETE FROM integracao.tb_c_grupo_acesso WHERE id_grupo_acesso = ".$_SESSION['id_grupo_acesso']."";			
+				$sql = "DELETE FROM tratamento.tb_c_grupo_acesso WHERE id_grupo_acesso = ".$_SESSION['id_grupo_acesso']."";			
 				$result = pg_query($pdo, $sql);
 
 				if($result){
@@ -136,7 +136,7 @@
 		
 		try
 		{	
-			$sql = "insert into integracao.tb_c_grupo_acesso values ((select NEXTVAL('integracao.sq_grupo_acesso')), '". $_POST['nm_grupo_acesso']."', '".$_SESSION['usuario']."', current_timestamp, null,null);";				
+			$sql = "insert into tratamento.tb_c_grupo_acesso values ((select NEXTVAL('tratamento.sq_grupo_acesso')), '". $_POST['nm_grupo_acesso']."', '".$_SESSION['usuario']."', current_timestamp, null,null);";				
 			$result = pg_query($pdo, $sql);
 
 			if($result){
@@ -163,7 +163,7 @@
 		{	
 		
 			
-			$sql = "update integracao.tb_c_grupo_acesso set nm_grupo_acesso = '". $_POST['nm_grupo_acesso']."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_grupo_acesso = ". TRIM($_SESSION['id_grupo_acesso'])."";	
+			$sql = "update tratamento.tb_c_grupo_acesso set nm_grupo_acesso = '". $_POST['nm_grupo_acesso']."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_grupo_acesso = ". TRIM($_SESSION['id_grupo_acesso'])."";	
 			
 			$result = pg_query($pdo, $sql);
 
@@ -189,7 +189,7 @@
 	 <meta charset="utf-8">
 	 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	 <meta name="viewport" content="width=device-width, initial-scale=1">
-	 <title>integracao de Grupos de Usuários</title>
+	 <title>tratamento de Grupos de Usuários</title>
 
 	 <link href="../css/bootstrap.min.css" rel="stylesheet">
 	 <link href="../css/style.css" rel="stylesheet">

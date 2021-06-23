@@ -7,7 +7,7 @@
 	
 	$pdo = database::connect();
 
-	$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from integracao.tb_c_grupo_acesso where id_grupo_acesso = '".$_POST['id_grupo_acesso']."'";
+	$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from tratamento.tb_c_grupo_acesso where id_grupo_acesso = '".$_POST['id_grupo_acesso']."'";
 
 	if ($pdo==null){
 			header(Config::$webLogin);
@@ -23,7 +23,7 @@
 	$codigo_cor_smart = $row[1];
 	$codigo_html = $row[2];
 	
-	$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from integracao.tb_c_grupo_acesso order by 1";
+	$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from tratamento.tb_c_grupo_acesso order by 1";
 	
 	if ($pdo==null){
 			header(Config::$webLogin);

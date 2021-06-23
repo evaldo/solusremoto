@@ -32,7 +32,7 @@
 										<td style="width:150px"><label>Transação:</label></td>  
 										<?php
 										
-										$sql = "SELECT id_acesso_transac_integracao, nm_acesso_transac_integracao from integracao.tb_c_acesso_transac_integracao order by 1";
+										$sql = "SELECT id_acesso_transac_tratamento, nm_acesso_transac_tratamento from tratamento.tb_c_acesso_transac_tratamento order by 1";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -47,7 +47,7 @@
 											<select  class="form-control" id="macesso" onchange=" 
 														var selObj = document.getElementById('macesso');
 														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('id_acesso_transac_integracao').value = selValue;">
+														document.getElementById('id_acesso_transac_tratamento').value = selValue;">
 											<option value="N"></option>
 											<?php
 												$cont=1;										
@@ -64,7 +64,7 @@
 										<td style="width:150px"><label>Grupo de Acesso:</label></td>  
 										<?php
 										
-										$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from integracao.tb_c_grupo_acesso order by 1";
+										$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from tratamento.tb_c_grupo_acesso order by 1";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -101,7 +101,7 @@
 							</div>									
 						</div>
 						<input type="text" id="id_grupo_acesso" name="id_grupo_acesso" style="display:none"> 
-						<input type="text" id="id_acesso_transac_integracao" name="id_acesso_transac_integracao" style="display:none"> 
+						<input type="text" id="id_acesso_transac_tratamento" name="id_acesso_transac_tratamento" style="display:none"> 
 					</form>
 				</div>
 			</div>

@@ -10,7 +10,7 @@ if(isset($_POST["codigo_usua"]))
     $pdo = database::connect();
 	
     $query = "SELECT cd_usua_acesso, nm_usua_acesso, ds_usua_acesso, cd_faixa_ip_1, cd_faixa_ip_2, fl_acesso_ip, fl_sist_admn 
-				from integracao.tb_c_usua_acesso where cd_usua_acesso = '".$_POST["codigo_usua"]."'";
+				from tratamento.tb_c_usua_acesso where cd_usua_acesso = '".$_POST["codigo_usua"]."'";
 	
     $ret = pg_query($pdo, $query);
     if(!$ret) {

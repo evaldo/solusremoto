@@ -20,7 +20,7 @@ if(isset($_POST['id_memb_equip_hosptr']))
 							'TERAPEUTA'
 						 else ''
 			   end end end ds_memb_equip_hosptr
-		from integracao.tb_equip_hosptr 
+		from tratamento.tb_equip_hosptr 
 		where id_memb_equip_hosptr = '".$_POST['id_memb_equip_hosptr']."'";
 	
     $ret = pg_query($pdo, $query);

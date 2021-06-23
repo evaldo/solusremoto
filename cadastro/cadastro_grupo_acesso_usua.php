@@ -24,9 +24,9 @@
 		$textoconsulta = strtoupper($_POST['textoconsulta']);
 		
 		$sql = "select count(1)
-				  from integracao.tb_c_grupo_usua_acesso grupo_usua_acesso
-					 , integracao.tb_c_grupo_acesso grupo
-					 , integracao.tb_c_usua_acesso usua
+				  from tratamento.tb_c_grupo_usua_acesso grupo_usua_acesso
+					 , tratamento.tb_c_grupo_acesso grupo
+					 , tratamento.tb_c_usua_acesso usua
 				where grupo_usua_acesso.id_grupo_acesso = grupo.id_grupo_acesso
 				  and grupo_usua_acesso.cd_usua_acesso = usua.cd_usua_acesso
 				  and upper(usua.nm_usua_acesso) like '%" . $textoconsulta . "%' ";
@@ -48,9 +48,9 @@
 					 , id_grupo_usua_acesso
 					 , grupo_usua_acesso.id_grupo_acesso
 					 , grupo.id_grupo_acesso
-				  from integracao.tb_c_grupo_usua_acesso grupo_usua_acesso
-					 , integracao.tb_c_grupo_acesso grupo
-					 , integracao.tb_c_usua_acesso usua
+				  from tratamento.tb_c_grupo_usua_acesso grupo_usua_acesso
+					 , tratamento.tb_c_grupo_acesso grupo
+					 , tratamento.tb_c_usua_acesso usua
 				where grupo_usua_acesso.id_grupo_acesso = grupo.id_grupo_acesso
 				  and grupo_usua_acesso.cd_usua_acesso = usua.cd_usua_acesso
 				  and upper(usua.nm_usua_acesso) like '%" . $textoconsulta . "%'
@@ -59,9 +59,9 @@
 	} else{
 		
 			$sql = "select count(1)
-				  from integracao.tb_c_grupo_usua_acesso grupo_usua_acesso
-					 , integracao.tb_c_grupo_acesso grupo
-					 , integracao.tb_c_usua_acesso usua
+				  from tratamento.tb_c_grupo_usua_acesso grupo_usua_acesso
+					 , tratamento.tb_c_grupo_acesso grupo
+					 , tratamento.tb_c_usua_acesso usua
 				where grupo_usua_acesso.id_grupo_acesso = grupo.id_grupo_acesso
 				  and grupo_usua_acesso.cd_usua_acesso = usua.cd_usua_acesso ";
 			
@@ -82,9 +82,9 @@
 					 , id_grupo_usua_acesso
 					 , grupo_usua_acesso.id_grupo_acesso
 					 , grupo.id_grupo_acesso
-				  from integracao.tb_c_grupo_usua_acesso grupo_usua_acesso
-					 , integracao.tb_c_grupo_acesso grupo
-					 , integracao.tb_c_usua_acesso usua
+				  from tratamento.tb_c_grupo_usua_acesso grupo_usua_acesso
+					 , tratamento.tb_c_grupo_acesso grupo
+					 , tratamento.tb_c_usua_acesso usua
 				where grupo_usua_acesso.id_grupo_acesso = grupo.id_grupo_acesso
 				  and grupo_usua_acesso.cd_usua_acesso = usua.cd_usua_acesso				  
 				order by 1, 2 LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";		
@@ -108,7 +108,7 @@
 		try
 		{	
 			// remove do banco			
-			$sql = "DELETE FROM integracao.tb_c_grupo_usua_acesso WHERE id_grupo_usua_acesso = ".$_SESSION['id_grupo_usua_acesso']."";	
+			$sql = "DELETE FROM tratamento.tb_c_grupo_usua_acesso WHERE id_grupo_usua_acesso = ".$_SESSION['id_grupo_usua_acesso']."";	
 			
 			$result = pg_query($pdo, $sql);
 
@@ -135,7 +135,7 @@
 		try
 		{	
 				
-			$sql="select count(1) from integracao.tb_c_grupo_usua_acesso where id_grupo_acesso = ".$_POST['id_grupo_acesso']." and cd_usua_acesso = ".$_POST['cd_usua_acesso']."";
+			$sql="select count(1) from tratamento.tb_c_grupo_usua_acesso where id_grupo_acesso = ".$_POST['id_grupo_acesso']." and cd_usua_acesso = ".$_POST['cd_usua_acesso']."";
 			
 			if ($pdo==null){
 			header(Config::$webLogin);
@@ -154,7 +154,7 @@
 					<strong>Atenção!</strong>  Tentativa de inclusão em duplicidade.</div>";
 			} else {
 		
-				$sql = "insert into integracao.tb_c_grupo_usua_acesso values ((select NEXTVAL('integracao.sq_grupo_usua_acesso')),".$_POST['id_grupo_acesso'].", ". $_POST['cd_usua_acesso'].", '".$_SESSION['usuario']."', current_timestamp, null,null)";	
+				$sql = "insert into tratamento.tb_c_grupo_usua_acesso values ((select NEXTVAL('tratamento.sq_grupo_usua_acesso')),".$_POST['id_grupo_acesso'].", ". $_POST['cd_usua_acesso'].", '".$_SESSION['usuario']."', current_timestamp, null,null)";	
 								
 				$result = pg_query($pdo, $sql);
 

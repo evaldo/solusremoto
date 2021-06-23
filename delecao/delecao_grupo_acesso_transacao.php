@@ -27,7 +27,7 @@
 								 </tr>
 								  <tr>  
 									<td width="50%"><label>Transação:</label></td>  
-									<td width="500%"><?php echo $_POST['nm_acesso_transac_integracao']; ?></td>  
+									<td width="500%"><?php echo $_POST['nm_acesso_transac_tratamento']; ?></td>  
 								 </tr>								 
 								 <tr>  
 									<td width="50%"><label>Grupo de Acesso:</label></td>  

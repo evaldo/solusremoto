@@ -24,12 +24,12 @@
 		$textoconsulta = strtoupper($_POST['textoconsulta']);
 		
 		$sql = "select count(1)
-				  from integracao.tb_c_grupo_acesso grupo
-					 , integracao.tb_c_grupo_usua_transac_acesso grupo_transac
-					 , integracao.tb_c_acesso_transac_integracao transac
+				  from tratamento.tb_c_grupo_acesso grupo
+					 , tratamento.tb_c_grupo_usua_transac_acesso grupo_transac
+					 , tratamento.tb_c_acesso_transac_tratamento transac
 				where grupo_transac.id_grupo_acesso = grupo.id_grupo_acesso
-				  and transac.id_acesso_transac_integracao = grupo_transac.id_acesso_transac_nm_grupo_acessocao
-				  and upper(transac.nm_acesso_transac_integracao) like '%" . $textoconsulta . "%' ";
+				  and transac.id_acesso_transac_tratamento = grupo_transac.id_acesso_transac_nm_grupo_acessocao
+				  and upper(transac.nm_acesso_transac_tratamento) like '%" . $textoconsulta . "%' ";
 			
 		if ($pdo==null){
 				header(Config::$webLogin);
@@ -44,24 +44,24 @@
 		$num_paginas = ceil($num_total/$itens_por_pagina);
 		
 		$sql ="select grupo_transac.id_grupo_usua_transac_acesso
-		            , transac.nm_acesso_transac_integracao
+		            , transac.nm_acesso_transac_tratamento
 					, grupo.nm_grupo_acesso					
-		          from integracao.tb_c_grupo_acesso grupo
-					 , integracao.tb_c_grupo_usua_transac_acesso grupo_transac
-					 , integracao.tb_c_acesso_transac_integracao transac
+		          from tratamento.tb_c_grupo_acesso grupo
+					 , tratamento.tb_c_grupo_usua_transac_acesso grupo_transac
+					 , tratamento.tb_c_acesso_transac_tratamento transac
 				where grupo_transac.id_grupo_acesso = grupo.id_grupo_acesso
-				  and transac.id_acesso_transac_integracao = grupo_transac.id_acesso_transac_integracao
-				  and upper(transac.nm_acesso_transac_integracao) like '%" . $textoconsulta . "%'
+				  and transac.id_acesso_transac_tratamento = grupo_transac.id_acesso_transac_tratamento
+				  and upper(transac.nm_acesso_transac_tratamento) like '%" . $textoconsulta . "%'
 				order by 1, 2 LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
 		
 	} else{
 		
 			$sql = "select count(1)
-				  from integracao.tb_c_grupo_acesso grupo
-					 , integracao.tb_c_grupo_usua_transac_acesso grupo_transac
-					 , integracao.tb_c_acesso_transac_integracao transac
+				  from tratamento.tb_c_grupo_acesso grupo
+					 , tratamento.tb_c_grupo_usua_transac_acesso grupo_transac
+					 , tratamento.tb_c_acesso_transac_tratamento transac
 				where grupo_transac.id_grupo_acesso = grupo.id_grupo_acesso
-				  and transac.id_acesso_transac_integracao = grupo_transac.id_acesso_transac_integracao ";
+				  and transac.id_acesso_transac_tratamento = grupo_transac.id_acesso_transac_tratamento ";
 			
 			if ($pdo==null){
 					header(Config::$webLogin);
@@ -76,13 +76,13 @@
 			$num_paginas = ceil($num_total/$itens_por_pagina);
 		
 			$sql ="select grupo_transac.id_grupo_usua_transac_acesso
-		            , transac.nm_acesso_transac_integracao
+		            , transac.nm_acesso_transac_tratamento
 					, grupo.nm_grupo_acesso					
-		          from integracao.tb_c_grupo_acesso grupo
-					 , integracao.tb_c_grupo_usua_transac_acesso grupo_transac
-					 , integracao.tb_c_acesso_transac_integracao transac
+		          from tratamento.tb_c_grupo_acesso grupo
+					 , tratamento.tb_c_grupo_usua_transac_acesso grupo_transac
+					 , tratamento.tb_c_acesso_transac_tratamento transac
 				where grupo_transac.id_grupo_acesso = grupo.id_grupo_acesso
-				  and transac.id_acesso_transac_integracao = grupo_transac.id_acesso_transac_integracao			  
+				  and transac.id_acesso_transac_tratamento = grupo_transac.id_acesso_transac_tratamento			  
 				order by 1, 2 LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";		
 	}
 	
@@ -104,7 +104,7 @@
 		try
 		{	
 			// remove do banco			
-			$sql = "DELETE FROM integracao.tb_c_grupo_usua_transac_acesso WHERE id_grupo_usua_transac_acesso = ".$_SESSION['id_grupo_usua_transac_acesso']."";	
+			$sql = "DELETE FROM tratamento.tb_c_grupo_usua_transac_acesso WHERE id_grupo_usua_transac_acesso = ".$_SESSION['id_grupo_usua_transac_acesso']."";	
 			
 			$result = pg_query($pdo, $sql);
 
@@ -131,7 +131,7 @@
 		try
 		{	
 				
-			$sql="select count(1) from integracao.tb_c_grupo_usua_transac_acesso where id_grupo_acesso = ".$_POST['id_grupo_acesso']." and id_acesso_transac_integracao = ".$_POST['id_acesso_transac_integracao']."";
+			$sql="select count(1) from tratamento.tb_c_grupo_usua_transac_acesso where id_grupo_acesso = ".$_POST['id_grupo_acesso']." and id_acesso_transac_tratamento = ".$_POST['id_acesso_transac_tratamento']."";
 			
 			if ($pdo==null){
 			header(Config::$webLogin);
@@ -150,7 +150,7 @@
 					<strong>Atenção!</strong>  Tentativa de inclusão em duplicidade.</div>";
 			} else {
 		
-				$sql = "insert into integracao.tb_c_grupo_usua_transac_acesso values ((select NEXTVAL('integracao.sq_grupo_usua_transac_acesso')),".$_POST['id_acesso_transac_integracao'].", ".$_POST['id_grupo_acesso'].", '".$_SESSION['usuario']."', current_timestamp, null,null)";	
+				$sql = "insert into tratamento.tb_c_grupo_usua_transac_acesso values ((select NEXTVAL('tratamento.sq_grupo_usua_transac_acesso')),".$_POST['id_acesso_transac_tratamento'].", ".$_POST['id_grupo_acesso'].", '".$_SESSION['usuario']."', current_timestamp, null,null)";	
 				
 				//echo $sql;
 				
@@ -220,7 +220,7 @@
 					?>						
 						<tr>
 							<td id="id_grupo_usua_transac_acesso" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
-							<td id="nm_acesso_transac_integracao" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
+							<td id="nm_acesso_transac_tratamento" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
 							<td id="nm_grupo_acesso" value="<?php echo $row[2];?>"><?php echo $row[2];?></td>														
 							<td class="actions">								
 								<input type="button" value="Visualizar" class="btn btn-success btn-xs visualiza"/>																
@@ -275,14 +275,14 @@
 			var currentRow=$(this).closest("tr"); 
 			
 			var id_grupo_usua_transac_acesso = currentRow.find("td:eq(0)").text();				
-			var nm_acesso_transac_integracao = currentRow.find("td:eq(1)").text();
+			var nm_acesso_transac_tratamento = currentRow.find("td:eq(1)").text();
 			var nm_grupo_acesso = currentRow.find("td:eq(2)").text();	
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
 				 url: "../delecao/delecao_grupo_acesso_transacao.php", //
-				 data: {id_grupo_usua_transac_acesso:id_grupo_usua_transac_acesso, nm_acesso_transac_integracao:nm_acesso_transac_integracao, nm_grupo_acesso:nm_grupo_acesso},
+				 data: {id_grupo_usua_transac_acesso:id_grupo_usua_transac_acesso, nm_acesso_transac_tratamento:nm_acesso_transac_tratamento, nm_grupo_acesso:nm_grupo_acesso},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();
@@ -308,13 +308,13 @@
 			
 			var currentRow=$(this).closest("tr"); 			
 			var id_grupo_usua_transac_acesso = currentRow.find("td:eq(0)").text();	
-			var nm_acesso_transac_integracao = currentRow.find("td:eq(1)").text();
+			var nm_acesso_transac_tratamento = currentRow.find("td:eq(1)").text();
 			var nm_grupo_acesso = currentRow.find("td:eq(2)").text();				
 						
 			$.ajax({
 				url:"../visualizacao/visualizacao_grupo_acesso_transacao.php",
 				method:"POST",
-				data: {id_grupo_usua_transac_acesso:id_grupo_usua_transac_acesso, nm_acesso_transac_integracao:nm_acesso_transac_integracao, nm_grupo_acesso:nm_grupo_acesso},
+				data: {id_grupo_usua_transac_acesso:id_grupo_usua_transac_acesso, nm_acesso_transac_tratamento:nm_acesso_transac_tratamento, nm_grupo_acesso:nm_grupo_acesso},
 				success:function(data){
 					$('#visualizacao').html(data);
 					$('#visualiza').modal('show');

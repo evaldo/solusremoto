@@ -7,7 +7,7 @@
 	
 	$pdo = database::connect();
 
-	$sql = "SELECT cd_usua_acesso, nm_usua_acesso, ds_usua_acesso,cd_faixa_ip_1,cd_faixa_ip_2, fl_sist_admn, fl_acesso_ip from integracao.tb_c_usua_acesso where cd_usua_acesso = '".$_POST['cd_usua_acesso']."'";
+	$sql = "SELECT cd_usua_acesso, nm_usua_acesso, ds_usua_acesso,cd_faixa_ip_1,cd_faixa_ip_2, fl_sist_admn, fl_acesso_ip from tratamento.tb_c_usua_acesso where cd_usua_acesso = '".$_POST['cd_usua_acesso']."'";
 
 	if ($pdo==null){
 			header(Config::$webLogin);

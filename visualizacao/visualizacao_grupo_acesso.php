@@ -10,7 +10,7 @@ if(isset($_POST["id_grupo_acesso"]))
     $pdo = database::connect();
 	
     $query = "SELECT id_grupo_acesso, nm_grupo_acesso 
-				from integracao.tb_c_grupo_acesso where id_grupo_acesso = '".$_POST["id_grupo_acesso"]."'";
+				from tratamento.tb_c_grupo_acesso where id_grupo_acesso = '".$_POST["id_grupo_acesso"]."'";
 	
     $ret = pg_query($pdo, $query);
     if(!$ret) {

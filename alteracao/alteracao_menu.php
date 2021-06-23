@@ -1,7 +1,7 @@
 <?php
 //altera_cores.php
 	session_start();
-	$_SESSION['id_menu_sist_integracao']=$_POST['id_menu_sist_integracao'];
+	$_SESSION['id_menu_sist_tratamento']=$_POST['id_menu_sist_tratamento'];
 	
     include '../database.php';	
 	
@@ -9,7 +9,7 @@
 	
 	$pdo = database::connect();
 
-	$sql = "select menu.*, (select nm_menu_sist_integracao from integracao.tb_c_menu_sist_integracao where id_menu_sist_integracao = menu.id_menu_supr) from integracao.tb_c_menu_sist_integracao menu where menu.id_menu_sist_integracao = '".$_POST['id_menu_sist_integracao']."'";
+	$sql = "select menu.*, (select nm_menu_sist_tratamento from tratamento.tb_c_menu_sist_tratamento where id_menu_sist_tratamento = menu.id_menu_supr) from tratamento.tb_c_menu_sist_tratamento menu where menu.id_menu_sist_tratamento = '".$_POST['id_menu_sist_tratamento']."'";
 
 	if ($pdo==null){
 			header(Config::$webLogin);
@@ -25,7 +25,7 @@
 	$id_menu_supr = $row[3];
 	$nm_objt = $row[4];
 	$nm_link_objt = $row[5];
-	$nm_menu_sist_integracao = $row[11];
+	$nm_menu_sist_tratamento = $row[11];
 	
 ?>
 	<!DOCTYPE html>
@@ -48,12 +48,12 @@
 								<table class="table table-bordered">			
 									 <tr>  
 										<td style="width:150px"><label>Identificador do Menu:</label></td>  
-										<td style="width:150px"><p class="form-control-static" name="id_menu_sist_integracao"><?php echo $_POST['id_menu_sist_integracao']; ?></p>
+										<td style="width:150px"><p class="form-control-static" name="id_menu_sist_tratamento"><?php echo $_POST['id_menu_sist_tratamento']; ?></p>
 										</td>  
 									 </tr>
 									  <tr>  
 										<td style="width:150px"><label>Nome do Menu:</label></td>  
-										<td style="width:400px"><input type="text" class="form-control" name="nm_menu_sist_integracao" value="<?php echo $row[1]; ?>"></td> 							
+										<td style="width:400px"><input type="text" class="form-control" name="nm_menu_sist_tratamento" value="<?php echo $row[1]; ?>"></td> 							
 									  </tr>									  
 									  <tr>  
 										<td style="width:150px"><label>Menu Principal?</label></td> 
@@ -73,7 +73,7 @@
 										
 										<?php
 										
-										$sql = "SELECT nm_menu_sist_integracao, id_menu_sist_integracao from integracao.tb_c_menu_sist_integracao order by 1";
+										$sql = "SELECT nm_menu_sist_tratamento, id_menu_sist_tratamento from tratamento.tb_c_menu_sist_tratamento order by 1";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -95,7 +95,7 @@
 												$cont=1;																	
 											
 												while($row = pg_fetch_row($ret)) {
-													if($row[0]==$nm_menu_sist_integracao){														
+													if($row[0]==$nm_menu_sist_tratamento){														
 												?>												
 													<option value="<?php echo $row[1]; ?>" selected><?php echo $row[0]; ?></option>
 												<?php																		

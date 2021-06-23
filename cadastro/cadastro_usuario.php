@@ -24,7 +24,7 @@
 		$textoconsulta = strtoupper($_POST['textoconsulta']);
 		
 		$sql = "SELECT count(cd_usua_acesso)
-				from integracao.tb_c_usua_acesso 
+				from tratamento.tb_c_usua_acesso 
 				where upper(nm_usua_acesso) like '%" . $textoconsulta . "%'";
 			
 		if ($pdo==null){
@@ -40,13 +40,13 @@
 		$num_paginas = ceil($num_total/$itens_por_pagina);
 		
 		$sql ="SELECT cd_usua_acesso, nm_usua_acesso 
-				from integracao.tb_c_usua_acesso 
+				from tratamento.tb_c_usua_acesso 
 				where upper(nm_usua_acesso) like '%" . $textoconsulta . "%' order by nm_usua_acesso LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
 		
 	} else{
 		
 			$sql = "SELECT count(cd_usua_acesso)
-				from integracao.tb_c_usua_acesso";
+				from tratamento.tb_c_usua_acesso";
 			
 			if ($pdo==null){
 					header(Config::$webLogin);
@@ -60,7 +60,7 @@
 			$num_total = $row[0];	
 			$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-			$sql ="SELECT cd_usua_acesso, nm_usua_acesso from integracao.tb_c_usua_acesso order by nm_usua_acesso LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
+			$sql ="SELECT cd_usua_acesso, nm_usua_acesso from tratamento.tb_c_usua_acesso order by nm_usua_acesso LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
 	}
 	
 	if ($pdo==null){
@@ -93,7 +93,7 @@
 				$fl_acesso_ip = 'N';
 			}
 		
-			$sql = "insert into integracao.tb_c_usua_acesso (cd_usua_acesso, nm_usua_acesso, ds_usua_acesso, fl_sist_admn, cd_faixa_ip_1, cd_faixa_ip_2, fl_acesso_ip, cd_usua_incs, dt_incs) values ((select NEXTVAL('integracao.sq_usua_acesso')), '". $_POST['nm_usua_acesso']."', '". $_POST['ds_usua_acesso']."' ,'". $fl_sist_admn ."','". $_POST['cd_faixa_ip_1']."', '". $_POST['cd_faixa_ip_2']."','". $fl_acesso_ip ."', '".$_SESSION['usuario']."', current_timestamp);";
+			$sql = "insert into tratamento.tb_c_usua_acesso (cd_usua_acesso, nm_usua_acesso, ds_usua_acesso, fl_sist_admn, cd_faixa_ip_1, cd_faixa_ip_2, fl_acesso_ip, cd_usua_incs, dt_incs) values ((select NEXTVAL('tratamento.sq_usua_acesso')), '". $_POST['nm_usua_acesso']."', '". $_POST['ds_usua_acesso']."' ,'". $fl_sist_admn ."','". $_POST['cd_faixa_ip_1']."', '". $_POST['cd_faixa_ip_2']."','". $fl_acesso_ip ."', '".$_SESSION['usuario']."', current_timestamp);";
 
 			$result = pg_query($pdo, $sql);
 
@@ -132,7 +132,7 @@
 				$fl_acesso_ip = 'N';
 			}
 			
-			$sql = "update integracao.tb_c_usua_acesso set nm_usua_acesso = '". $_POST['nm_usua_acesso']."',ds_usua_acesso = '". $_POST['ds_usua_acesso']."',  cd_faixa_ip_1 = '". $_POST['cd_faixa_ip_1']."',  cd_faixa_ip_2 = '". $_POST['cd_faixa_ip_2']."', fl_sist_admn = '" .$fl_sist_admn."' , fl_acesso_ip = '" .$fl_acesso_ip."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where cd_usua_acesso = ". $_SESSION['cd_usua_acesso']."";	
+			$sql = "update tratamento.tb_c_usua_acesso set nm_usua_acesso = '". $_POST['nm_usua_acesso']."',ds_usua_acesso = '". $_POST['ds_usua_acesso']."',  cd_faixa_ip_1 = '". $_POST['cd_faixa_ip_1']."',  cd_faixa_ip_2 = '". $_POST['cd_faixa_ip_2']."', fl_sist_admn = '" .$fl_sist_admn."' , fl_acesso_ip = '" .$fl_acesso_ip."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where cd_usua_acesso = ". $_SESSION['cd_usua_acesso']."";	
 			
 			//echo $sql;
 			
@@ -162,7 +162,7 @@
 		{
 
 			$sql = "SELECT count(cd_usua_acesso)
-				from integracao.tb_c_grupo_usua_acesso
+				from tratamento.tb_c_grupo_usua_acesso
 				where cd_usua_acesso = ".$_SESSION['cd_usua_acesso']." ";
 			
 			if ($pdo==null){
@@ -189,7 +189,7 @@
 			} else {
 		
 				// remove do banco			
-				$sql = "DELETE FROM integracao.tb_c_usua_acesso WHERE cd_usua_acesso = ".$_SESSION['cd_usua_acesso']."";			
+				$sql = "DELETE FROM tratamento.tb_c_usua_acesso WHERE cd_usua_acesso = ".$_SESSION['cd_usua_acesso']."";			
 				$result = pg_query($pdo, $sql);
 
 				if($result){
@@ -216,7 +216,7 @@
 	 <meta charset="utf-8">
 	 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	 <meta name="viewport" content="width=device-width, initial-scale=1">
-	 <title>integracao de Usuários</title>
+	 <title>tratamento de Usuários</title>
 
 	 <link href="../css/bootstrap.min.css" rel="stylesheet">
 	 <link href="../css/style.css" rel="stylesheet">

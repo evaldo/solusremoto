@@ -29,7 +29,7 @@
 								<table class="table table-bordered">												 
 									  <tr>  
 										<td style="width:150px"><label>Nome do Menu:</label></td>  
-										<td style="width:400px"><input type="text" class="form-control" name="nm_menu_sist_integracao"></td> 							
+										<td style="width:400px"><input type="text" class="form-control" name="nm_menu_sist_tratamento"></td> 							
 									  </tr>									  
 									  <tr>  
 										<td style="width:150px"><label>Menu Principal?</label></td> 										
@@ -42,7 +42,7 @@
 										
 										<?php
 										
-										$sql = "SELECT nm_menu_sist_integracao, id_menu_sist_integracao from integracao.tb_c_menu_sist_integracao order by 1";
+										$sql = "SELECT nm_menu_sist_tratamento, id_menu_sist_tratamento from tratamento.tb_c_menu_sist_tratamento order by 1";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);

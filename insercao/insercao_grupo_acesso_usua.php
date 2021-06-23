@@ -31,7 +31,7 @@
 										<td style="width:150px"><label>Grupo de Acesso:</label></td>  
 										<?php
 										
-										$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from integracao.tb_c_grupo_acesso order by 1";
+										$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from tratamento.tb_c_grupo_acesso order by 1";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -64,7 +64,7 @@
 										<td style="width:150px"><label>Usuário:</label></td>  
 										<?php
 										
-										$sql = "SELECT cd_usua_acesso, nm_usua_acesso from integracao.tb_c_usua_acesso order by 1";
+										$sql = "SELECT cd_usua_acesso, nm_usua_acesso from tratamento.tb_c_usua_acesso order by 1";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);

@@ -31,7 +31,7 @@
 										<td style="width:150px"><label>Grupo de Acesso:</label></td>  
 										<?php
 										
-										$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from integracao.tb_c_grupo_acesso order by 1";
+										$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from tratamento.tb_c_grupo_acesso order by 1";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -64,7 +64,7 @@
 										<td style="width:150px"><label>Menu:</label></td>  
 										<?php
 										
-										$sql = "SELECT id_menu_sist_integracao, nm_menu_sist_integracao from integracao.tb_c_menu_sist_integracao order by 1";
+										$sql = "SELECT id_menu_sist_tratamento, nm_menu_sist_tratamento from tratamento.tb_c_menu_sist_tratamento order by 1";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -79,7 +79,7 @@
 											<select  class="form-control" id="macesso" onchange=" 
 														var selObj = document.getElementById('macesso');
 														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('id_menu_sist_integracao').value = selValue;">
+														document.getElementById('id_menu_sist_tratamento').value = selValue;">
 											<option value="N"></option>
 											<?php
 												$cont=1;										
@@ -100,7 +100,7 @@
 							</div>									
 						</div>
 						<input type="text" id="id_grupo_acesso" name="id_grupo_acesso" style="display:none"> 
-						<input type="text" id="id_menu_sist_integracao" name="id_menu_sist_integracao" style="display:none"> 
+						<input type="text" id="id_menu_sist_tratamento" name="id_menu_sist_tratamento" style="display:none"> 
 					</form>
 				</div>
 			</div>

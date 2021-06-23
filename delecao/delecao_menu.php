@@ -1,7 +1,7 @@
 <?php
 //delete_cores.php
 	session_start();
-	$_SESSION['id_menu_sist_integracao']=$_POST['id_menu_sist_integracao'];
+	$_SESSION['id_menu_sist_tratamento']=$_POST['id_menu_sist_tratamento'];
 		
 ?>
 	<!DOCTYPE html>
@@ -23,11 +23,11 @@
 							<table class="table table-bordered">
 								 <tr>  
 									<td width="50%"><label>Identificação do Menu:</label></td>  
-									<td width="500%"><?php echo $_POST['id_menu_sist_integracao']; ?></td>  
+									<td width="500%"><?php echo $_POST['id_menu_sist_tratamento']; ?></td>  
 								 </tr>
 								  <tr>  
 									<td width="50%"><label>Nome do Menu:</label></td>  
-									<td width="500%"><?php echo $_POST['nm_menu_sist_integracao']; ?></td>  
+									<td width="500%"><?php echo $_POST['nm_menu_sist_tratamento']; ?></td>  
 								 </tr>								 
 							</table>
 						</div>

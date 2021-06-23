@@ -24,8 +24,8 @@
 		$textoconsulta = strtoupper($_POST['textoconsulta']);
 		
 		$sql = "select count(1)
-				 from integracao.tb_c_menu_sist_integracao menu
-				where upper(nm_menu_sist_integracao) like '%" . $textoconsulta . "%'
+				 from tratamento.tb_c_menu_sist_tratamento menu
+				where upper(nm_menu_sist_tratamento) like '%" . $textoconsulta . "%'
 				order by 1";
 			
 		if ($pdo==null){
@@ -40,21 +40,21 @@
 		$num_total = $row[0];	
 		$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-		$sql ="select menu.id_menu_sist_integracao
-			 , menu.nm_menu_sist_integracao
+		$sql ="select menu.id_menu_sist_tratamento
+			 , menu.nm_menu_sist_tratamento
 			 , menu.fl_menu_princ
-			 , (select nm_menu_sist_integracao 
-				from integracao.tb_c_menu_sist_integracao
-			   where id_menu_sist_integracao = menu.id_menu_supr)
+			 , (select nm_menu_sist_tratamento 
+				from tratamento.tb_c_menu_sist_tratamento
+			   where id_menu_sist_tratamento = menu.id_menu_supr)
 			 , menu.nm_objt
 			 , menu.nm_link_objt
-			 from integracao.tb_c_menu_sist_integracao menu 
-				where upper(menu.nm_menu_sist_integracao) like '%" . $textoconsulta . "%' order by menu.nm_menu_sist_integracao LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
+			 from tratamento.tb_c_menu_sist_tratamento menu 
+				where upper(menu.nm_menu_sist_tratamento) like '%" . $textoconsulta . "%' order by menu.nm_menu_sist_tratamento LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
 		
 	} else{
 		
 			$sql = "select count(1)
-				 from integracao.tb_c_menu_sist_integracao menu";
+				 from tratamento.tb_c_menu_sist_tratamento menu";
 			
 			if ($pdo==null){
 					header(Config::$webLogin);
@@ -68,15 +68,15 @@
 			$num_total = $row[0];	
 			$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-			$sql ="select menu.id_menu_sist_integracao
-			 , menu.nm_menu_sist_integracao
+			$sql ="select menu.id_menu_sist_tratamento
+			 , menu.nm_menu_sist_tratamento
 			 , menu.fl_menu_princ
-			 , (select nm_menu_sist_integracao 
-				from integracao.tb_c_menu_sist_integracao
-			   where id_menu_sist_integracao = menu.id_menu_supr)
+			 , (select nm_menu_sist_tratamento 
+				from tratamento.tb_c_menu_sist_tratamento
+			   where id_menu_sist_tratamento = menu.id_menu_supr)
 			 , menu.nm_objt
 			 , menu.nm_link_objt
-			 from integracao.tb_c_menu_sist_integracao menu order by menu.nm_menu_sist_integracao LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
+			 from tratamento.tb_c_menu_sist_tratamento menu order by menu.nm_menu_sist_tratamento LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
 	}
 	
 	if ($pdo==null){
@@ -107,7 +107,7 @@
 				$_POST['id_menu_supr'] = 'null';			
 			}
 		
-			$sql = "insert into integracao.tb_c_menu_sist_integracao values ((select NEXTVAL('integracao.sq_menu_sist_integracao')), '". $_POST['nm_menu_sist_integracao']."', '". $fl_menu_princ ."', ".$_POST['id_menu_supr'].", '". $_POST['nm_objt'] ."', '". $_POST['nm_link_objt'] ."', '". $_SESSION['usuario'] ."', current_timestamp, null,null);";
+			$sql = "insert into tratamento.tb_c_menu_sist_tratamento values ((select NEXTVAL('tratamento.sq_menu_sist_tratamento')), '". $_POST['nm_menu_sist_tratamento']."', '". $fl_menu_princ ."', ".$_POST['id_menu_supr'].", '". $_POST['nm_objt'] ."', '". $_POST['nm_link_objt'] ."', '". $_SESSION['usuario'] ."', current_timestamp, null,null);";
 
 			$result = pg_query($pdo, $sql);
 
@@ -144,7 +144,7 @@
 				$_POST['id_menu_supr'] = 'null';			
 			}
 			
-			$sql = "update integracao.tb_c_menu_sist_integracao set nm_menu_sist_integracao = '". $_POST['nm_menu_sist_integracao']."', fl_menu_princ = '" .$fl_menu_princ."', id_menu_supr = ".$_POST['id_menu_supr'].", nm_objt = '". $_POST['nm_objt'] ."', nm_link_objt = '". $_POST['nm_link_objt'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_menu_sist_integracao = ". $_SESSION['id_menu_sist_integracao']."";	
+			$sql = "update tratamento.tb_c_menu_sist_tratamento set nm_menu_sist_tratamento = '". $_POST['nm_menu_sist_tratamento']."', fl_menu_princ = '" .$fl_menu_princ."', id_menu_supr = ".$_POST['id_menu_supr'].", nm_objt = '". $_POST['nm_objt'] ."', nm_link_objt = '". $_POST['nm_link_objt'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_menu_sist_tratamento = ". $_SESSION['id_menu_sist_tratamento']."";	
 			
 			$result = pg_query($pdo, $sql);
 
@@ -171,9 +171,9 @@
 		try
 		{
 
-			$sql = "SELECT count(id_menu_sist_integracao)
-				from integracao.tb_c_grupo_usua_menu_sist_integracao
-				where id_menu_sist_integracao = ".$_SESSION['id_menu_sist_integracao']." ";
+			$sql = "SELECT count(id_menu_sist_tratamento)
+				from tratamento.tb_c_grupo_usua_menu_sist_tratamento
+				where id_menu_sist_tratamento = ".$_SESSION['id_menu_sist_tratamento']." ";
 			
 			
 			if ($pdo==null){
@@ -200,7 +200,7 @@
 			} else {
 		
 				// remove do banco			
-				$sql = "DELETE FROM integracao.tb_c_menu_sist_integracao WHERE id_menu_sist_integracao = ".$_SESSION['id_menu_sist_integracao']."";			
+				$sql = "DELETE FROM tratamento.tb_c_menu_sist_tratamento WHERE id_menu_sist_tratamento = ".$_SESSION['id_menu_sist_tratamento']."";			
 				$result = pg_query($pdo, $sql);
 
 				if($result){
@@ -227,7 +227,7 @@
 	 <meta charset="utf-8">
 	 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	 <meta name="viewport" content="width=device-width, initial-scale=1">
-	 <title>Cadastro de Menus da Aplicação de integracao</title>
+	 <title>Cadastro de Menus da Aplicação de tratamento</title>
 
 	 <link href="../css/bootstrap.min.css" rel="stylesheet">
 	 <link href="../css/style.css" rel="stylesheet">
@@ -266,8 +266,8 @@
 					while($row = pg_fetch_row($ret)) {
 					?>						
 						<tr>
-							<td id="id_menu_sist_integracao" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
-							<td id="nm_menu_sist_integracao" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
+							<td id="id_menu_sist_tratamento" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
+							<td id="nm_menu_sist_tratamento" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
 							<td id="fl_menu_princ" value="<?php echo $row[2];?>"><?php echo $row[2];?></td>				
 							<td id="id_menu_supr" value="<?php echo $row[3];?>"><?php echo $row[3];?></td>							
 							<td class="actions">								
@@ -323,8 +323,8 @@
 		
 			var currentRow=$(this).closest("tr"); 
 			
-			var id_menu_sist_integracao = currentRow.find("td:eq(0)").text();
-			var nm_menu_sist_integracao = currentRow.find("td:eq(1)").text();	
+			var id_menu_sist_tratamento = currentRow.find("td:eq(0)").text();
+			var nm_menu_sist_tratamento = currentRow.find("td:eq(1)").text();	
 			var fl_menu_princ = currentRow.find("td:eq(2)").text();
 			var id_menu_supr = currentRow.find("td:eq(3)").text();				
 			
@@ -332,7 +332,7 @@
 			$.ajax({
 				 type: "POST",
 				 url: "../delecao/delecao_menu.php", //
-				 data: {id_menu_sist_integracao:id_menu_sist_integracao, nm_menu_sist_integracao:nm_menu_sist_integracao,
+				 data: {id_menu_sist_tratamento:id_menu_sist_tratamento, nm_menu_sist_tratamento:nm_menu_sist_tratamento,
 				 fl_menu_princ:fl_menu_princ, id_menu_supr:id_menu_supr},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
@@ -358,8 +358,8 @@
 		
 			var currentRow=$(this).closest("tr"); 
 			
-			var id_menu_sist_integracao = currentRow.find("td:eq(0)").text();
-			var nm_menu_sist_integracao = currentRow.find("td:eq(1)").text();	
+			var id_menu_sist_tratamento = currentRow.find("td:eq(0)").text();
+			var nm_menu_sist_tratamento = currentRow.find("td:eq(1)").text();	
 			var fl_menu_princ = currentRow.find("td:eq(2)").text();
 			var id_menu_supr = currentRow.find("td:eq(3)").text();				
 			
@@ -367,7 +367,7 @@
 			$.ajax({
 				 type: "POST",
 				 url: "../alteracao/alteracao_menu.php", //
-				 data: {id_menu_sist_integracao:id_menu_sist_integracao, nm_menu_sist_integracao:nm_menu_sist_integracao,
+				 data: {id_menu_sist_tratamento:id_menu_sist_tratamento, nm_menu_sist_tratamento:nm_menu_sist_tratamento,
 				 fl_menu_princ:fl_menu_princ, id_menu_supr:id_menu_supr},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
@@ -381,12 +381,12 @@
 		$("#tabela").on('click', '.visualiza', function(){
 			
 			var currentRow=$(this).closest("tr"); 			
-			var id_menu_sist_integracao = currentRow.find("td:eq(0)").text();							
+			var id_menu_sist_tratamento = currentRow.find("td:eq(0)").text();							
 						
 			$.ajax({
 				url:"../visualizacao/visualizacao_menu.php",
 				method:"POST",
-				data:{id_menu_sist_integracao:id_menu_sist_integracao},
+				data:{id_menu_sist_tratamento:id_menu_sist_tratamento},
 				success:function(data){
 					$('#visualizacao').html(data);
 					$('#visualiza').modal('show');

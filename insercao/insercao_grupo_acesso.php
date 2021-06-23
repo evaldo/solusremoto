@@ -8,7 +8,7 @@
 	$optconsulta = "";
 	$textoconsulta = "";
 	
-	$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from integracao.tb_c_grupo_acesso  order by 1";
+	$sql = "SELECT id_grupo_acesso, nm_grupo_acesso from tratamento.tb_c_grupo_acesso  order by 1";
 	
 	if ($pdo==null){
 			header(Config::$webLogin);

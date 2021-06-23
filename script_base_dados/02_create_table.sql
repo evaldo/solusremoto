@@ -1,3 +1,96 @@
+CREATE TABLE IF NOT EXISTS tratamento.tb_c_local_trtmto
+(
+    id_local_trtmto integer NOT NULL,
+    ds_local_trtmto character varying(255) NOT NULL,
+	nu_seq_local_pnel integer NOT NULL,
+	cd_usua_incs character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    dt_incs timestamp without time zone NOT NULL,
+    cd_usua_altr character varying(255) COLLATE pg_catalog."default",
+    dt_altr timestamp without time zone,
+    CONSTRAINT pk_local_trtmto PRIMARY KEY (id_local_trtmto)
+)
+WITH (
+    OIDS = FALSE
+);
+
+ALTER TABLE tratamento.tb_c_local_trtmto
+    OWNER to postgres;
+
+COMMENT ON TABLE tratamento.tb_c_local_trtmto
+    IS 'Tabela de locais de Tratamento';
+
+COMMENT ON COLUMN tratamento.tb_c_local_trtmto.id_local_trtmto
+    IS 'Identificador do local de tratamento.';
+
+COMMENT ON COLUMN tratamento.tb_c_local_trtmto.ds_local_trtmto
+    IS 'Descrição do local de tratamento.';
+	
+COMMENT ON COLUMN tratamento.tb_c_local_trtmto.cd_usua_incs
+    IS 'Código do usuário que incluiu o registro';
+
+COMMENT ON COLUMN tratamento.tb_c_local_trtmto.dt_incs
+    IS 'Data de inclusão do registro';
+
+COMMENT ON COLUMN tratamento.tb_c_local_trtmto.cd_usua_altr
+    IS 'Código do usuário que alterpu pela última vez o registro';
+
+COMMENT ON COLUMN tratamento.tb_c_local_trtmto.dt_altr
+    IS 'Data da última alteração do registro';	
+	
+------------------------------------------------------------------------------------------------------------------
+
+-- Table: tratamento.tb_c_risco_pcnt
+-- DROP TABLE tratamento.tb_c_risco_pcnt;
+
+CREATE TABLE IF NOT EXISTS tratamento.tb_c_risco_pcnt
+(
+    id_risco_pcnt integer NOT NULL,
+    ds_risco_pcnt character varying(255) COLLATE pg_catalog."default" NOT NULL,    
+    cd_cor_risco_pcnt character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    cd_usua_incs character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    dt_incs timestamp without time zone NOT NULL,
+    cd_usua_altr character varying(255) COLLATE pg_catalog."default",
+    dt_altr timestamp without time zone,
+    CONSTRAINT pk_risco_pcnt PRIMARY KEY (id_risco_pcnt)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE tratamento.tb_c_risco_pcnt
+    OWNER to postgres;
+
+GRANT DELETE, INSERT, SELECT, UPDATE ON TABLE tratamento.tb_c_risco_pcnt TO evaldo;
+
+GRANT ALL ON TABLE tratamento.tb_c_risco_pcnt TO postgres;
+
+COMMENT ON TABLE tratamento.tb_c_risco_pcnt
+    IS 'Cadastro dos riscos de pacientes';
+
+COMMENT ON COLUMN tratamento.tb_c_risco_pcnt.id_risco_pcnt
+    IS 'Identificador do risco';
+
+COMMENT ON COLUMN tratamento.tb_c_risco_pcnt.ds_risco_pcnt
+    IS 'Descrição do risco';
+
+COMMENT ON COLUMN tratamento.tb_c_risco_pcnt.cd_cor_risco_pcnt
+    IS 'Código da cor do risco';
+
+COMMENT ON COLUMN tratamento.tb_c_risco_pcnt.cd_usua_incs
+    IS 'Código do usuário que incluiu o registro';
+
+COMMENT ON COLUMN tratamento.tb_c_risco_pcnt.dt_incs
+    IS 'Data de inclusão do registro';
+
+COMMENT ON COLUMN tratamento.tb_c_risco_pcnt.cd_usua_altr
+    IS 'Código do usuário que alterpu pela última vez o registro';
+
+COMMENT ON COLUMN tratamento.tb_c_risco_pcnt.dt_altr
+    IS 'Data da última alteração do registro';
+
+----------------------------------------------------------------------------------------------------
+
 -- Table: tratamento.tb_c_equipe
 
 -- DROP TABLE tratamento.tb_c_equipe;
@@ -122,7 +215,62 @@ COMMENT ON COLUMN tratamento.tb_c_status_equipe.cd_usua_altr
 
 COMMENT ON COLUMN tratamento.tb_c_status_equipe.dt_altr
     IS 'Data da última alteração do registro';	
-	
+
+-----------------------------------------------------------------------------------------------
+-- Table: tratamento.tb_c_status_trtmto
+-- DROP TABLE tratamento.tb_c_status_trtmto;
+
+CREATE TABLE IF NOT EXISTS tratamento.tb_c_status_trtmto
+(
+    id_status_trtmto integer NOT NULL,    
+    ds_status_trtmto character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    fl_ativo integer NOT NULL,    
+    cd_cor_status_trtmto character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    cd_usua_incs character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    dt_incs timestamp without time zone NOT NULL,
+    cd_usua_altr character varying(255) COLLATE pg_catalog."default",
+    dt_altr timestamp without time zone,
+    CONSTRAINT pk_status_trtmto PRIMARY KEY (id_status_trtmto)           
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE tratamento.tb_c_status_trtmto
+    OWNER to postgres;
+
+GRANT DELETE, INSERT, SELECT, UPDATE ON TABLE tratamento.tb_c_status_trtmto TO evaldo;
+
+GRANT ALL ON TABLE tratamento.tb_c_status_trtmto TO postgres;
+
+COMMENT ON TABLE tratamento.tb_c_status_trtmto
+    IS 'Cadastro dos status por equipe';
+
+COMMENT ON COLUMN tratamento.tb_c_status_trtmto.id_status_trtmto
+    IS 'Identificador do status do tratamento';
+
+COMMENT ON COLUMN tratamento.tb_c_status_trtmto.ds_status_trtmto
+    IS 'Descrição do status do tratamento';
+
+COMMENT ON COLUMN tratamento.tb_c_status_trtmto.fl_ativo
+    IS 'Flag do status ativo para aparecer ou não no painel de tratamento';
+
+COMMENT ON COLUMN tratamento.tb_c_status_trtmto.cd_cor_status_trtmto
+    IS 'Código da cor do status do tratamento';
+
+COMMENT ON COLUMN tratamento.tb_c_status_trtmto.cd_usua_incs
+    IS 'Código do usuário que incluiu o registro';
+
+COMMENT ON COLUMN tratamento.tb_c_status_trtmto.dt_incs
+    IS 'Data de inclusão do registro';
+
+COMMENT ON COLUMN tratamento.tb_c_status_trtmto.cd_usua_altr
+    IS 'Código do usuário que alterpu pela última vez o registro';
+
+COMMENT ON COLUMN tratamento.tb_c_status_trtmto.dt_altr
+    IS 'Data da última alteração do registro';
+
 -----------------------------------------------------------------------------------------------
 
 -- Table: tratamento.tb_pnel_solic_trtmto

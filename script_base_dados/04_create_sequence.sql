@@ -1,3 +1,62 @@
+-- SEQUENCE: tratamento.sq_risco_pcnt
+-- DROP SEQUENCE tratamento.sq_risco_pcnt;
+
+CREATE SEQUENCE tratamento.sq_risco_pcnt
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE tratamento.sq_risco_pcnt
+    OWNER TO postgres;
+
+COMMENT ON SEQUENCE tratamento.sq_risco_pcnt
+    IS 'Sequence para o cadastro dos riscos dos pacientes';
+
+GRANT ALL ON SEQUENCE tratamento.sq_risco_pcnt TO evaldo;
+
+GRANT ALL ON SEQUENCE tratamento.sq_risco_pcnt TO postgres;
+
+-- SEQUENCE: tratamento.sq_status_trtmto
+-- DROP SEQUENCE tratamento.sq_status_trtmto;
+
+CREATE SEQUENCE tratamento.sq_status_trtmto
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE tratamento.sq_status_trtmto
+    OWNER TO postgres;
+
+COMMENT ON SEQUENCE tratamento.sq_status_trtmto
+    IS 'Sequence para o cadastro dos status por tratamentos';
+
+GRANT ALL ON SEQUENCE tratamento.sq_status_trtmto TO evaldo;
+
+GRANT ALL ON SEQUENCE tratamento.sq_status_trtmto TO postgres;
+
+-- SEQUENCE: tratamento.sq_local_trtmto
+-- DROP SEQUENCE tratamento.sq_local_trtmto;
+
+CREATE SEQUENCE tratamento.sq_local_trtmto
+    INCREMENT 1
+    START 1
+    MINVALUE 1
+    MAXVALUE 999999999
+    CACHE 1;
+
+ALTER SEQUENCE tratamento.sq_local_trtmto
+    OWNER TO postgres;
+
+COMMENT ON SEQUENCE tratamento.sq_local_trtmto
+    IS 'Sequence para o cadastro de locais de tratamento';
+
+GRANT ALL ON SEQUENCE tratamento.sq_local_trtmto TO evaldo;
+GRANT ALL ON SEQUENCE tratamento.sq_local_trtmto TO postgres;
+
 -- SEQUENCE: tratamento.sq_acesso_transac_tratamento
 -- DROP SEQUENCE tratamento.sq_acesso_transac_tratamento;
 

@@ -39,8 +39,7 @@
 		$num_total = $row[0];	
 		$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-		$sql ="SELECT status.id_status_trtmto, equipe.ds_equipe, status.ds_status_trtmto, case when status.fl_ativo = 1 then 'Sim' else 'Não' End Status_Ativo, case when status.fl_status_intrpe_trtmto_equipe = 1 then 'Sim' else 'Não' End Status_intrpe_trtmeto_equipe, case when status.fl_status_finaliza_trtmto_equipe = 1 then 'Sim' else 'Não' End status_finaliza_trtmto_equipe, status.cd_cor_status_trtmto
-				from tratamento.tb_c_status_trtmto status, tratamento.tb_c_equipe equipe 
+		$sql ="SELECT status.id_status_trtmto, equipe.ds_equipe, status.ds_status_trtmto, case when status.fl_ativo = 1 then 'Sim' else 'Não' End Status_Ativo, case when status.fl_status_intrpe_trtmto_equipe = 1 then 'Sim' else 'Não' End Status_intrpe_trtmeto_equipe, case when status.fl_status_finaliza_trtmto_equipe = 1 then 'Sim' else 'Não' End status_finaliza_trtmto_equipe, status.cd_cor_status_trtmto, case when status.fl_status_inicial_trtmto = 1 then 'Sim' else 'Não' End fl_status_inicial_trtmto from tratamento.tb_c_status_trtmto status, tratamento.tb_c_equipe equipe 
 				where status.id_equipe = equipe.id_equipe and upper(status.ds_status_trtmto) like '%" . $textoconsulta . "%' order by equipe.ds_equipe, status.ds_status_trtmto LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
 		
 	} else{
@@ -60,8 +59,7 @@
 			$num_total = $row[0];	
 			$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-			$sql ="SELECT status.id_status_trtmto, equipe.ds_equipe, status.ds_status_trtmto, case when status.fl_ativo = 1 then 'Sim' else 'Não' End Status_Ativo, case when status.fl_status_intrpe_trtmto_equipe = 1 then 'Sim' else 'Não' End Status_intrpe_trtmto_equipe, case when status.fl_status_finaliza_trtmto_equipe = 1 then 'Sim' else 'Não' End status_finaliza_trtmto_equipe, status.cd_cor_status_trtmto
-				from tratamento.tb_c_status_trtmto status, tratamento.tb_c_equipe equipe 
+			$sql ="SELECT status.id_status_trtmto, equipe.ds_equipe, status.ds_status_trtmto, case when status.fl_ativo = 1 then 'Sim' else 'Não' End Status_Ativo, case when status.fl_status_intrpe_trtmto_equipe = 1 then 'Sim' else 'Não' End Status_intrpe_trtmto_equipe, case when status.fl_status_finaliza_trtmto_equipe = 1 then 'Sim' else 'Não' End status_finaliza_trtmto_equipe, status.cd_cor_status_trtmto, case when status.fl_status_inicial_trtmto = 1 then 'Sim' else 'Não' End fl_status_inicial_trtmto	from tratamento.tb_c_status_trtmto status, tratamento.tb_c_equipe equipe 
 				where status.id_equipe = equipe.id_equipe order by equipe.ds_equipe, status.ds_status_trtmto LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
 	}
 	
@@ -83,7 +81,7 @@
 		try
 		{	
 		
-			$sql = "INSERT INTO tratamento.tb_c_status_trtmto(id_status_trtmto, id_equipe, ds_status_trtmto, fl_ativo, fl_status_intrpe_trtmto_equipe, fl_status_finaliza_trtmto_equipe, cd_cor_status_trtmto, cd_usua_incs, dt_incs) values ((select NEXTVAL('tratamento.sq_status_trtmto')), ". $_POST['id_equipe'].", '". $_POST['ds_status_trtmto']."', ". $_POST['fl_ativo'].", ". $_POST['fl_status_intrpe_trtmto_equipe'].",  ". $_POST['fl_status_finaliza_trtmto_equipe'].", '".$_POST['cd_cor_status_trtmto']."','".$_SESSION['usuario']."', current_timestamp);";
+			$sql = "INSERT INTO tratamento.tb_c_status_trtmto(id_status_trtmto, id_equipe, ds_status_trtmto, fl_ativo, fl_status_intrpe_trtmto_equipe, fl_status_finaliza_trtmto_equipe, cd_cor_status_trtmto, cd_usua_incs, dt_incs, fl_status_inicial_trtmto) values ((select NEXTVAL('tratamento.sq_status_trtmto')), ". $_POST['id_equipe'].", '". $_POST['ds_status_trtmto']."', ". $_POST['fl_ativo'].", ". $_POST['fl_status_intrpe_trtmto_equipe'].",  ". $_POST['fl_status_finaliza_trtmto_equipe'].", '".$_POST['cd_cor_status_trtmto']."','".$_SESSION['usuario']."', current_timestamp,  ". $_POST['fl_status_inicial_trtmto'].");";
 
 			$result = pg_query($pdo, $sql);
 
@@ -113,7 +111,7 @@
 		{	
 			
 			$sql = "UPDATE tratamento.tb_c_status_trtmto
-	SET id_equipe=". $_POST['id_equipe'].", ds_status_trtmto='". $_POST['ds_status_trtmto']."', fl_ativo=". $_POST['fl_ativo'].", fl_status_intrpe_trtmto_equipe=". $_POST['fl_status_intrpe_trtmto_equipe'].", fl_status_finaliza_trtmto_equipe=". $_POST['fl_status_finaliza_trtmto_equipe'].", cd_cor_status_trtmto='".$_POST['cd_cor_status_trtmto']."', cd_usua_altr='".$_SESSION['usuario']."', dt_altr=current_timestamp
+	SET id_equipe=". $_POST['id_equipe'].", ds_status_trtmto='". $_POST['ds_status_trtmto']."', fl_ativo=". $_POST['fl_ativo'].", fl_status_intrpe_trtmto_equipe=". $_POST['fl_status_intrpe_trtmto_equipe'].", fl_status_finaliza_trtmto_equipe=". $_POST['fl_status_finaliza_trtmto_equipe'].", cd_cor_status_trtmto='".$_POST['cd_cor_status_trtmto']."', cd_usua_altr='".$_SESSION['usuario']."', fl_status_inicial_trtmto = ". $_POST['fl_status_inicial_trtmto'].", dt_altr=current_timestamp
 	WHERE id_status_trtmto = ". $_SESSION['id_status_trtmto']."";
 			
 			//echo $sql;
@@ -202,6 +200,7 @@
 						<th>Flag Interrompe o Tratamento?</th>
 						<th>Flag Finaliza o Tratamento?</th>
 						<th>Cor no Painel</th>
+						<th>Flag para o Status Inicial do Tratamento?</th>
 						<th class="actions">Ações</th>
 					</tr>
 				</thead>				
@@ -220,6 +219,7 @@
 							<td id="fl_status_intrpe_trtmto_equipe" value="<?php echo $row[4];?>"><?php echo $row[4];?></td>
 							<td id="fl_status_finaliza_trtmto_equipe" value="<?php echo $row[5];?>"><?php echo $row[5];?></td>
 							<td id="cd_cor_status_trtmto" value="<?php echo $row[6];?>"><?php echo $row[6];?></td>
+							<td id="fl_status_inicial_trtmto" value="<?php echo $row[6];?>"><?php echo $row[7];?></td>
 														
 							<td class="actions">								
 								<input style="font-size: 11px" type="button" value="Visualizar" class="btn btn-success btn-xs visualiza"/>
@@ -281,12 +281,13 @@
 			var fl_status_intrpe_trtmto_equipe = currentRow.find("td:eq(4)").text();	
 			var fl_status_finaliza_trtmto_equipe = currentRow.find("td:eq(5)").text();
 			var cd_cor_status_trtmto = currentRow.find("td:eq(6)").text();
+			var fl_status_inicial_trtmto = currentRow.find("td:eq(7)").text();
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
 				 url: "../delecao/delecao_status_tratamento.php", //
-				 data: {id_status_trtmto:id_status_trtmto, ds_equipe:ds_equipe, ds_status_trtmto:ds_status_trtmto,fl_ativo:fl_ativo, fl_status_intrpe_trtmto_equipe:fl_status_intrpe_trtmto_equipe, fl_status_finaliza_trtmto_equipe:fl_status_finaliza_trtmto_equipe, cd_cor_status_trtmto:cd_cor_status_trtmto},
+				 data: {id_status_trtmto:id_status_trtmto, ds_equipe:ds_equipe, ds_status_trtmto:ds_status_trtmto,fl_ativo:fl_ativo, fl_status_intrpe_trtmto_equipe:fl_status_intrpe_trtmto_equipe, fl_status_finaliza_trtmto_equipe:fl_status_finaliza_trtmto_equipe, cd_cor_status_trtmto:cd_cor_status_trtmto, fl_status_inicial_trtmto:fl_status_inicial_trtmto},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();
@@ -318,12 +319,13 @@
 			var fl_status_intrpe_trtmto_equipe = currentRow.find("td:eq(4)").text();	
 			var fl_status_finaliza_trtmto_equipe = currentRow.find("td:eq(5)").text();
 			var cd_cor_status_trtmto = currentRow.find("td:eq(6)").text();
+			var fl_status_inicial_trtmto = currentRow.find("td:eq(7)").text();
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
 				 url: "../alteracao/alteracao_status_tratamento.php", //
-				 data: {id_status_trtmto:id_status_trtmto, ds_equipe:ds_equipe, ds_status_trtmto:ds_status_trtmto,fl_ativo:fl_ativo, fl_status_intrpe_trtmto_equipe:fl_status_intrpe_trtmto_equipe, fl_status_finaliza_trtmto_equipe:fl_status_finaliza_trtmto_equipe, cd_cor_status_trtmto:cd_cor_status_trtmto},
+				 data: {id_status_trtmto:id_status_trtmto, ds_equipe:ds_equipe, ds_status_trtmto:ds_status_trtmto,fl_ativo:fl_ativo, fl_status_intrpe_trtmto_equipe:fl_status_intrpe_trtmto_equipe, fl_status_finaliza_trtmto_equipe:fl_status_finaliza_trtmto_equipe, cd_cor_status_trtmto:cd_cor_status_trtmto, fl_status_inicial_trtmto:fl_status_inicial_trtmto},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();

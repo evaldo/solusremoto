@@ -7,7 +7,7 @@
 	
 	$pdo = database::connect();
 
-	$sql = "SELECT id_status_trtmto, id_equipe, ds_status_trtmto, fl_ativo, fl_status_intrpe_trtmto_equipe, fl_status_finaliza_trtmto_equipe, cd_cor_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_SESSION['id_status_trtmto']."";
+	$sql = "SELECT id_status_trtmto, id_equipe, ds_status_trtmto, fl_ativo, fl_status_intrpe_trtmto_equipe, fl_status_finaliza_trtmto_equipe, cd_cor_status_trtmto, fl_status_inicial_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_SESSION['id_status_trtmto']."";
 
 	if ($pdo==null){
 			header(Config::$webLogin);
@@ -27,6 +27,7 @@
 	$fl_status_intrpe_trtmto_equipe = $row[4];	
 	$fl_status_finaliza_trtmto_equipe = $row[5];
 	$cd_cor_status_trtmto = $row[6];
+	$fl_status_inicial_trtmto = $row[7];
 	
 ?>
 	<!DOCTYPE html>
@@ -170,6 +171,29 @@
 										<td style="width:150px"><label>Cor no Painel:</label></td>  
 										<td style="width:200px"><input type="text" class="form-control" name="cd_cor_status_trtmto" value="<?php echo $cd_cor_status_trtmto; ?>"></td>  
 									 </tr>
+									  <tr>  
+										<td style="width:150px"><label>Flag para o Status Inicial do Tratamento?</label></td>
+										<td style="width:150px">
+											<select  class="form-control" id="flstatusinicialtrtmto" onchange=" 
+														var selObj = document.getElementById('flstatusinicialtrtmto');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('fl_status_inicial_trtmto').value = selValue;">
+													<?php												
+														if($fl_status_inicial_trtmto==1){														
+													?>
+														<option value="1" selected>Sim</option>
+														<option value="0">Não</option>
+													<?php												
+														} else {
+													?>
+														<option value="1">Sim</option>
+														<option value="0" selected>Não</option>
+													<?php												
+														} 
+													?>
+											</select>
+										</td>  
+									 </tr>
 								</table>																
 							</div>								
 							<div class="modal-footer">	
@@ -181,6 +205,7 @@
 						<input type="text" id="fl_ativo" name="fl_ativo" style="display:none" value="<?php echo $fl_ativo; ?>"> 
 						<input type="text" id="fl_status_intrpe_trtmto_equipe" name="fl_status_intrpe_trtmto_equipe" style="display:none" value="<?php echo $fl_status_intrpe_trtmto_equipe; ?>"> 
 						<input type="text" id="fl_status_finaliza_trtmto_equipe" name="fl_status_finaliza_trtmto_equipe" style="display:none" value="<?php echo $fl_status_finaliza_trtmto_equipe; ?>"> 
+						<input type="text" id="fl_status_inicial_trtmto" name="fl_status_inicial_trtmto" style="display:none" value="<?php echo $fl_status_inicial_trtmto; ?>">
 					</form>
 				</div>
 			</div>

@@ -12,13 +12,55 @@
 	$sql = '';
 	
 		
-	$sql ="";
+	$sql ="select 1, 2, 3, 4, 5, 6";
 			
 	$ret = pg_query($pdo, $sql);
 	
 	if(!$ret) {
 		echo pg_last_error($pdo);		
 		exit;
+	}
+	
+	if(isset($_POST['insere'])){					
+		
+		if ($pdo==null){
+			header(Config::$webLogin);
+		}
+		
+		try
+		{	
+			
+			
+			$sql = "SELECT status_trtmto.id_equipe
+				 , equipe.ds_equipe
+				 , status_trtmto.id_status_trtmto	 
+				 , status_trtmto.ds_status_trtmto
+				 , equipe.nu_seq_equipe_pnel
+			FROM tratamento.tb_c_status_trtmto status_trtmto
+			   , tratamento.tb_c_equipe equipe
+			WHERE equipe.id_equipe = status_trtmto.id_equipe
+			  and status_trtmto.fl_ativo = 1
+			  and status_trtmto.fl_status_inicial_trtmto = 1
+			ORDER BY equipe.nu_seq_equipe_pnel ";
+			
+			//Para cada registro acima inserir o tratamento para o paciente. Criar um loop para a inserção
+			
+			$sql = "insert into tratamento.tb_c_menu_sist_tratamento values ((select NEXTVAL('tratamento.sq_menu_sist_tratamento')), '". $_POST['nm_menu_sist_tratamento']."', '". $fl_menu_princ ."', ".$_POST['id_menu_supr'].", '". $_POST['nm_objt'] ."', '". $_POST['nm_link_objt'] ."', '". $_SESSION['usuario'] ."', current_timestamp, null,null);";
+
+			$result = pg_query($pdo, $sql);
+
+			if($result){
+				echo "";
+			}  
+			
+			$secondsWait = 0;
+			header("Refresh:$secondsWait");
+
+			
+		} catch(PDOException $e)
+		{
+			die($e->getMessage());
+		}
 	}
 	
 	if(isset($_POST['altera'])){					
@@ -95,18 +137,18 @@
 			 <link href="../css/style.css" rel="stylesheet">	 			 		 			 
 	  
 		</head>
-		<body id="aplicacao">			
-			<div class="container" style="margin-left: 0px; margin-right: 0px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 130px; border: 1px solid #E6E6E6;">
+		<body id="aplicacao" onload="removeDivsEtapasCarga();">			
+			<div class="container" style="margin-left: 0px; margin-right: 0px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 50px; border: 1px solid #E6E6E6;">
 			
 				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Exportar" id="exportarplanejamento">&nbsp;
 						
-				<input type="button" value="Novo Registro" style="font-size: 11px;" class="btn btn-primary btn-xs insere"/>
+				<input type="button" value="Novo Paciente" style="font-size: 11px;" class="btn btn-primary btn-xs insere"/>
 			
 			</div>
 			
 			<div id="list" class="row" style="margin-left: 2px; margin-right: 2px">
 				
-				<div class="table-responsive" style="margin-top: 130px">				
+				<div class="table-responsive" style="margin-top: 50px">				
 					<table id="tabela" class="display table table-responsive table-striped table-bordered table-sm table-condensed">
 					
 						<tr style="font-size: 11px">
@@ -120,10 +162,14 @@
 									exit;
 								}
 								
-								$rowequipe = pg_fetch_row($retequipe)
+								while($rowequipe = pg_fetch_row($retequipe)) {
 								
 							?>
-							<th style="text-align:center"><?php $rowequipe[0] ?></th>
+									<th style="text-align:center"><?php echo $rowequipe[0]; ?></th>
+							<?php 							
+								
+							}  ?>
+							<th colspan="3" style="text-align:center">Ações</th>
 						</tr>
 						
 						<tbody>
@@ -134,20 +180,26 @@
 								?>											
 								<tr >
 									<td data-toggle="tooltip" data-placement="top" title=<?php echo $row[1];?> style="font-weight:bold; color:red; background-color:#E0FFFF" id="<?php echo $row[0];?>" value="<?php echo $row[0];?>" ><?php echo $row[1];?></td>
-								</tr>
+									<td data-toggle="tooltip" data-placement="top" title=<?php echo $row[1];?> style="font-weight:bold; color:red; background-color:#E0FFFF" id="<?php echo $row[0];?>" value="<?php echo $row[0];?>" ><?php echo $row[1];?></td>
+									<td data-toggle="tooltip" data-placement="top" title=<?php echo $row[1];?> style="font-weight:bold; color:red; background-color:#E0FFFF" id="<?php echo $row[0];?>" value="<?php echo $row[0];?>" ><?php echo $row[1];?></td>
+									<td data-toggle="tooltip" data-placement="top" title=<?php echo $row[1];?> style="font-weight:bold; color:red; background-color:#E0FFFF" id="<?php echo $row[0];?>" value="<?php echo $row[0];?>" ><?php echo $row[1];?></td>
+									<td data-toggle="tooltip" data-placement="top" title=<?php echo $row[1];?> style="font-weight:bold; color:red; background-color:#E0FFFF" id="<?php echo $row[0];?>" value="<?php echo $row[0];?>" ><?php echo $row[1];?></td>
+									<td data-toggle="tooltip" data-placement="top" title=<?php echo $row[1];?> style="font-weight:bold; color:red; background-color:#E0FFFF" id="<?php echo $row[0];?>" value="<?php echo $row[0];?>" ><?php echo $row[1];?></td>				
+									<td class="actions">
+										<input type="image" src="../img/lupa_1.png"  height="23" width="23" class="btn-xs visualiza"/>
+									</td>
+									<td class="actions">
+										<input type="image" src="../img/Update_2.ico"  height="23" width="23" name="atualizaleito" data-toggle="modal" data-target="#atualizaleito" class="btn-xs classatualizaleito"/>
+									</td>
+									<td class="actions">
+										<input type="image" src="../img/imprimileito.png"  height="23" width="23"  class="btn-xs imprimileito"/>
+									</td>
+							</tr>
 							<?php 
 							
 								$cont=$cont+1;
 							}  ?>
-							<td class="actions">
-								<input type="image" src="../img/lupa_1.png"  height="23" width="23" class="btn-xs visualiza"/>
-							</td>
-							<td class="actions">
-								<input type="image" src="../img/Update_2.ico"  height="23" width="23" name="atualizaleito" data-toggle="modal" data-target="#atualizaleito" class="btn-xs classatualizaleito"/>
-							</td>
-							<td class="actions">
-								<input type="image" src="../img/imprimileito.png"  height="23" width="23"  class="btn-xs imprimileito"/>
-							</td>
+									
 						</tbody>
 					</table>
 				</div>
@@ -200,6 +252,18 @@
 			});
         });
 	});
+	
+	$(document).on('click', '.insere', function(){
+			event.preventDefault();			
+			$.ajax({
+				type: "POST",
+				url:"../insercao/insercao_paciente.php",															
+				success : function(completeHtmlPage) {				
+					$("html").empty();
+					$("html").append(completeHtmlPage);
+				}
+			});			
+		});	
 	
 	$(document).ready(function(){
 		$("#tabela").on('click', '.visualiza', function(){

@@ -50,6 +50,10 @@
 									<td width="50%"><label>Cor no Painel</label></td>  
 									<td width="500%"><?php echo $_POST['cd_cor_status_trtmto']; ?></td>  
 								 </tr>
+								 <tr>  
+									<td width="50%"><label>Flag para o Status Inicial do Tratamento?</label></td>  
+									<td width="500%"><?php echo $_POST['fl_status_inicial_trtmto']; ?></td>  
+								 </tr>
 							</table>
 						</div>
 					</div>

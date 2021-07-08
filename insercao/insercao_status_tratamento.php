@@ -114,6 +114,21 @@
 											<td style="width:200px"><input type="text" class="form-control" name="cd_cor_status_trtmto"></td>  
 									 </tr>	
 									 
+									 <tr>  
+										<td style="width:150px"><label>Flag para o Status Inicial do Tratamento?</label></td>
+										<td style="width:150px">
+											<select  class="form-control" id="flstatusinicialtrtmto" onchange=" 
+														var selObj = document.getElementById('flstatusinicialtrtmto');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('fl_status_inicial_trtmto').value = selValue;">
+													<option value="null"></option>
+													<option value="1">Sim</option>
+													<option value="0">Não</option>
+											</select>
+										</td>  
+										
+									 </tr>
+									 
 								</table>																
 							</div>
 							<div class="modal-footer">	
@@ -125,6 +140,7 @@
 						<input type="text" id="fl_ativo" name="fl_ativo" style="display:none"> 
 						<input type="text" id="fl_status_intrpe_trtmto_equipe" name="fl_status_intrpe_trtmto_equipe" style="display:none"> 
 						<input type="text" id="fl_status_finaliza_trtmto_equipe" name="fl_status_finaliza_trtmto_equipe" style="display:none"> 
+						<input type="text" id="fl_status_inicial_trtmto" name="fl_status_inicial_trtmto" style="display:none">
 						
 					</form>
 				</div>

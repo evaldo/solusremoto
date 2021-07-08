@@ -1,6 +1,6 @@
 <?php
 //visualizacao_cores_risco.php
-if(isset($_POST["id_grupo_usua_menu_sist_pts"]))
+if(isset($_POST["id_grupo_usua_menu_sist_tratamento"]))
 {
 	session_start();
     
@@ -9,15 +9,15 @@ if(isset($_POST["id_grupo_usua_menu_sist_pts"]))
 	
     $pdo = database::connect();
 	
-    $query = "SELECT grupo_menu.id_grupo_usua_menu_sist_pts
+    $query = "SELECT grupo_menu.id_grupo_usua_menu_sist_tratamento
 					 , grupo.nm_grupo_acesso
-					 , menu.nm_menu_sist_pts
-				FROM tratamento.tb_c_grupo_usua_menu_sist_pts grupo_menu
+					 , menu.nm_menu_sist_tratamento
+				FROM tratamento.tb_c_grupo_usua_menu_sist_tratamento grupo_menu
 				   , tratamento.tb_c_grupo_acesso grupo
-				   , tratamento.tb_c_menu_sist_pts menu
+				   , tratamento.tb_c_menu_sist_tratamento menu
 				where grupo_menu.id_grupo_acesso = grupo.id_grupo_acesso
-				  and grupo_menu.id_menu_sist_pts = menu.id_menu_sist_pts				 
-				  and id_grupo_usua_menu_sist_pts = ".$_POST["id_grupo_usua_menu_sist_pts"]." 
+				  and grupo_menu.id_menu_sist_tratamento = menu.id_menu_sist_tratamento				 
+				  and id_grupo_usua_menu_sist_tratamento = ".$_POST["id_grupo_usua_menu_sist_tratamento"]." 
 				order by 2, 3 ";
 	
     $ret = pg_query($pdo, $query);

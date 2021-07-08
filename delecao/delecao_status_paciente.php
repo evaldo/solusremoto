@@ -1,7 +1,7 @@
 <?php
 //delete_cores.php
 	session_start();
-	$_SESSION['id_status_equipe']=$_POST['id_status_equipe'];
+	$_SESSION['id_status_pcnt']=$_POST['id_status_pcnt'];
 		
 ?>
 	<!DOCTYPE html>
@@ -16,39 +16,26 @@
 		  <div class="modal-dialog">
 				<div class="modal-content">
 					<div class="container">						
-						<h4 class="modal-title">Exclusão de Equipes</h4>
-					</div>	
-
+						<h4 class="modal-title">Exclusão dos Status do Paciente</h4>
+					</div>										
 					<div class="modal-body">
 						<div class="table-responsive">  
 							<table class="table table-bordered">
 								 <tr>  
-									<td width="50%"><label>Id do Status da Equipe:</label></td>  
-									<td width="500%"><?php echo $_POST['id_status_equipe']; ?></td>  
+									<td width="50%"><label>Id do Status do Paciente:</label></td>  
+									<td width="500%"><?php echo $_POST['id_status_pcnt']; ?></td>  
 								 </tr>
 								  <tr>  
-									<td width="50%"><label>Descrição do Status:</label></td>  
-									<td width="500%"><?php echo $_POST['ds_status_equipe']; ?></td>  
+									<td width="50%"><label>Descrição do Status do Paciente:</label></td>  
+									<td width="500%"><?php echo $_POST['ds_status_pcnt']; ?></td>  
 								 </tr>								 
-								 <tr>  
-									<td width="50%"><label>Descrição da Equipe:</label></td>  
-									<td width="500%"><?php echo $_POST['ds_equipe']; ?></td>  
-								 </tr>
 								 <tr>  
 									<td width="50%"><label>Flag Ativo?</label></td>  
 									<td width="500%"><?php echo $_POST['fl_ativo']; ?></td>  
-								 </tr>
+								 </tr>	
 								 <tr>  
-									<td width="50%"><label>Flag Interrompe o Tratamento?</label></td>  
-									<td width="500%"><?php echo $_POST['fl_status_intrpe_trtmto_equipe']; ?></td>  
-								 </tr>
-								 <tr>  
-									<td width="50%"><label>Flag Finaliza o Tratamento?</label></td>  
-									<td width="500%"><?php echo $_POST['fl_status_finaliza_trtmto_equipe']; ?></td>  
-								 </tr>
-								 <tr>  
-									<td width="50%"><label>Cor no Painel</label></td>  
-									<td width="500%"><?php echo $_POST['cd_cor_status_equipe']; ?></td>  
+									<td width="50%"><label>Cor no Painel:</label></td>  
+									<td width="500%"><?php echo $_POST['cd_cor_status_pcnt']; ?></td>  
 								 </tr>
 							</table>
 						</div>

@@ -6,7 +6,7 @@
 	
 	error_reporting(0); 
 	
-	$itens_por_pagina=5;
+	$itens_por_pagina=10;
 	$pagina=intval($_GET['pagina']);
 	
     global $pdo;	
@@ -23,10 +23,9 @@
 		
 		$textoconsulta = strtoupper($_POST['textoconsulta']);
 		
-		$sql = "select count(1)
-				 from tratamento.tb_c_menu_sist_tratamento menu
-				where upper(nm_menu_sist_tratamento) like '%" . $textoconsulta . "%'
-				order by 1";
+		$sql = "SELECT count(id_status_pcnt)
+				from tratamento.tb_c_status_pcnt 
+				where upper(ds_status_pcnt) like '%" . $textoconsulta . "%'";
 			
 		if ($pdo==null){
 				header(Config::$webLogin);
@@ -40,22 +39,14 @@
 		$num_total = $row[0];	
 		$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-		$sql ="select menu.id_menu_sist_tratamento
-			 , menu.nm_menu_sist_tratamento
-			 , menu.fl_menu_princ
-			 , (select nm_menu_sist_tratamento 
-				from tratamento.tb_c_menu_sist_tratamento
-			   where id_menu_sist_tratamento = menu.id_menu_supr)
-			 , menu.nm_objt
-			 , menu.nm_link_objt
-			 from tratamento.tb_c_menu_sist_tratamento menu 
-				where upper(menu.nm_menu_sist_tratamento) like '%" . $textoconsulta . "%' order by menu.nm_menu_sist_tratamento LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
-		
+		$sql ="SELECT id_status_pcnt, ds_status_pcnt, case when fl_ativo=1 then 'Sim' else 'Não' end fl_ativo, cd_cor_status_pcnt 
+				from tratamento.tb_c_status_pcnt 
+				where upper(ds_status_pcnt) like '%" . $textoconsulta . "%' order by cd_cor_status_pcnt LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
 		
 	} else{
 		
-			$sql = "select count(1)
-				 from tratamento.tb_c_menu_sist_tratamento menu";
+			$sql = "SELECT count(id_status_pcnt)
+				from tratamento.tb_c_status_pcnt";
 			
 			if ($pdo==null){
 					header(Config::$webLogin);
@@ -69,15 +60,7 @@
 			$num_total = $row[0];	
 			$num_paginas = ceil($num_total/$itens_por_pagina);
 		
-			$sql ="select menu.id_menu_sist_tratamento
-			 , menu.nm_menu_sist_tratamento
-			 , menu.fl_menu_princ
-			 , (select nm_menu_sist_tratamento 
-				from tratamento.tb_c_menu_sist_tratamento
-			   where id_menu_sist_tratamento = menu.id_menu_supr)
-			 , menu.nm_objt
-			 , menu.nm_link_objt
-			 from tratamento.tb_c_menu_sist_tratamento menu order by menu.nm_menu_sist_tratamento LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
+			$sql ="SELECT id_status_pcnt, ds_status_pcnt, case when fl_ativo=1 then 'Sim' else 'Não' end fl_ativo, cd_cor_status_pcnt from tratamento.tb_c_status_pcnt order by cd_cor_status_pcnt LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
 	}
 	
 	if ($pdo==null){
@@ -98,17 +81,9 @@
 		try
 		{	
 		
-			if ($_POST['fl_menu_princ']=='on'){
-				$fl_menu_princ = 'S';
-			} else {
-				$fl_menu_princ = 'N';
-			}
-			
-			if ($_POST['id_menu_supr']==''){
-				$_POST['id_menu_supr'] = 'null';			
-			}
-		
-			$sql = "insert into tratamento.tb_c_menu_sist_tratamento values ((select NEXTVAL('tratamento.sq_menu_sist_tratamento')), '". $_POST['nm_menu_sist_tratamento']."', '". $fl_menu_princ ."', ".$_POST['id_menu_supr'].", '". $_POST['nm_objt'] ."', '". $_POST['nm_link_objt'] ."', '". $_SESSION['usuario'] ."', current_timestamp, null,null);";
+			$sql = "insert into tratamento.tb_c_status_pcnt (id_status_pcnt, ds_status_pcnt, fl_ativo, cd_cor_status_pcnt, cd_usua_incs, dt_incs) values ((select NEXTVAL('tratamento.sq_status_pcnt')), '". $_POST['ds_status_pcnt']."', ". $_POST['fl_ativo'].", '". $_POST['cd_cor_status_pcnt']."', '".$_SESSION['usuario']."', current_timestamp);";
+
+			//echo $sql;
 
 			$result = pg_query($pdo, $sql);
 
@@ -135,17 +110,9 @@
 		try
 		{	
 			
-			if ($_POST['fl_menu_princ']=='on'){					
-				$fl_menu_princ = 'S';
-			} else {
-				$fl_menu_princ = 'N';
-			}
+			$sql = "update tratamento.tb_c_status_pcnt set ds_status_pcnt = '". $_POST['ds_status_pcnt']."', fl_ativo = ". $_POST['fl_ativo'].", cd_usua_altr = '".$_SESSION['usuario']."', cd_cor_status_pcnt = '". $_POST['cd_cor_status_pcnt']."',  dt_altr = current_timestamp where id_status_pcnt = ". $_SESSION['id_status_pcnt']."";	
 			
-			if ($_POST['id_menu_supr']==''){
-				$_POST['id_menu_supr'] = 'null';			
-			}
-			
-			$sql = "update tratamento.tb_c_menu_sist_tratamento set nm_menu_sist_tratamento = '". $_POST['nm_menu_sist_tratamento']."', fl_menu_princ = '" .$fl_menu_princ."', id_menu_supr = ".$_POST['id_menu_supr'].", nm_objt = '". $_POST['nm_objt'] ."', nm_link_objt = '". $_POST['nm_link_objt'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_menu_sist_tratamento = ". $_SESSION['id_menu_sist_tratamento']."";	
+			//echo $sql;
 			
 			$result = pg_query($pdo, $sql);
 
@@ -172,10 +139,9 @@
 		try
 		{
 
-			$sql = "SELECT count(id_menu_sist_tratamento)
-				from tratamento.tb_c_grupo_usua_menu_sist_tratamento
-				where id_menu_sist_tratamento = ".$_SESSION['id_menu_sist_tratamento']." ";
-			
+			/*$sql = "SELECT count(id_status_pcnt)
+				from tratamento.tb_c_status_equipe
+				where id_status_pcnt = ".$_SESSION['id_status_pcnt']." ";
 			
 			if ($pdo==null){
 					header(Config::$webLogin);
@@ -192,16 +158,16 @@
 				
 				echo "<div class=\"alert alert-warning alert-dismissible\">
 					<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
-					<strong>Atenção!</strong> Exclusão recusada! Este menu está cadastrado para grupos de acesso.
+					<strong>Atenção!</strong> Exclusão recusada! Esta equipe está cadastrada em status por Equipe.
 				</div>";
 				
 				$secondsWait = 5;
 				header("Refresh:$secondsWait");
 				
-			} else {
+			} else {*/
 		
 				// remove do banco			
-				$sql = "DELETE FROM tratamento.tb_c_menu_sist_tratamento WHERE id_menu_sist_tratamento = ".$_SESSION['id_menu_sist_tratamento']."";			
+				$sql = "DELETE FROM tratamento.tb_c_status_pcnt WHERE id_status_pcnt = ".$_SESSION['id_status_pcnt']."";			
 				$result = pg_query($pdo, $sql);
 
 				if($result){
@@ -211,7 +177,7 @@
 				$secondsWait = 0;
 				header("Refresh:$secondsWait");
 				
-			}
+			//}
 
 			
 		} catch(PDOException $e)
@@ -228,7 +194,7 @@
 	 <meta charset="utf-8">
 	 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	 <meta name="viewport" content="width=device-width, initial-scale=1">
-	 <title>Cadastro de Menus da Aplicação de tratamento</title>
+	 <title>Cadastro dos Status do Paciente</title>
 
 	 <link href="../css/bootstrap.min.css" rel="stylesheet">
 	 <link href="../css/style.css" rel="stylesheet">
@@ -238,7 +204,7 @@
 	 <div id="main" class="container-fluid" style="margin-top: 50px"> 
 		<div class="container" style="margin-left: 0px">
 			<form class="form-inline" action="#" method="post" >				
-				<b>Consultar menus:</b>:&nbsp;&nbsp													
+				<b>Consultar Status dos Pacientes:</b>:&nbsp;&nbsp													
 				<input class="form-control" name="textoconsulta" type="text" placeholder="Pesquisar">&nbsp;&nbsp;&nbsp;&nbsp;
 				<input class="btn btn-primary" type="submit" value="Consultar" name="botaoconsultar">&nbsp;&nbsp;											
 				<input type="button" value="Novo Registro" class="btn btn-primary btn-xs insere"/>				
@@ -253,11 +219,11 @@
 			<table class="table table-striped" cellspacing="0" cellpadding="0" id="tabela">
 				<thead>
 					<tr>
-						<th>Identificador do usuário</th>
-						<th>Nome do Menu</th>												
-						<th>Menu Principal?</th>												
-						<th>Menu Superior</th>																		
-						<th class="actions">Ações</th>			
+						<th>Identificador do Status do Paciente</th>
+						<th>Descrição do Status do Paciente</th>
+						<th>Flag Ativo?</th>	
+						<th>Cor no Painel</th>	
+						<th class="actions">Ações</th>
 					</tr>
 				</thead>				
 				<tbody>
@@ -267,10 +233,11 @@
 					while($row = pg_fetch_row($ret)) {
 					?>						
 						<tr>
-							<td id="id_menu_sist_tratamento" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
-							<td id="nm_menu_sist_tratamento" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
-							<td id="fl_menu_princ" value="<?php echo $row[2];?>"><?php echo $row[2];?></td>				
-							<td id="id_menu_supr" value="<?php echo $row[3];?>"><?php echo $row[3];?></td>							
+							<td id="id_status_pcnt" value="<?php echo $row[0];?>"><?php echo $row[0];?></td>
+							<td id="ds_status_pcnt" value="<?php echo $row[1];?>"><?php echo $row[1];?></td>
+							<td id="fl_ativo" value="<?php echo $row[2];?>"><?php echo $row[2];?></td>
+							<td id="cd_cor_status_pcnt" value="<?php echo $row[3];?>"><?php echo $row[3];?></td>
+														
 							<td class="actions">								
 								<input type="button" value="Visualizar" class="btn btn-success btn-xs visualiza"/>
 								<input type="button" value="Alterar" class="btn btn-warning btn-xs altera"/>								
@@ -286,14 +253,14 @@
 		
 		<div>			
 			<ul class="pagination">
-				<li class="page-item"><a class="page-link" href="cadastro_menu.php?pagina=0">Primeiro</a></li>
+				<li class="page-item"><a class="page-link" href="cadastro_status_paciente.php?pagina=0">Primeiro</a></li>
 				<?php 				
 				for ($i=0; $i<$num_paginas;$i++){										
 				?>
-					<li class="page-item" ><a class="page-link" href="cadastro_menu.php?pagina=<?php echo $i;?>">
+					<li class="page-item" ><a class="page-link" href="cadastro_status_paciente.php?pagina=<?php echo $i;?>">
 						<?php echo $i+1;?></a></li>
 				<?php } ?>
-				<li class="page-item"><a class="page-link" href="cadastro_menu.php?pagina=<?php echo $num_paginas-1; ?>">Último</a></li>
+				<li class="page-item"><a class="page-link" href="cadastro_status_paciente.php?pagina=<?php echo $num_paginas-1; ?>">Último</a></li>
 			</ul>		
 		</div> <!-- /#bottom -->
 	 </div> <!-- /#main -->
@@ -324,17 +291,16 @@
 		
 			var currentRow=$(this).closest("tr"); 
 			
-			var id_menu_sist_tratamento = currentRow.find("td:eq(0)").text();
-			var nm_menu_sist_tratamento = currentRow.find("td:eq(1)").text();	
-			var fl_menu_princ = currentRow.find("td:eq(2)").text();
-			var id_menu_supr = currentRow.find("td:eq(3)").text();				
+			var id_status_pcnt = currentRow.find("td:eq(0)").text();
+			var ds_status_pcnt = currentRow.find("td:eq(1)").text();	
+			var fl_ativo = currentRow.find("td:eq(2)").text();
+			var cd_cor_status_pcnt = currentRow.find("td:eq(3)").text();	
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
-				 url: "../delecao/delecao_menu.php", //
-				 data: {id_menu_sist_tratamento:id_menu_sist_tratamento, nm_menu_sist_tratamento:nm_menu_sist_tratamento,
-				 fl_menu_princ:fl_menu_princ, id_menu_supr:id_menu_supr},
+				 url: "../delecao/delecao_status_paciente.php", //
+				 data: {id_status_pcnt:id_status_pcnt, ds_status_pcnt:ds_status_pcnt, fl_ativo:fl_ativo, cd_cor_status_pcnt:cd_cor_status_pcnt},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();
@@ -347,7 +313,7 @@
 			event.preventDefault();			
 			$.ajax({
 				type: "POST",
-				url:"../insercao/insercao_menu.php",															
+				url:"../insercao/insercao_status_paciente.php",															
 				success : function(completeHtmlPage) {				
 					$("html").empty();
 					$("html").append(completeHtmlPage);
@@ -359,17 +325,16 @@
 		
 			var currentRow=$(this).closest("tr"); 
 			
-			var id_menu_sist_tratamento = currentRow.find("td:eq(0)").text();
-			var nm_menu_sist_tratamento = currentRow.find("td:eq(1)").text();	
-			var fl_menu_princ = currentRow.find("td:eq(2)").text();
-			var id_menu_supr = currentRow.find("td:eq(3)").text();				
+			var id_status_pcnt = currentRow.find("td:eq(0)").text();
+			var ds_status_pcnt = currentRow.find("td:eq(1)").text();
+			var fl_ativo = currentRow.find("td:eq(2)").text();
+			var cd_cor_status_pcnt = currentRow.find("td:eq(3)").text();
 			
 			// AJAX code to submit form.
 			$.ajax({
 				 type: "POST",
-				 url: "../alteracao/alteracao_menu.php", //
-				 data: {id_menu_sist_tratamento:id_menu_sist_tratamento, nm_menu_sist_tratamento:nm_menu_sist_tratamento,
-				 fl_menu_princ:fl_menu_princ, id_menu_supr:id_menu_supr},
+				 url: "../alteracao/alteracao_status_paciente.php", //
+				 data: {id_status_pcnt:id_status_pcnt, ds_status_pcnt:ds_status_pcnt, fl_ativo:fl_ativo, cd_cor_status_pcnt:cd_cor_status_pcnt},
 				 dataType : "text",			 
 				 success : function(completeHtmlPage) {				
 					$("html").empty();
@@ -382,12 +347,12 @@
 		$("#tabela").on('click', '.visualiza', function(){
 			
 			var currentRow=$(this).closest("tr"); 			
-			var id_menu_sist_tratamento = currentRow.find("td:eq(0)").text();							
+			var id_status_pcnt = currentRow.find("td:eq(0)").text();							
 						
 			$.ajax({
-				url:"../visualizacao/visualizacao_menu.php",
+				url:"../visualizacao/visualizacao_status_paciente.php",
 				method:"POST",
-				data:{id_menu_sist_tratamento:id_menu_sist_tratamento},
+				data:{id_status_pcnt:id_status_pcnt},
 				success:function(data){
 					$('#visualizacao').html(data);
 					$('#visualiza').modal('show');
@@ -399,4 +364,3 @@
 	
 	</script>
 <?php ?>
-

@@ -6,6 +6,9 @@
 	
 	$pdo = database::connect();
 	
+	$nm_pcnt = '';	
+	$dt_nasc_pcnt = '';	
+	$ds_mncp_pcnt = '';
 	
 ?>	
 
@@ -27,19 +30,60 @@
 						<div class="modal-body">
 							<div class="table-responsive">
 								<table class="table table-bordered">
+								
+									<tr>  
+										<td style="width:150px"><label>Escolha um paciente ou faça o cadastro abaixo:</label></td>  
+										<?php
+										
+										$sql = "SELECT cd_pcnt, nm_pcnt, to_char(dt_nasc_pcnt,'yyyy-mm-dd'), ds_mncp_pcnt from tratamento.tb_c_pcnt order by 2";
+										
+										if ($pdo==null){
+												header(Config::$webLogin);
+										}	
+										$ret = pg_query($pdo, $sql);
+										if(!$ret) {
+											echo pg_last_error($pdo);
+											exit;
+										}
+										?>
+										<td style="width:150px">
+											<select  id="pcnt" class="form-control" onchange=" 
+														var selObj = document.getElementById('pcnt');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														var selnm_pcnt = $(this).find(':selected').data('nm_pcnt');
+														var seldt_nasc_pcnt = $(this).find(':selected').data('dt_nasc_pcnt');
+														var selds_mncp_pcnt = $(this).find(':selected').data('ds_mncp_pcnt');
+														document.getElementById('cd_pcnt').value = selValue;
+														document.getElementById('nm_pcnt').value = selnm_pcnt;
+														document.getElementById('dt_nasc_pcnt').value = seldt_nasc_pcnt;
+														document.getElementById('mncp').value = selds_mncp_pcnt;
+														document.getElementById('ds_mncp').value = selds_mncp_pcnt;">
+														<option value="" data-nm_pcnt="" data-dt_nasc_pcnt="" data-ds_mncp_pcnt="">Novo</option>
+																									
+											<?php
+												$cont=1;																	
+											
+												while($row = pg_fetch_row($ret)) {
+												?>												
+													<option value="<?php echo $row[0]; ?>" data-nm_pcnt="<?php echo $row[1]; ?>" data-dt_nasc_pcnt="<?php echo $row[2]; ?>" data-ds_mncp_pcnt="<?php echo $row[3]; ?>" ><?php echo $row[1]; ?></option>																		
+											<?php $cont=$cont+1;} ?>	
+											</select>											
+										</td>  																				
+									 </tr>
+								
 									 <tr>  
 										<td style="width:150px"><label>Identificador no Sistema de Gestão:</label></td>  
-										<td style="width:200px"><input type="text" class="form-control" name="cd_pcnt"></td>  
+										<td style="width:200px"><input type="text" id="cd_pcnt" class="form-control" name="cd_pcnt"></td>  
 									 </tr>	
 								
 									 <tr>  
 										<td style="width:150px"><label>Nome do Paciente:</label></td>  
-										<td style="width:200px"><input type="text" class="form-control" name="nm_pcnt"></td> 																			
+										<td style="width:200px"><input type="text" class="form-control" value="<?php echo $nm_pcnt; ?>" id="nm_pcnt" name="nm_pcnt"></td> 																			
 									 </tr>
 									 
 									 <tr>  
 										<td style="width:150px"><label>Data de Nascimento:</label></td>
-										<td style="width:400px"><input type="date" class="form-control" name="dt_nasc_pcnt"></td>  
+										<td style="width:400px"><input type="date" class="form-control" id="dt_nasc_pcnt" name="dt_nasc_pcnt" value="<?php echo $dt_nasc_pcnt; ?>"></td>  
 									 </tr>
 									 
 									  <tr>  
@@ -68,9 +112,14 @@
 												$cont=1;																	
 											
 												while($row = pg_fetch_row($ret)) {
-												?>												
-													<option value="<?php echo $row[1]; ?>"><?php echo $row[1]; ?></option>																		
-											<?php $cont=$cont+1;} ?>	
+													if($row[1]==$ds_mncp_pcnt) {
+													?>
+														<option value="<?php echo $ds_mncp_pcnt; ?>"><?php echo $ds_mncp_pcnt; ?></option>
+													<?php
+													} else {
+													?>
+														<option value="<?php echo $row[1]; ?>"><?php echo $row[1]; ?></option>																		
+												<?php $cont=$cont+1;}} ?>	
 											</select>
 										</td>  								
 									 </tr>
@@ -82,7 +131,7 @@
 								<input type="button" class="btn btn-primary" onclick="history.go()" value="Voltar">									
 							</div>									
 						</div>						
-						<input type="text" id="ds_mncp" name="ds_mncp" style="display:none"> 						
+						<input type="text" id="ds_mncp" name="ds_mncp" style="display:none"> 												
 						
 					</form>
 				</div>
@@ -92,7 +141,8 @@
 		<script src="../js/jquery.min.js"></script>
 		<script src="../js/bootstrap.min.js"></script>			
 	</body>
-	</html>		
+	</html>
+	
 <?php 
     
 	

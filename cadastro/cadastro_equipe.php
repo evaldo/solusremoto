@@ -138,7 +138,7 @@
 		{
 
 			$sql = "SELECT count(id_equipe)
-				from tratamento.tb_c_status_equipe
+				from tratamento.tb_c_status_trtmto
 				where id_equipe = ".$_SESSION['id_equipe']." ";
 			
 			if ($pdo==null){
@@ -156,7 +156,7 @@
 				
 				echo "<div class=\"alert alert-warning alert-dismissible\">
 					<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
-					<strong>Atenção!</strong> Exclusão recusada! Esta equipe está cadastrada em status por Equipe.
+					<strong>Atenção!</strong> Exclusão recusada! Esta equipe está cadastrada em status de tratamento.
 				</div>";
 				
 				$secondsWait = 5;

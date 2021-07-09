@@ -6,9 +6,6 @@
 	
 	error_reporting(0); 
 	
-	$itens_por_pagina=10;
-	$pagina=intval($_GET['pagina']);
-	
     global $pdo;	
 	
 	$pdo = database::connect();
@@ -40,7 +37,7 @@
 		$num_paginas = ceil($num_total/$itens_por_pagina);
 		
 		$sql ="SELECT status.id_status_trtmto, equipe.ds_equipe, status.ds_status_trtmto, case when status.fl_ativo = 1 then 'Sim' else 'Não' End Status_Ativo, case when status.fl_status_intrpe_trtmto_equipe = 1 then 'Sim' else 'Não' End Status_intrpe_trtmeto_equipe, case when status.fl_status_finaliza_trtmto_equipe = 1 then 'Sim' else 'Não' End status_finaliza_trtmto_equipe, status.cd_cor_status_trtmto, case when status.fl_status_inicial_trtmto = 1 then 'Sim' else 'Não' End fl_status_inicial_trtmto from tratamento.tb_c_status_trtmto status, tratamento.tb_c_equipe equipe 
-				where status.id_equipe = equipe.id_equipe and upper(status.ds_status_trtmto) like '%" . $textoconsulta . "%' order by equipe.ds_equipe, status.ds_status_trtmto LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
+				where status.id_equipe = equipe.id_equipe and upper(status.ds_status_trtmto) like '%" . $textoconsulta . "%' order by equipe.nu_seq_equipe_pnel ";
 		
 	} else{
 		
@@ -60,7 +57,7 @@
 			$num_paginas = ceil($num_total/$itens_por_pagina);
 		
 			$sql ="SELECT status.id_status_trtmto, equipe.ds_equipe, status.ds_status_trtmto, case when status.fl_ativo = 1 then 'Sim' else 'Não' End Status_Ativo, case when status.fl_status_intrpe_trtmto_equipe = 1 then 'Sim' else 'Não' End Status_intrpe_trtmto_equipe, case when status.fl_status_finaliza_trtmto_equipe = 1 then 'Sim' else 'Não' End status_finaliza_trtmto_equipe, status.cd_cor_status_trtmto, case when status.fl_status_inicial_trtmto = 1 then 'Sim' else 'Não' End fl_status_inicial_trtmto	from tratamento.tb_c_status_trtmto status, tratamento.tb_c_equipe equipe 
-				where status.id_equipe = equipe.id_equipe order by equipe.ds_equipe, status.ds_status_trtmto LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
+				where status.id_equipe = equipe.id_equipe order by equipe.nu_seq_equipe_pnel ";	
 	}
 	
 	if ($pdo==null){
@@ -234,18 +231,7 @@
 		
 		</div> <!-- /#list -->
 		
-		<div>			
-			<ul class="pagination">
-				<li class="page-item"><a class="page-link" href="cadastro_status_tratamento.php?pagina=0">Primeiro</a></li>
-				<?php 				
-				for ($i=0; $i<$num_paginas;$i++){										
-				?>
-					<li class="page-item" ><a class="page-link" href="cadastro_status_tratamento.php?pagina=<?php echo $i;?>">
-						<?php echo $i+1;?></a></li>
-				<?php } ?>
-				<li class="page-item"><a class="page-link" href="cadastro_status_tratamento.php?pagina=<?php echo $num_paginas-1; ?>">Último</a></li>
-			</ul>		
-		</div> <!-- /#bottom -->
+		
 	 </div> <!-- /#main -->
 
 	 <script src="../js/jquery.min.js"></script>

@@ -282,13 +282,13 @@
 
 									
 									<td class="actions">
-										<input type="image" title="Inserir Status" src="../img/insertstatus.png"  height="27" width="27" name="inserestatus" data-toggle="modal" data-target="#inserestatus" class="btn-xs inserestatus"/>
+										<input type="image" title="Insere Status" src="../img/insertstatus.png"  height="23" width="23" name="inserestatus" data-toggle="modal" data-target="#inserestatus" class="btn-xs inserestatus"/>
 									</td>
 									<td class="actions">
-										<input type="image" title="Alterar Status" src="../img/alterarstatus.png"  height="27" width="27"  class="btn-xs imprimileito"/>
+										<input type="image" src="../img/delete.png"  height="23" width="23" class="btn-xs deletestatus"/>
 									</td>
 									<td class="actions">
-										<input type="image" title="Excluir Status" src="../img/deletestatus.png"  height="27" width="27" class="btn-xs deletestatus"/>
+										<input type="image" src="../img/imprimileito.png"  height="23" width="23"  class="btn-xs imprimileito"/>
 									</td>
 							</tr>
 							<?php 
@@ -327,24 +327,59 @@
 
 <script>
 	
+	
 	$(document).ready(function(){
-		$(document).on('click', '.inserestatus', function(){
+		$("#tabela").on('click', '.loader', function(){
 			
 			var currentRow=$(this).closest("tr"); 							
-			var cd_pcnt = currentRow.find("td:eq(0)").text();
-			var nm_pcnt = currentRow.find("td:eq(1)").text();
-			
+			var nm_loc_nome_inteiro = currentRow.find("td:eq(0)").text();
+			var nm_loc_nome_trim = nm_loc_nome_inteiro.trim();			
+			var nm_loc_nome_replace = nm_loc_nome_trim.replace('LEITO ', '');			
+			var nm_loc_nome = nm_loc_nome_replace.trim();			
+												
+			$.ajax({
+				url:"../gestaoleitos/selecao_detalhe_paciente.php",
+				method:"POST",
+				data:{nm_loc_nome:nm_loc_nome},
+				success:function(data){
+					$('#detalhe_paciente').html(data);
+					$('#dataModal').modal('show');
+				}
+			});
+        });
+	});
+	
+	$(document).on('click', '.insere', function(){
 			event.preventDefault();			
 			$.ajax({
 				type: "POST",
-				url:"../tratamento/insercao_status.php",
-				data:{cd_pcnt:cd_pcnt, nm_pcnt:nm_pcnt},			
-				success : function(completeHtmlPage) {									
-					$("html").empty();					
-					$("html").append(completeHtmlPage);										
+				url:"../tratamento/insercao_paciente.php",															
+				success : function(completeHtmlPage) {				
+					$("html").empty();
+					$("html").append(completeHtmlPage);
 				}
 			});			
 		});	
+	
+	$(document).ready(function(){
+		$("#tabela").on('click', '.visualiza', function(){
+			
+			var currentRow=$(this).closest("tr"); 							
+			var nm_loc_nome_inteiro = currentRow.find("td:eq(0)").text();
+			var nm_loc_nome_trim = nm_loc_nome_inteiro.trim();			
+			var nm_loc_nome_replace = nm_loc_nome_trim.replace('LEITO ', '');			
+			var nm_loc_nome = nm_loc_nome_replace.trim();			
+			
+			$.ajax({
+				url:"../gestaoleitos/selecao_detalhe_paciente.php",
+				method:"POST",
+				data:{nm_loc_nome:nm_loc_nome},
+				success:function(data){
+					$('#detalhe_paciente').html(data);
+					$('#dataModal').modal('show');
+				}
+			});
+        });
 	});
 	
 </script>

@@ -5,7 +5,7 @@
     include '../database.php';
     $pdo = database::connect();
 	
-	error_reporting(0); 	
+	//error_reporting(0); 	
 		
 	$textoconsulta = "";
 	$retSqlServer = "";
@@ -19,6 +19,106 @@
 	if(!$ret) {
 		echo pg_last_error($pdo);		
 		exit;
+	}
+	
+	if(isset($_POST['inserestatus'])){					
+		
+		if ($pdo==null){
+			header(Config::$webLogin);
+		}
+		
+		try
+		{
+			
+			
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			///VERIFICAR SE JÁ EXISTE O STATUS PARA O TRATAMENTO
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			
+			
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			///Criar opção de exclusão do tratamento por paciente. Pode ser um botão no alto
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			
+			
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			///Ao passar o mouse aparecer a observação
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			///Não calculou o tempo de stauts ao incluir
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			
+					
+			$sql = "SELECT id_hstr_pnel_solic_trtmto, dt_inicial_trtmto 
+			          FROM tratamento.tb_hstr_pnel_solic_trtmto 
+			        WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_equipe = ".$_POST['id_equipe']." ";
+			
+			//echo $sql;
+
+			$rethstrtratamento = pg_query($pdo, $sql);
+			
+			if(!$rethstrtratamento) {
+				echo pg_last_error($pdo);		
+				exit;
+			}
+			
+			$rowhstrtratamento = pg_fetch_row($rethstrtratamento);
+			
+			$id_hstr_pnel_solic_trtmto = $rowhstrtratamento[0];
+			$dt_inicial_trtmto = $rowhstrtratamento[1];
+			
+			$sql = "update tratamento.tb_hstr_pnel_solic_trtmto set ds_utlma_obs_pcnt = '".$_POST['ds_obs_pcnt']."', id_status_trtmto = ".$_POST['id_status_trtmto'].", ds_status_trtmto = (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto'].") where id_hstr_pnel_solic_trtmto = ".$id_hstr_pnel_solic_trtmto."";
+			
+			//echo $sql;
+
+			$result = pg_query($pdo, $sql);
+
+			if($result){
+				echo "";
+			}
+
+			$sql = "INSERT INTO tratamento.tb_hstr_obs_pnel_solic_trtmto(id_hstr_obs_pnel_solic_trtmto, id_hstr_pnel_solic_trtmto, id_status_equipe, ds_status_equipe, dt_inic_status_equipe_trtmto, dt_final_status_equipe_trtmto, ds_obs_pcnt, tp_minuto_status_equipe_trtmto, cd_usua_incs, dt_incs, dt_inicial_trtmto, cd_pcnt, nm_pcnt, id_status_trtmto, ds_status_trtmto)
+	VALUES ((select NEXTVAL('tratamento.sq_hstr_obs_pnel_solic_trtmto')), ".$id_hstr_pnel_solic_trtmto.", ".$_POST['id_equipe'].", (select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe']."), current_timestamp, null, '".$_POST['ds_obs_pcnt']."', 0, '".$_SESSION['usuario']."', current_timestamp, '".$dt_inicial_trtmto."', '".$_POST['cd_pcnt']."', '".$_POST['nm_pcnt']."',".$_POST['id_status_trtmto'].", (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."));";
+
+			//echo $sql;
+
+			$result = pg_query($pdo, $sql);
+
+			if($result){
+				echo "";
+			} 
+			
+			$sql = "SELECT MAX(id_hstr_obs_pnel_solic_trtmto) FROM tratamento.tb_hstr_obs_pnel_solic_trtmto WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_status_equipe = ".$_POST['id_equipe']." ";
+			
+			//echo $sql;
+
+			$retmaxstatusequipe = pg_query($pdo, $sql);
+			
+			if(!$retmaxstatusequipe) {
+				echo pg_last_error($pdo);		
+				exit;
+			}
+			
+			$rowmaxstatusequipe = pg_fetch_row($retmaxstatusequipe);
+			
+			$sql = "UPDATE tratamento.tb_hstr_obs_pnel_solic_trtmto set dt_final_status_equipe_trtmto= current_timestamp, tp_minuto_status_equipe_trtmto = round((SELECT date_part( 'minute', age(current_timestamp, dt_inic_status_equipe_trtmto)))) where id_hstr_obs_pnel_solic_trtmto = ".$rowmaxstatusequipe[0]."";
+
+			//echo $sql;
+
+			$result = pg_query($pdo, $sql);
+
+			if($result){
+				echo "";
+			} 
+
+			$secondsWait = 0;
+			header("Refresh:$secondsWait");
+		
+		} catch(PDOException $e)
+		{
+			die($e->getMessage());
+		}
 	}
 	
 	if(isset($_POST['insere'])){					
@@ -42,12 +142,7 @@
 			}
 			
 			$rowpaciente = pg_fetch_row($retpaciente);
-			
-			if(!$retpaciente) {
-				echo pg_last_error($pdo);		
-				exit;
-			}
-			
+									
 			if($rowpaciente[0]==0){
 				$sqlinsertpcnt = "INSERT INTO tratamento.tb_c_pcnt(cd_pcnt, nm_pcnt, dt_nasc_pcnt, ds_mncp_pcnt)
 		VALUES ('". $_POST['cd_pcnt'] ."', '". $_POST['nm_pcnt'] ."', '". $_POST['dt_nasc_pcnt'] ."', '". $_POST['ds_mncp'] ."')";
@@ -117,9 +212,21 @@
 
 					if($result){
 						echo "";
-					}  
+					}
+					
+					$sql = "INSERT INTO tratamento.tb_hstr_obs_pnel_solic_trtmto(id_hstr_obs_pnel_solic_trtmto, id_hstr_pnel_solic_trtmto, id_status_equipe, ds_status_equipe, dt_inic_status_equipe_trtmto, dt_final_status_equipe_trtmto, ds_obs_pcnt, tp_minuto_status_equipe_trtmto, cd_usua_incs, dt_incs, dt_inicial_trtmto, cd_pcnt, nm_pcnt, id_status_trtmto, ds_status_trtmto)
+	VALUES ((select NEXTVAL('tratamento.sq_hstr_obs_pnel_solic_trtmto')), (SELECT currval('tratamento.sq_hstr_pnel_solic_trtmto')), ".$rowretequipetratamento[0].", '".$rowretequipetratamento[1]."', current_timestamp, null, 'INICIO DO TRATAMENTO', 0, '".$_SESSION['usuario']."', current_timestamp, current_timestamp, '".$_POST['cd_pcnt']."', '".$_POST['nm_pcnt']."',".$rowretequipetratamento[3].", '".$rowretequipetratamento[4]."') ";
+
+					//echo $sql;
+
+					$result = pg_query($pdo, $sql);
+
+					if($result){
+						echo "";
+					}
 					
 				}
+				
 				
 				$secondsWait = 0;
 				header("Refresh:$secondsWait");
@@ -282,7 +389,7 @@
 
 									
 									<td class="actions">
-										<input type="image" title="Inserir Status" src="../img/insertstatus.png"  height="27" width="27" name="inserestatus" data-toggle="modal" data-target="#inserestatus" class="btn-xs inserestatus"/>
+										<input type="image" title="Inserir Status" src="../img/insertstatus.png"  height="27" width="27" name="telainserestatus" data-toggle="modal" data-target="#telainserestatus" class="btn-xs telainserestatus"/>
 									</td>
 									<td class="actions">
 										<input type="image" title="Alterar Status" src="../img/alterarstatus.png"  height="27" width="27"  class="btn-xs imprimileito"/>
@@ -328,7 +435,7 @@
 <script>
 	
 	$(document).ready(function(){
-		$(document).on('click', '.inserestatus', function(){
+		$(document).on('click', '.telainserestatus', function(){
 			
 			var currentRow=$(this).closest("tr"); 							
 			var cd_pcnt = currentRow.find("td:eq(0)").text();
@@ -338,6 +445,26 @@
 			$.ajax({
 				type: "POST",
 				url:"../tratamento/insercao_status.php",
+				data:{cd_pcnt:cd_pcnt, nm_pcnt:nm_pcnt},			
+				success : function(completeHtmlPage) {									
+					$("html").empty();					
+					$("html").append(completeHtmlPage);										
+				}
+			});			
+		});	
+	});
+	
+	$(document).ready(function(){
+		$(document).on('click', '.insere', function(){
+			
+			var currentRow=$(this).closest("tr"); 							
+			var cd_pcnt = currentRow.find("td:eq(0)").text();
+			var nm_pcnt = currentRow.find("td:eq(1)").text();
+			
+			event.preventDefault();			
+			$.ajax({
+				type: "POST",
+				url:"../tratamento/insercao_paciente.php",
 				data:{cd_pcnt:cd_pcnt, nm_pcnt:nm_pcnt},			
 				success : function(completeHtmlPage) {									
 					$("html").empty();					

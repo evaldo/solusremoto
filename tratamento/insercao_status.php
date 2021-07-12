@@ -6,10 +6,7 @@
 	include '../database.php';
 	$pdo = database::connect();
 	
-	if (isset($_POST['nm_pcnt'])){
-
 	
-	}
 ?>	
 
 	<!DOCTYPE html>
@@ -106,13 +103,15 @@
 								</table>																
 							</div>
 							<div class="modal-footer">	
-								<input type="submit" class="btn btn-danger" name="insere" value="Inserir Status">&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="submit" class="btn btn-danger" name="inserestatus" value="Inserir Status">&nbsp;&nbsp;&nbsp;&nbsp;
 								<input type="button" class="btn btn-primary" onclick="history.go()" value="Voltar">									
 							</div>									
-						</div>						
+						</div>		
+						<!-- style="display:none"-->
 						<input type="text" id="id_equipe" name="id_equipe" style="display:none"> 						
-						<input type="text" id="id_status_trtmto" name="id_status_trtmto" style="display:none">						
-						
+						<input type="text" id="id_status_trtmto" name="id_status_trtmto" style="display:none">	
+						<input type="text" id="nm_pcnt" name="nm_pcnt" value="<?php echo $_POST['nm_pcnt'];?>" style="display:none">
+						<input type="text" id="cd_pcnt" name="cd_pcnt" value="<?php echo $_POST['cd_pcnt'];?>" style="display:none">
 					</form>
 				</div>
 			</div>

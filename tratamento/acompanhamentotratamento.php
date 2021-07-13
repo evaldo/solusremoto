@@ -29,68 +29,9 @@
 		
 		try
 		{
-			
-			
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			///VERIFICAR SE JÁ EXISTE O STATUS PARA O TRATAMENTO
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
-			
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			///Criar opção de exclusão do tratamento por paciente. Pode ser um botão no alto
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
-			
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			///Ao passar o mouse aparecer a observação
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			///Não calculou o tempo de stauts ao incluir
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
-					
-			$sql = "SELECT id_hstr_pnel_solic_trtmto, dt_inicial_trtmto 
-			          FROM tratamento.tb_hstr_pnel_solic_trtmto 
-			        WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_equipe = ".$_POST['id_equipe']." ";
-			
-			//echo $sql;
-
-			$rethstrtratamento = pg_query($pdo, $sql);
-			
-			if(!$rethstrtratamento) {
-				echo pg_last_error($pdo);		
-				exit;
-			}
-			
-			$rowhstrtratamento = pg_fetch_row($rethstrtratamento);
-			
-			$id_hstr_pnel_solic_trtmto = $rowhstrtratamento[0];
-			$dt_inicial_trtmto = $rowhstrtratamento[1];
-			
-			$sql = "update tratamento.tb_hstr_pnel_solic_trtmto set ds_utlma_obs_pcnt = '".$_POST['ds_obs_pcnt']."', id_status_trtmto = ".$_POST['id_status_trtmto'].", ds_status_trtmto = (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto'].") where id_hstr_pnel_solic_trtmto = ".$id_hstr_pnel_solic_trtmto."";
-			
-			//echo $sql;
-
-			$result = pg_query($pdo, $sql);
-
-			if($result){
-				echo "";
-			}
-
-			$sql = "INSERT INTO tratamento.tb_hstr_obs_pnel_solic_trtmto(id_hstr_obs_pnel_solic_trtmto, id_hstr_pnel_solic_trtmto, id_status_equipe, ds_status_equipe, dt_inic_status_equipe_trtmto, dt_final_status_equipe_trtmto, ds_obs_pcnt, tp_minuto_status_equipe_trtmto, cd_usua_incs, dt_incs, dt_inicial_trtmto, cd_pcnt, nm_pcnt, id_status_trtmto, ds_status_trtmto)
-	VALUES ((select NEXTVAL('tratamento.sq_hstr_obs_pnel_solic_trtmto')), ".$id_hstr_pnel_solic_trtmto.", ".$_POST['id_equipe'].", (select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe']."), current_timestamp, null, '".$_POST['ds_obs_pcnt']."', 0, '".$_SESSION['usuario']."', current_timestamp, '".$dt_inicial_trtmto."', '".$_POST['cd_pcnt']."', '".$_POST['nm_pcnt']."',".$_POST['id_status_trtmto'].", (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."));";
-
-			//echo $sql;
-
-			$result = pg_query($pdo, $sql);
-
-			if($result){
-				echo "";
-			} 
-			
+						
 			$sql = "SELECT MAX(id_hstr_obs_pnel_solic_trtmto) FROM tratamento.tb_hstr_obs_pnel_solic_trtmto WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_status_equipe = ".$_POST['id_equipe']." ";
-			
+				
 			//echo $sql;
 
 			$retmaxstatusequipe = pg_query($pdo, $sql);
@@ -102,18 +43,80 @@
 			
 			$rowmaxstatusequipe = pg_fetch_row($retmaxstatusequipe);
 			
-			$sql = "UPDATE tratamento.tb_hstr_obs_pnel_solic_trtmto set dt_final_status_equipe_trtmto= current_timestamp, tp_minuto_status_equipe_trtmto = round((SELECT date_part( 'minute', age(current_timestamp, dt_inic_status_equipe_trtmto)))) where id_hstr_obs_pnel_solic_trtmto = ".$rowmaxstatusequipe[0]."";
-
+			$sql = "SELECT count(1) FROM tratamento.tb_hstr_obs_pnel_solic_trtmto WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_status_equipe = ".$_POST['id_equipe']." and id_status_trtmto = ".$_POST['id_status_trtmto']." ";
+			
 			//echo $sql;
 
-			$result = pg_query($pdo, $sql);
+			$rethstrobs = pg_query($pdo, $sql);
+			
+			if(!$rethstrobs) {
+				echo pg_last_error($pdo);		
+				exit;
+			}
+			
+			$rowhstrobs = pg_fetch_row($rethstrobs);
+			
+			if ($rowhstrobs[0]==0){
+					
+				$sql = "SELECT id_hstr_pnel_solic_trtmto, dt_inicial_trtmto 
+						  FROM tratamento.tb_hstr_pnel_solic_trtmto 
+						WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_equipe = ".$_POST['id_equipe']." ";
+				
+				//echo $sql;
 
-			if($result){
-				echo "";
-			} 
+				$rethstrtratamento = pg_query($pdo, $sql);
+				
+				if(!$rethstrtratamento) {
+					echo pg_last_error($pdo);		
+					exit;
+				}
+				
+				$rowhstrtratamento = pg_fetch_row($rethstrtratamento);
+				
+				$id_hstr_pnel_solic_trtmto = $rowhstrtratamento[0];
+				$dt_inicial_trtmto = $rowhstrtratamento[1];
+				
+				$sql = "update tratamento.tb_hstr_pnel_solic_trtmto set ds_utlma_obs_pcnt = '".$_POST['ds_obs_pcnt']."', id_status_trtmto = ".$_POST['id_status_trtmto'].", ds_status_trtmto = (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."), cd_cor_status_trtmto = (select cd_cor_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto'].") where id_hstr_pnel_solic_trtmto = ".$id_hstr_pnel_solic_trtmto."";
+				
+				//echo $sql;
 
-			$secondsWait = 0;
-			header("Refresh:$secondsWait");
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				}
+
+				$sql = "INSERT INTO tratamento.tb_hstr_obs_pnel_solic_trtmto(id_hstr_obs_pnel_solic_trtmto, id_hstr_pnel_solic_trtmto, id_status_equipe, ds_status_equipe, dt_inic_status_equipe_trtmto, dt_final_status_equipe_trtmto, ds_obs_pcnt, tp_minuto_status_equipe_trtmto, cd_usua_incs, dt_incs, dt_inicial_trtmto, cd_pcnt, nm_pcnt, id_status_trtmto, ds_status_trtmto)
+		VALUES ((select NEXTVAL('tratamento.sq_hstr_obs_pnel_solic_trtmto')), ".$id_hstr_pnel_solic_trtmto.", ".$_POST['id_equipe'].", (select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe']."), current_timestamp, null, '".$_POST['ds_obs_pcnt']."', 0, '".$_SESSION['usuario']."', current_timestamp, '".$dt_inicial_trtmto."', '".$_POST['cd_pcnt']."', '".$_POST['nm_pcnt']."',".$_POST['id_status_trtmto'].", (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."));";
+
+				//echo $sql;
+
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				} 
+				
+				$sql = "UPDATE tratamento.tb_hstr_obs_pnel_solic_trtmto set dt_final_status_equipe_trtmto= current_timestamp, tp_minuto_status_equipe_trtmto = round((SELECT date_part( 'minute', age(current_timestamp::timestamp AT TIME ZONE 'CST', dt_inic_status_equipe_trtmto)))) where id_hstr_obs_pnel_solic_trtmto = ".$rowmaxstatusequipe[0]."";
+
+				//echo $sql;
+
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				} 
+
+				$secondsWait = 0;
+				header("Refresh:$secondsWait");
+			
+			} else {
+				
+				echo "<div class=\"alert alert-warning alert-dismissible\">
+					<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
+					<strong>Atenção!</strong>Status já existe para o paciente e equipe. Tente novamente com outro stauts.	</div>";
+
+			}
 		
 		} catch(PDOException $e)
 		{
@@ -185,7 +188,8 @@
 					 , equipe.ds_equipe
 					 , equipe.nu_seq_equipe_pnel
 					 , status_trtmto.id_status_trtmto	 
-					 , status_trtmto.ds_status_trtmto				 
+					 , status_trtmto.ds_status_trtmto
+					 , status_trtmto.cd_cor_status_trtmto	
 				FROM tratamento.tb_c_status_trtmto status_trtmto
 				   , tratamento.tb_c_equipe equipe
 				WHERE equipe.id_equipe = status_trtmto.id_equipe
@@ -203,8 +207,8 @@
 				while($rowretequipetratamento = pg_fetch_row($retequipetratamento)) {
 				
 					$sql = "INSERT INTO tratamento.tb_hstr_pnel_solic_trtmto(
-		id_hstr_pnel_solic_trtmto, cd_pcnt, nm_pcnt, dt_nasc_pcnt, ds_mncp_pcnt, id_equipe, ds_equipe, nu_seq_equipe_pnel, id_status_trtmto, ds_status_trtmto, fl_trtmto_fchd, dt_inicial_trtmto, dt_final_trtmto, ds_utlma_obs_pcnt, tp_dia_trtmto, tp_hora_trtmto, tp_minuto_trtmto, cd_usua_incs, dt_incs, cd_usua_altr, dt_altr)
-		VALUES ((select NEXTVAL('tratamento.sq_hstr_pnel_solic_trtmto')), '". $_POST['cd_pcnt'] ."', '". $_POST['nm_pcnt'] ."', '". $_POST['dt_nasc_pcnt'] ."', '". $_POST['ds_mncp'] ."',".$rowretequipetratamento[0].", '".$rowretequipetratamento[1]."', ".$rowretequipetratamento[2].", ".$rowretequipetratamento[3].", '".$rowretequipetratamento[4]."', 0, current_timestamp, null, null, 0, 0, 0, '".$_SESSION['usuario']."', current_timestamp, null, null);";
+		id_hstr_pnel_solic_trtmto, cd_pcnt, nm_pcnt, dt_nasc_pcnt, ds_mncp_pcnt, id_equipe, ds_equipe, nu_seq_equipe_pnel, id_status_trtmto, ds_status_trtmto, fl_trtmto_fchd, dt_inicial_trtmto, dt_final_trtmto, ds_utlma_obs_pcnt, tp_dia_trtmto, tp_hora_trtmto, tp_minuto_trtmto, cd_usua_incs, dt_incs, cd_usua_altr, dt_altr, cd_cor_status_trtmto)
+		VALUES ((select NEXTVAL('tratamento.sq_hstr_pnel_solic_trtmto')), '". $_POST['cd_pcnt'] ."', '". $_POST['nm_pcnt'] ."', '". $_POST['dt_nasc_pcnt'] ."', '". $_POST['ds_mncp'] ."',".$rowretequipetratamento[0].", '".$rowretequipetratamento[1]."', ".$rowretequipetratamento[2].", ".$rowretequipetratamento[3].", '".$rowretequipetratamento[4]."', 0, current_timestamp, null, 'INICIO DO TRATAMENTO', 0, 0, 0, '".$_SESSION['usuario']."', current_timestamp, null, null, '".$rowretequipetratamento[5]."');";
 		
 					//echo $sql;
 		
@@ -323,23 +327,25 @@
 	  
 		</head>
 		<body id="aplicacao" onload="removeDivsEtapasCarga();">			
-			<div class="container" style="margin-left: 0px; margin-right: 0px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 80px; border: 1px solid #E6E6E6;">
+			<div class="container" style="margin-left: 5px; margin-right: 5px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 80px; border: 1px solid #E6E6E6;">
 				
 				<br>
 				<input type="button" value="Novo Paciente" class="btn btn-primary btn-xs insere"/>
+				
+				<input type="button" value="Finaliza Tratamento" class="btn btn-primary btn-xs finaliza"/>
 			
 				<input class="btn btn-primary" type="submit" value="Exportar para Excel" id="exportarplanejamento">&nbsp;
 				
-				<input class="btn btn-primary" type="submit" value="PDF" id="exportarplanejamento">&nbsp;
+				<input class="btn btn-primary" type="submit" value="Imprimir PDF" id="exportarplanejamento">&nbsp;
 				
 			</div>
 			
-			<div id="list" class="row">
+			<div id="list" class="row" style="margin-left: 5px; margin-right: 5px">
 				
 				<div class="table-responsive" style="margin-top: 80px;">				
 					<table id="tabela" class="table table-striped table-bordered">
 						<thead class="thead-dark">
-							<tr style="font-size: 15px;">
+							<tr style="font-size: 11px;">
 								<?php
 									$sqlequipe ="select ds_equipe from tratamento.tb_c_equipe order by nu_seq_equipe_pnel asc";
 					
@@ -350,7 +356,7 @@
 										exit;
 									}
 								?>
-									<th style="text-align:center">Id Pac</th>
+									<th style="text-align:center">Id</th>
 									<th style="text-align:center">Paciente</th>
 								<?php	
 									while($rowequipe = pg_fetch_row($retequipe)) {
@@ -371,32 +377,33 @@
 							while($row = pg_fetch_row($ret)) {
 								?>											
 								<tr style="font-size: 11px;">
-									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[0];?>" style="text-align:center; " id="<?php echo $row[0];?>" value="<?php echo $row[0];?>" ><?php echo $row[0];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[8];?>" style="text-align:center" " id="<?php echo $row[0];?>" value="<?php echo $row[0];?>" ><?php echo $row[0];?></td>
 									
 									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[1];?>" style=" " id="<?php echo $row[1];?>" value="<?php echo $row[1];?>" ><?php echo $row[1];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[2];?>" style="text-align:center;" id="<?php echo $row[2];?>" value="<?php echo $row[2];?>" ><?php echo $row[2];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[8];?>" style="text-align:center;background-color:<?php echo $row[14] ;?>" id="<?php echo $row[2];?>" value="<?php echo $row[2];?>" ><?php echo $row[2];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[3];?>" style=" text-align:center;" id="<?php echo $row[3];?>" value="<?php echo $row[3];?>" ><?php echo $row[3];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[9];?>" style=" text-align:center;background-color:<?php echo $row[15] ;?>" id="<?php echo $row[3];?>" value="<?php echo $row[3];?>" ><?php echo $row[3];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[4];?>" style="text-align:center; " id="<?php echo $row[4];?>" value="<?php echo $row[4];?>" ><?php echo $row[4];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[10];?>" style="text-align:center;background-color:<?php echo $row[16] ;?> " id="<?php echo $row[4];?>" value="<?php echo $row[4];?>" ><?php echo $row[4];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[5];?>" style="text-align:center; " id="<?php echo $row[5];?>" value="<?php echo $row[5];?>" ><?php echo $row[5];?></td>				
+									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[11];?>" style="text-align:center;background-color:<?php echo $row[17] ;?> " id="<?php echo $row[5];?>" value="<?php echo $row[5];?>" ><?php echo $row[5];?></td>				
 									
-									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[6];?>" style=" text-align:center;" id="<?php echo $row[6];?>" value="<?php echo $row[6];?>" ><?php echo $row[6];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[12];?>" style=" text-align:center;background-color:<?php echo $row[18] ;?>" id="<?php echo $row[6];?>" value="<?php echo $row[6];?>" ><?php echo $row[6];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[7];?>" style=" text-align:center;" id="<?php echo $row[7];?>" value="<?php echo $row[7];?>" ><?php echo $row[7];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[13];?>" style=" text-align:center;background-color:<?php echo $row[19] ;?>" id="<?php echo $row[7];?>" value="<?php echo $row[7];?>" ><?php echo $row[7];?></td>
 
 									
 									<td class="actions">
-										<input type="image" title="Inserir Status" src="../img/insertstatus.png"  height="27" width="27" name="telainserestatus" data-toggle="modal" data-target="#telainserestatus" class="btn-xs telainserestatus"/>
+										<input type="image" title="Inserir Status" src="../img/insertstatus.png"  height="20" width="20" name="telainserestatus" data-toggle="modal" data-target="#telainserestatus" class="btn-xs telainserestatus"/>
 									</td>
 									<td class="actions">
-										<input type="image" title="Alterar Status" src="../img/alterarstatus.png"  height="27" width="27"  class="btn-xs imprimileito"/>
+										<input type="image" title="Alterar Status" src="../img/alterarstatus.png"  height="20" width="20"  class="btn-xs imprimileito"/>
 									</td>
 									<td class="actions">
-										<input type="image" title="Excluir Status" src="../img/deletestatus.png"  height="27" width="27" class="btn-xs deletestatus"/>
+										<input type="image" title="Excluir Status" src="../img/deletestatus2.png"  height="20" width="20" class="btn-xs deletestatus"/>
 									</td>
+									
 							</tr>
 							<?php 
 							
@@ -466,6 +473,21 @@
 				type: "POST",
 				url:"../tratamento/insercao_paciente.php",
 				data:{cd_pcnt:cd_pcnt, nm_pcnt:nm_pcnt},			
+				success : function(completeHtmlPage) {									
+					$("html").empty();					
+					$("html").append(completeHtmlPage);										
+				}
+			});			
+		});	
+	});
+	
+	$(document).ready(function(){
+		$(document).on('click', '.finaliza', function(){
+			
+			event.preventDefault();			
+			$.ajax({
+				type: "POST",
+				url:"../tratamento/finaliza_tratamento.php",					
 				success : function(completeHtmlPage) {									
 					$("html").empty();					
 					$("html").append(completeHtmlPage);										

@@ -32,7 +32,7 @@
 										<td style="width:150px"><label>Equipe:</label></td>  
 										<?php
 										
-										$sql = "SELECT id_equipe, ds_equipe from tratamento.tb_c_equipe order by 1";
+										$sql = "SELECT id_equipe, ds_equipe from tratamento.tb_c_equipe order by nu_seq_equipe_pnel";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -68,6 +68,7 @@
 												FROM tratamento.tb_c_status_trtmto trtmto
 												   , tratamento.tb_c_equipe equipe
 												WHERE trtmto.id_equipe = equipe.id_equipe
+												  and trtmto.id_status_trtmto not in (select id_status_trtmto from tratamento.tb_hstr_obs_pnel_solic_trtmto where cd_pcnt = '".$_POST['cd_pcnt']."')
 												ORDER BY nu_seq_equipe_pnel ASC";
 										
 										if ($pdo==null){

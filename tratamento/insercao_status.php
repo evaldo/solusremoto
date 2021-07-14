@@ -17,7 +17,7 @@
 		<link href="../css/style.css" rel="stylesheet">					
 	</head>
 	<body style="margin-right: 0; margin-left: 0">		
-		<div class="container" style="width: 100%;  margin-right: 0; margin-left: 0; position: relative;">
+		<div class="container" style="width: 70%;  margin-right: 0; margin-left: 0; position: relative;">
 		  <div class="modal-dialog">
 				<div class="modal-content" style="width:800px">
 					<div class="container">						
@@ -66,10 +66,10 @@
 										
 										$sql = "SELECT trtmto.id_status_trtmto, equipe.ds_equipe||' - '||trtmto.ds_status_trtmto
 												FROM tratamento.tb_c_status_trtmto trtmto
-												   , tratamento.tb_c_equipe equipe
+												   , tratamento.tb_c_equipe equipe												   
 												WHERE trtmto.id_equipe = equipe.id_equipe
-												  and trtmto.id_status_trtmto not in (select id_status_trtmto from tratamento.tb_hstr_obs_pnel_solic_trtmto where cd_pcnt = '".$_POST['cd_pcnt']."')
-												ORDER BY nu_seq_equipe_pnel ASC";
+												  and trtmto.fl_status_inicial_trtmto = 0
+												  and trtmto.id_status_trtmto not in (select id_status_trtmto from tratamento.tb_hstr_pnel_solic_trtmto where cd_pcnt = '".$_POST['cd_pcnt']."' and fl_trtmto_fchd = 0) ORDER BY nu_seq_equipe_pnel ASC";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);

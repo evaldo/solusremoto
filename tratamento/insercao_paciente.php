@@ -20,7 +20,7 @@
 		<link href="../css/style.css" rel="stylesheet">					
 	</head>
 	<body style="margin-right: 0; margin-left: 0">		
-		<div class="container" style="width: 100%;  margin-right: 0; margin-left: 0; position: relative;">
+		<div class="container" style="width: 70%;  margin-right: 0; margin-left: 0; position: relative;">
 		  <div class="modal-dialog">
 				<div class="modal-content" style="width:800px">
 					<div class="container">						

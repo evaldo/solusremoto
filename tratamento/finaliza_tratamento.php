@@ -20,7 +20,7 @@
 		<link href="../css/style.css" rel="stylesheet">					
 	</head>
 	<body style="margin-right: 0; margin-left: 0">		
-		<div class="container" style="width: 100%;  margin-right: 0; margin-left: 0; position: relative;">
+		<div class="container" style="width: 70%;  margin-right: 0; margin-left: 0; position: relative;">
 		  <div class="modal-dialog">
 				<div class="modal-content" style="width:800px">
 					<div class="container">						
@@ -80,7 +80,7 @@
 								</table>																
 							</div>
 							<div class="modal-footer">	
-								<input type="submit" class="btn btn-danger" name="insere" value="Inserir">&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="submit" class="btn btn-danger" name="finaliza" value="Confirmar">&nbsp;&nbsp;&nbsp;&nbsp;
 								<input type="button" class="btn btn-primary" onclick="history.go()" value="Voltar">									
 							</div>									
 						</div>				

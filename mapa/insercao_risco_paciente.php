@@ -32,7 +32,7 @@
 										<td style="width:150px"><label>Escolha o paciente para inserir o risco:</label></td>  
 										<?php
 										
-										$sql = "SELECT distinct mapa.cd_pcnt, mapa.nm_pcnt from tb_hstr_pnel_mapa_risco mapa where mapa.dt_final_mapa_risco is null order by 2";
+										$sql = "SELECT distinct mapa.cd_pcnt, mapa.nm_pcnt from tratamento.tb_hstr_pnel_mapa_risco mapa where mapa.dt_final_mapa_risco is null order by 2";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);

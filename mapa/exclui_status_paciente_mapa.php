@@ -36,7 +36,7 @@
 													 , mapa_hstr.nm_pcnt||'->'||status.ds_status_pcnt as nm_pcnt_status
 													 , mapa_hstr.id_status_pcnt
 													 , mapa_hstr.ds_obs_mapa_risco
-													 , mapa.id_hstr_pnel_mapa_risco
+													 , mapa_hstr.id_hstr_pnel_mapa_risco
 													 , mapa_hstr.id_hstr_obs_pnel_mapa_risco
 												FROM tratamento.tb_hstr_obs_pnel_mapa_risco mapa_hstr
 												   , tratamento.tb_c_status_pcnt status 

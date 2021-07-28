@@ -557,7 +557,7 @@
 			
 				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Exportar para Excel" id="exportarpaineltratamento">&nbsp;
 				
-				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Imprimir PDF" id="exportarplanejamento">&nbsp;
+				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Imprimir PDF" id="exportarplanejamentopdf" onclick="window.open('../tcpdf/relatorio/impressao_relatoriotratamento.php');>&nbsp;
 				
 			</div>
 			

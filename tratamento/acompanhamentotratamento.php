@@ -499,6 +499,81 @@
 			die($e->getMessage());
 		}
 	}
+	
+	$inserestatus="";
+	$alterastatus="";
+	$excluistatus="";
+	$novotratamento="";
+	$finalizatratamento="";
+		
+	$sql = "SELECT fl_sist_admn from tratamento.tb_c_usua_acesso where nm_usua_acesso = '".$_SESSION['usuario']."'";
+	
+	$ret_usua = pg_query($pdo, $sql);	
+	if(!$ret_usua) {
+		echo pg_last_error($pdo);
+		exit;
+	}
+	
+	$ret_usua_row = pg_fetch_row($ret_usua);
+	
+	if ($ret_usua_row[0]=="S"){
+		$fl_sist_admn="S";						
+	}else{
+		
+		$fl_sist_admn="N";			
+		
+		$sql = "SELECT distinct cd_transac_tratamento from tratamento.vw_acesso_transac_tratamento where nm_usua_acesso = '".$_SESSION['usuario']."' and cd_transac_tratamento = 'btn-xs telainserestatus' ";	
+		
+		$rettransac = pg_query($pdo, $sql);
+		if(pg_num_rows($rettransac)==0) {
+			$inserestatus = "nao_inserestatus";
+		} else {
+			$rettransac_row = pg_fetch_row($rettransac);
+			$inserestatus = $rettransac_row[0];						
+		}
+		
+		$sql = "SELECT distinct cd_transac_tratamento from tratamento.vw_acesso_transac_tratamento where nm_usua_acesso = '".$_SESSION['usuario']."' and cd_transac_tratamento = 'btn-xs alterastatus' ";	
+		
+		$rettransac = pg_query($pdo, $sql);
+		if(pg_num_rows($rettransac)==0) {
+			$alterastatus = "nao_alterastatus";
+		} else {
+			$rettransac_row = pg_fetch_row($rettransac);
+			$alterastatus = $rettransac_row[0];						
+		}
+		
+		$sql = "SELECT distinct cd_transac_tratamento from tratamento.vw_acesso_transac_tratamento where nm_usua_acesso = '".$_SESSION['usuario']."' and cd_transac_tratamento = 'btn-xs excluistatus' ";	
+		
+		$rettransac = pg_query($pdo, $sql);
+		if(pg_num_rows($rettransac)==0) {
+			$excluistatus = "nao_excluistatus";
+		} else {
+			$rettransac_row = pg_fetch_row($rettransac);
+			$excluistatus = $rettransac_row[0];						
+		}
+		
+		$sql = "SELECT distinct cd_transac_tratamento from tratamento.vw_acesso_transac_tratamento where nm_usua_acesso = '".$_SESSION['usuario']."' and cd_transac_tratamento = 'btn btn-primary btn-xs insere' ";	
+		
+		$rettransac = pg_query($pdo, $sql);
+		if(pg_num_rows($rettransac)==0) {
+			$novotratamento = "nao_novotratamento";
+		} else {
+			$rettransac_row = pg_fetch_row($rettransac);
+			$novotratamento = $rettransac_row[0];						
+		}
+		
+		$sql = "SELECT distinct cd_transac_tratamento from tratamento.vw_acesso_transac_tratamento where nm_usua_acesso = '".$_SESSION['usuario']."' and cd_transac_tratamento = 'btn btn-primary btn-xs finaliza' ";	
+		
+		$rettransac = pg_query($pdo, $sql);
+		if(pg_num_rows($rettransac)==0) {
+			$finalizatratamento = "nao_finalizatratamento";
+		} else {
+			$rettransac_row = pg_fetch_row($rettransac);
+			$finalizatratamento = $rettransac_row[0];						
+		}		
+		
+	}
+	
 		
 ?>	
 
@@ -551,13 +626,26 @@
 			<div class="container" style="margin-left: 5px; margin-right: 5px; position:fixed; margin-top: 0px; background-color:white; max-width: 5000px; height: 60px; border: 1px solid #E6E6E6;font-size: 11px;">
 				
 				<br>
-				<input type="button" style="font-size: 11px;" value="Novo Tratamento" class="btn btn-primary btn-xs insere" />
 				
-				<input type="button" style="font-size: 11px;" value="Finalizar Tratamento" class="btn btn-primary btn-xs finaliza"/>
-			
-				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Exportar para Excel" id="exportarpaineltratamento">&nbsp;
+				<?php
+				if ($novotratamento=="nao_novotratamento"){
+				?>
+					&nbsp;
+				<?php } else { ?> 				
+					<input type="button" style="font-size: 11px;" value="Novo Tratamento" class="btn btn-primary btn-xs insere"/>
+				<?php } ?>
 				
-				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Imprimir PDF" id="exportarplanejamentopdf" onclick="window.open('../tcpdf/relatorio/impressao_relatoriotratamento.php');>&nbsp;
+				<?php
+				if ($finalizatratamento=="nao_finalizatratamento"){
+				?>
+					&nbsp;
+				<?php } else { ?> 
+					<input type="button" style="font-size: 11px;" value="Finalizar Tratamento" class="btn btn-primary btn-xs finaliza"/>
+				<?php } ?>
+				
+				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Exportar para Excel" id="exportarpaineltratamento" style="display:none">&nbsp;
+				
+				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Imprimir PDF" id="exportarplanejamentopdf" onclick="window.open('../tcpdf/relatorio/impressao_relatoriotratamento.php');">&nbsp;
 				
 			</div>
 			
@@ -613,17 +701,46 @@
 									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[12];?>" style=" text-align:center;background-color:<?php echo $row[18] ;?>" id="<?php echo $row[6];?>" value="<?php echo $row[6];?>" ><?php echo $row[6];?></td>
 									
 									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[13];?>" style=" text-align:center;background-color:<?php echo $row[19] ;?>" id="<?php echo $row[7];?>" value="<?php echo $row[7];?>" ><?php echo $row[7];?></td>
-
+	
+									<?php
+									if ($inserestatus=="nao_inserestatus"){
+									?>
+										<td class="actions">
+											<input type="image" src="../img/update_bloqueado.png" title="Funcionalidade Bloqueada"  height="23" width="23" name="atualizaleito" data-toggle="modal" data-target="#atualizaleito"/>
+												</td>
+									<?php } else { ?>
+										<td class="actions">
+											<input type="image" title="Inserir Status" src="../img/insertstatus.png"  height="20" width="20" name="telainserestatus" data-toggle="modal" data-target="#telainserestatus" class="btn-xs telainserestatus"/>
+										</td>
 									
-									<td class="actions">
-										<input type="image" title="Inserir Status" src="../img/insertstatus.png"  height="20" width="20" name="telainserestatus" data-toggle="modal" data-target="#telainserestatus" class="btn-xs telainserestatus"/>
-									</td>
-									<td class="actions">
-										<input type="image" title="Alterar Observação do Status" src="../img/alterarstatus.png"  height="20" width="20"  class="btn-xs alterastatus"/>
-									</td>
-									<td class="actions">
+									<?php } ?>
+									
+									<?php
+									if ($alterastatus=="nao_alterastatus"){
+									?>
+										<td class="actions">
+											<input type="image" src="../img/update_bloqueado.png" title="Funcionalidade Bloqueada"  height="23" width="23" name="atualizaleito" data-toggle="modal" data-target="#atualizaleito"/>
+												</td>
+									<?php } else { ?>
+										<td class="actions">
+											<input type="image" title="Alterar Observação do Status" src="../img/alterarstatus.png"  height="20" width="20"  class="btn-xs alterastatus"/>
+										</td>
+									
+									<?php } ?>
+									
+									
+									<?php
+									if ($excluistatus=="nao_excluistatus"){
+									?>
+										<td class="actions">
+											<input type="image" src="../img/update_bloqueado.png" title="Funcionalidade Bloqueada"  height="23" width="23" name="atualizaleito" data-toggle="modal" data-target="#atualizaleito"/>
+												</td>
+									<?php } else { ?>
+										<td class="actions">
 										<input type="image" title="Excluir Status" src="../img/deletestatus2.png"  height="20" width="20" class="btn-xs excluistatus"/>
 									</td>
+									
+									<?php } ?>
 									
 							</tr>
 							<?php 

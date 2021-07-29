@@ -157,6 +157,8 @@
 				$sql = "insert into tratamento.tb_c_grupo_usua_acesso values ((select NEXTVAL('tratamento.sq_grupo_usua_acesso')),".$_POST['id_grupo_acesso'].", ". $_POST['cd_usua_acesso'].", '".$_SESSION['usuario']."', current_timestamp, null,null)";	
 								
 				$result = pg_query($pdo, $sql);
+				
+				//echo $sql;
 
 				if($result){
 					echo "";
@@ -164,7 +166,7 @@
 				
 			}
 
-			$secondsWait = 5;
+			$secondsWait = 0;
 			header("Refresh:$secondsWait");			
 			
 		} catch(PDOException $e)

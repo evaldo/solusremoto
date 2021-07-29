@@ -4,28 +4,10 @@
 		
 		include '../../database.php';
 		$pdo = database::connect();
-						
-		$sql ="SELECT plnj_leito.id_plnj_pcnt_leito
-		 , plnj_leito.nm_pcnt_cndat
-		 , plnj_leito.dt_nasc
-		 , cnvo.cd_cnvo
-		 , plnj_leito.nm_cnto
-		 , plnj_leito.dt_prvs_admss
-		 , plnj_leito.ds_leito
-		 , grvd_risco.nm_grvd_risco_pcnt
-		 , orig_dmnd.ds_orig_dmnd_plnj_leito		 
-		 , case when plnj_leito.fl_pcnt_adtdo = 0 then 'Não' else 'Sim' end fl_pcnt_adtdo
-		FROM integracao.tb_orig_dmnd_plnj_leito orig_dmnd		   
-		   , integracao.tb_plnj_pcnt_leito plnj_leito
-		   , integracao.tb_grvd_risco_pcnt grvd_risco
-		   , integracao.tb_cnvo cnvo
-	WHERE plnj_leito.id_grvd_risco_pcnt = grvd_risco.id_grvd_risco_pcnt
-	  and plnj_leito.id_orig_dmnd_plnj_leito = orig_dmnd.id_orig_dmnd_plnj_leito
-	  and plnj_leito.id_cnvo = cnvo.id_cnvo		
-	  and plnj_leito.dt_prvs_admss >= to_date('".$_SESSION['dataInicio']."','dd/mm/yyyy')
-	  and plnj_leito.dt_prvs_admss <= to_date('".$_SESSION['dataFim']."','dd/mm/yyyy') 	
-	 order by 5 desc"; 
-			
+				
+		
+		$sql ="select * from tratamento.vw_painel_trtmto order by nm_pcnt ";			
+		
 		$ret = pg_query($pdo, $sql);
 		
 		if(!$ret) {
@@ -33,7 +15,7 @@
 			//header(Config::$webLogin);
 			exit;
 		}
-	
+		
 	
 	require_once('tcpdf_include.php');
 	class MYPDF extends TCPDF {
@@ -61,10 +43,10 @@ $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8',
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
-$pdf->SetAuthor('Hospital Vila Verde Saúde Mental');
-$pdf->SetTitle('Relatório do Planejamento da Demanda de Leitos');
+$pdf->SetAuthor('Solus Oncologia');
+$pdf->SetTitle('Acompanhamento de tratamento');
 $pdf->SetSubject('Relatório em PDF');
-$pdf->SetKeywords('BMH Online');
+$pdf->SetKeywords('Tratamento');
 
 // set default header data
 $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
@@ -104,10 +86,6 @@ $pdf->AddPage('L', 'A4');
 
 date_default_timezone_set('America/Sao_Paulo');
 
-	//admissoes
-
-	$row = pg_fetch_row($ret);
-
 	$html = ' 				
 			<!DOCTYPE html>
 			<html>
@@ -129,61 +107,47 @@ date_default_timezone_set('America/Sao_Paulo');
 			</style>
 			</head>
 			<body>
-			<img src="images/logo_vilaverde.png" border="0" height="80" width="80" ALIGN="left" HSPACE="50" VSPACE="50"/>
-			<h4>Relatório do Planejamento da Demanda de Leitos<h4>
-			<h5>Período de Emissão - Início	:'.$_SESSION['dataInicio'].' a Fim:'.$_SESSION['dataFim'].' Por Data de Previsão da Admissão</h5>			
+			<img src="images/logosolus.jpg" border="0" height="80" width="80" ALIGN="left" HSPACE="50" VSPACE="50"/>
+			<h2>Acompanhamento do Tratamento</h2>
+			<h3>Data/Hora da Emissão: '. date("d/m/Y H:i:s"). '</h3>
+			<hr>
         <table>					
-			<tr>
-				<th style="text-align:center">Id.</th>
-				<th>Candidato a vaga</th>
-				<th style="text-align:center">Data de Nasc</th>
-				<th>Convênio</th>
-				<th>Contato</th>							
-				<th style="text-align:center">Dt. Prev. de Admissão</th>
-				<th style="text-align:center">Leito Alocado</th>
-				<th>Origem da Demanda</th>
-				<th>Gravidade do Risco</th>							
-				<th style="text-align:center">Paciente Admitido?</th>				
-				
-			</tr>
-			<hr>';
+			<tr>';			
+				$sqlequipe ="select ds_equipe from tratamento.tb_c_equipe order by nu_seq_equipe_pnel asc";		
+				$retequipe = pg_query($pdo, $sqlequipe);						
+				if(!$retequipe) {
+					echo pg_last_error($pdo);		
+					exit;
+				}				
+				$html .= '<th style="text-align:center; font-weight: bold">ID</th>';
+				$html .= '<th style="text-align:center; font-weight: bold">PACIENTE</th>';
 			
-	$html .= ' 
-			<tr >
-				<td style="text-align:center">'.$row[0].'</td>				
-				<td>'.$row[1].'</td>
-				<td style="text-align:center">'.$row[2].'</td>				
-				<td>'.$row[3].'</td>
-				<td>'.$row[4].'</td>
-				<td style="text-align:center">'.$row[5].'</td>
-				<td style="text-align:center">'.$row[6].'</td>
-				<td>'.substr($row[7], 0, 20).'</td>	
-				<td>'.$row[8].'</td>
-				<td style="text-align:center">'.$row[9].'</td>
-			</tr>
-			<hr>';
+				while($rowequipe = pg_fetch_row($retequipe)) {
+			
+					$html .= '<th style="text-align:center; font-weight: bold">'.strtoupper($rowequipe[0]).'</th>';
+			
+				
+				} 
+		$html .= '</tr> ';
+		$html .= '<hr> ';
 	
-	$cabecalho='';	
-	$contalinha = 0;
-	$cor=1;
-	$color='';
+	$contalinha = 0;	
 	while($row = pg_fetch_row($ret)) {
-	
+		
 		$html .= ' 
-			<tr >
+			<tr>
 				<td style="text-align:center">'.$row[0].'</td>				
-				<td>'.$row[1].'</td>
+				<td style="text-align:center">'.$row[1].'</td>
 				<td style="text-align:center">'.$row[2].'</td>				
-				<td>'.$row[3].'</td>
-				<td>'.$row[4].'</td>
+				<td style="text-align:center">'.$row[3].'</td>
+				<td style="text-align:center">'.$row[4].'</td>
 				<td style="text-align:center">'.$row[5].'</td>
 				<td style="text-align:center">'.$row[6].'</td>
-				<td>'.substr($row[7], 0, 20).'</td>	
-				<td>'.$row[8].'</td>
-				<td style="text-align:center">'.$row[9].'</td>
-			</tr>
-			<hr>';
-	
+				<td style="text-align:center">'.$row[7].'</td>';
+		$html .= '</tr>	';
+		$html .= '<hr>  ';			
+		$contalinha = $contalinha + 1;
+			
 	}
 	$html .= '</table>';
 
@@ -193,9 +157,9 @@ $pdf->writeHTML($html, true, false, true, false, '');
 $pdf->lastPage();
 
 // ---------------------------------------------------------
-
+ob_end_clean();
 //Close and output PDF document
-$pdf->Output('gestao_leitos_2.pdf', 'I');
+$pdf->Output('relatoriotratamento.pdf', 'I');
 
 //============================================================+
 // END OF FILE

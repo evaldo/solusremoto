@@ -1,40 +1,13 @@
 <?php
 //select.php
-if(isset($_POST["nm_loc_nome"]))
+if(isset($_POST["local"]))
 {
 	session_start();
     $output = '';
     include '../database.php';
     $pdo = database::connect();
-    $query = "select 
-			ds_leito,		
-			to_char(dt_admss, 'dd/mm/yyyy hh24:mi') as dt_admss,
-			nm_pcnt,
-			ds_sexo,		
-			to_char(dt_nasc_pcnt, 'dd/mm/yyyy') as dt_nasc_pcnt,			
-			nm_cnvo,
-			ds_cid,
-			 case when fl_fmnte = 'T' then 
-				'Fumante' 
-			  else 
-				case when fl_fmnte = 'F' then
-					'Não Fumante' 
-				else	
-					''
-			  end end as fl_fmnte,
-			ds_dieta,
-			ds_const,
-			TO_CHAR(dt_prvs_alta,'DD/MM/YYYY hh24:mm'),
-			nm_mdco,
-			nm_psco,
-			nm_trpa,		
-			ds_ocorr,
-			ds_crtr_intnc,
-			fl_status_leito,
-			cd_usua_altr,
-			to_char(dt_altr, 'dd/mm/yyyy hh24:mi') as dt_altr,
-			ds_dtlh_cid
-			FROM integracao.tb_ctrl_leito WHERE TRIM(replace(ds_leito, 'LEITO', '')) = '". $_POST["nm_loc_nome"] ."' ";
+	
+    $query = "SELECT cd_pcnt, nm_pcnt, ds_status_pcnt, ds_local_trtmto, ds_utlma_obs_mapa_risco, cd_usua_incs, to_char(dt_incs, 'dd/mm/yyyy hh24:mi') as dt_incs FROM tratamento.tb_hstr_pnel_mapa_risco WHERE ds_local_trtmto = '". $_POST["local"] ."' and dt_final_mapa_risco is null ";
 		
     $ret = pg_query($pdo, $query);
     if(!$ret) {
@@ -48,81 +21,33 @@ if(isset($_POST["nm_loc_nome"]))
     $row = pg_fetch_row($ret);
     $output .= '
      <tr>  
-        <td width="30%"><label><b>Leito</b></label></td>  
+        <td width="30%"><label><b>Códido do Paciente:</b></label></td>  
         <td width="200%">'.$row[0].'</td>  
      </tr>
      <tr>  
-        <td width="30%"><label><b>Admissão</b></label></td>  
+        <td width="30%"><label><b>Nome do Paciente:</b></label></td>  
         <td width="200%">'.$row[1].'</td>  
       </tr>
       <tr>  
-        <td width="30%"><label><b>Paciente</b></label></td>  
+        <td width="30%"><label><b>Status:</b></label></td>  
         <td width="200%">'.$row[2].'</td>  
       </tr>
       <tr>  
-        <td width="30%"><label><b>Sexo</b></label></td>  
+        <td width="30%"><label><b>Local do Tratamento:</b></label></td>  
         <td width="200%">'.$row[3].'</td>  
       </tr>
       <tr>  
-        <td width="30%"><label><b>Nascimento</b></label></td>  
+        <td width="30%"><label><b>Observação:</b></label></td>  
         <td width="200%">'.$row[4].'</td>  
       </tr>             
       <tr>  
-        <td width="30%"><label><b>Convênio</b></label></td>  
+        <td width="30%"><label><b>Usuário que incluiu o registro:</b></label></td>  
         <td width="200%">'.$row[5].'</td>  
       </tr>
       <tr>  
-        <td width="30%"><label><b>Grupo de CID (CID)</b></label></td>  
-        <td width="200%">'.$row[6].' ('.$row[19].')</td>  
-      </tr>
-      <tr>  
-        <td width="30%"><label><b>Fumante</b></label></td>  
-        <td width="200%">'.$row[7].'</td>  
-      </tr>
-      <tr>  
-        <td width="30%"><label><b>Dieta</b></label></td>  
-        <td width="200%">'.$row[8].'</td>  
-      </tr>
-      <tr>  
-        <td width="30%"><label><b>Const.</b></label></td>  
-        <td width="200%">'.$row[9].'</td>  
-      </tr>
-      <tr>  
-        <td width="30%"><label><b>Previsão de Alta</b></label></td>  
-        <td width="200%">'.$row[10].'</td>  
-      </tr>
-      <tr>  
-        <td width="30%"><label><b>Médico</b></label></td>  
-        <td width="200%">'.$row[11].'</td>  
-      </tr>
-      <tr>  
-        <td width="30%"><label><b>Psicólogo</b></label></td>  
-        <td width="200%">'.$row[12].'</td>  
-      </tr>
-      <tr>  
-        <td width="30%"><label><b>Terapeuta</b></label></td>  
-        <td width="200%">'.$row[13].'</td>  
-      </tr>
-      <tr>  
-        <td width="30%"><label><b>Ocorrência</b></label></td>  
-        <td width="200%">'.$row[14].'</td>  
-      </tr>
-      <tr>  
-        <td width="30%"><label><b>Carater de Internação</b></label></td>  
-        <td width="200%">'.$row[15].'</td>  
-      </tr>
-      <tr>  
-        <td width="30%"><label><b>Status do Leito</b></label></td>  
-        <td width="200%">'.$row[16].'</td>  
-      </tr>
-	  <tr>  
-        <td width="30%"><label><b>Usuário que alterou:</b></label></td>  
-        <td width="200%">'.$row[17].'</td>  
-      </tr>
-	  <tr>  
-        <td width="30%"><label><b>Data da Alteração:</b></label></td>  
-        <td width="200%">'.$row[18].'</td>  
-      </tr>
+        <td width="30%"><label><b>Data/Hora de inclusão:</b></label></td>  
+        <td width="200%">'.$row[6].'</td>  
+      </tr>      
     ';
     $output .= '</table></div>';
     echo $output;

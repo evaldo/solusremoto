@@ -9,9 +9,11 @@
 	$textoconsulta = "";
 	$sql="";
 
-	$sql = "SELECT cd_pcnt
+	$sql = "SELECT cd_pcnt	   
 			 , ds_status_pcnt
 			 , ds_local_trtmto 
+			 , nm_pcnt
+			 , cd_cor_status_pcnt
 			FROM tratamento.tb_hstr_pnel_mapa_risco
 		WHERE dt_final_mapa_risco is null
 		ORDER BY nu_seq_local_pnel asc";		
@@ -24,7 +26,449 @@
         echo pg_last_error($pdo);
         exit;
     }
-    $row = pg_fetch_row($ret)
+    $row = pg_fetch_row($ret);
+	
+	if(isset($_POST['inserestatus'])){					
+		
+		if ($pdo==null){
+			header(Config::$webLogin);
+		}
+		
+		try
+		{		
+			
+			$sql = "SELECT MAX(id_hstr_obs_pnel_mapa_risco) FROM tratamento.tb_hstr_obs_pnel_mapa_risco WHERE cd_pcnt = '".$_POST['cd_pcnt']."' ";
+				
+			//echo $sql;
+
+			$retmaxstatuspcnt = pg_query($pdo, $sql);
+			
+			if(!$retmaxstatuspcnt) {
+				echo pg_last_error($pdo);		
+				exit;
+			}
+			
+			$rowmaxstatuspcnt = pg_fetch_row($retmaxstatuspcnt);
+			
+			$sql = "SELECT count(1) FROM tratamento.tb_hstr_pnel_mapa_risco WHERE cd_pcnt = '".$_POST['cd_pcnt']."'  and id_status_pcnt = ".$_POST['id_status_pcnt']." and dt_final_mapa_risco is null ";
+			
+			//echo $sql;
+
+			$rethstrobs = pg_query($pdo, $sql);
+			
+			if(!$rethstrobs) {
+				echo pg_last_error($pdo);		
+				exit;
+			}
+			
+			$rowhstrobs = pg_fetch_row($rethstrobs);
+			
+			if ($rowhstrobs[0]==0){
+					
+				$sql = "SELECT id_hstr_pnel_mapa_risco, dt_inic_mapa_risco 
+						  FROM tratamento.tb_hstr_pnel_mapa_risco 
+						WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and dt_final_mapa_risco is null ";
+				
+				//echo $sql;
+
+				$rethstrpcnt = pg_query($pdo, $sql);
+				
+				if(!$rethstrpcnt) {
+					echo pg_last_error($pdo);		
+					exit;
+				}
+				
+				$rowhstrpcnt = pg_fetch_row($rethstrpcnt);
+				
+				$id_hstr_pnel_mapa_risco = $rowhstrpcnt[0];
+				$dt_inic_mapa_risco = $rowhstrpcnt[1];
+				
+				$sql = "update tratamento.tb_hstr_pnel_mapa_risco set ds_utlma_obs_mapa_risco = '".$_POST['ds_obs_mapa_risco']."', id_status_pcnt = ".$_POST['id_status_pcnt'].", ds_status_pcnt = (select ds_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt']."), cd_cor_status_pcnt = (select cd_cor_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt']."), cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_hstr_pnel_mapa_risco = ".$id_hstr_pnel_mapa_risco."";
+				
+				//echo $sql;
+
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				}
+
+				$sql = "INSERT INTO tratamento.tb_hstr_obs_pnel_mapa_risco(id_hstr_obs_pnel_mapa_risco, id_hstr_pnel_mapa_risco, ds_status_pcnt, dt_inic_status_pcnt, dt_final_status_pcnt, ds_obs_mapa_risco, tp_min_status_pcnt, cd_usua_incs, dt_incs, dt_inic_mapa_risco, cd_pcnt, nm_pcnt, id_status_pcnt)
+		VALUES ((select NEXTVAL('tratamento.sq_hstr_obs_pnel_mapa_risco')), ".$id_hstr_pnel_mapa_risco.", (select ds_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt']."), current_timestamp, null, '".$_POST['ds_obs_mapa_risco']."', 0, '".$_SESSION['usuario']."', current_timestamp, '".$_POST['cd_pcnt']."', (SELECT nm_pcnt FROM tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."'),".$_POST['id_status_pcnt'].") ";
+
+				//echo $sql;
+
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				} 
+				
+				$sql = "UPDATE tratamento.tb_hstr_obs_pnel_mapa_risco set dt_final_status_pcnt= current_timestamp, tp_min_status_pcnt = round((SELECT date_part( 'day', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_status_pcnt))*24*60 + date_part( 'hour', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_status_pcnt))*60 + date_part( 'minute', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_status_pcnt)))), cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_hstr_obs_pnel_mapa_risco = ".$rowmaxstatuspcnt[0]."";
+
+				//echo $sql;
+
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				} 
+
+				$secondsWait = 0;
+				header("Refresh:$secondsWait");
+			
+			} else {
+				
+				echo "<div class=\"alert alert-warning alert-dismissible\">
+					<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
+					<strong>Atenção!</strong> Status já existe para o paciente. Tente novamente com outro stauts.	</div>";
+
+			}
+			
+		
+		} catch(PDOException $e)
+		{
+			die($e->getMessage());
+		}
+	}
+	
+	if(isset($_POST['inseremapa'])){					
+		
+		if ($pdo==null){
+			header(Config::$webLogin);
+		}
+		
+		try
+		{	
+			
+			$sqldataatual = "SELECT to_char(current_timestamp, 'dd/mm/yyyy hh24:mi') ";
+										  
+			$retdataatual = pg_query($pdo, $sqldataatual);
+			
+			if(!$retdataatual) {
+				echo pg_last_error($pdo);		
+				exit;
+			}
+			
+			$rowdataatual = pg_fetch_row($retdataatual);
+			
+			$sqlqtdemaparisco = "SELECT count(1)			 
+										FROM tratamento.tb_hstr_pnel_mapa_risco 
+										WHERE (cd_pcnt = '". $_POST['cd_pcnt'] ."' or id_local_trtmto = ".$_POST['id_local_trtmto'].") and dt_final_mapa_risco is null ";
+										  
+			$retqtdemaparisco = pg_query($pdo, $sqlqtdemaparisco);
+			
+			//echo $sqlqtdemaparisco;
+			
+			if(!$retqtdemaparisco) {
+				echo pg_last_error($pdo);		
+				exit;
+			}
+			
+			$rowretmaparisco = pg_fetch_row($retqtdemaparisco);
+			
+			if($rowretmaparisco[0]==0){
+				
+				$sql = "INSERT INTO tratamento.tb_hstr_pnel_mapa_risco(
+		id_hstr_pnel_mapa_risco, cd_pcnt, nm_pcnt, nu_seq_local_pnel, id_status_pcnt, ds_status_pcnt, dt_inic_mapa_risco, dt_final_mapa_risco, tp_pcnt_mapa_risco, cd_usua_incs, dt_incs, id_local_trtmto, ds_local_trtmto, ds_utlma_obs_mapa_risco, cd_cor_status_pcnt) VALUES ((select NEXTVAL('tratamento.sq_hstr_pnel_mapa_risco')), '". $_POST['cd_pcnt'] ."', (SELECT nm_pcnt FROM tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."'), (select nu_seq_local_pnel from tratamento.tb_c_local_trtmto where id_local_trtmto = ".$_POST['id_local_trtmto']."), ".$_POST['id_status_pcnt'].",  (select ds_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt']."), '".$rowdataatual[0]."', null, 0, '".$_SESSION['usuario']."', current_timestamp, ".$_POST['id_local_trtmto'].", (select ds_local_trtmto from tratamento.tb_c_local_trtmto where id_local_trtmto = ".$_POST['id_local_trtmto']."), '".$_POST['ds_obs_mapa_risco']."', (select cd_cor_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt']."));";
+		
+					//echo $sql;
+		
+					$result = pg_query($pdo, $sql);
+
+					if($result){
+						echo "";
+					}
+					
+					$sql = "INSERT INTO tratamento.tb_hstr_obs_pnel_mapa_risco(id_hstr_obs_pnel_mapa_risco, id_hstr_pnel_mapa_risco, dt_inic_status_pcnt, tp_min_status_pcnt, cd_usua_incs, dt_incs, cd_pcnt, nm_pcnt, id_status_pcnt, ds_status_pcnt, ds_obs_mapa_risco)
+	VALUES ((select NEXTVAL('tratamento.sq_hstr_obs_pnel_mapa_risco')), (SELECT currval('tratamento.sq_hstr_pnel_mapa_risco')), '".$rowdataatual[0]."', 0, '".$_SESSION['usuario']."', current_timestamp, '".$_POST['cd_pcnt']."', (SELECT nm_pcnt FROM tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."'), ".$_POST['id_status_pcnt'].", (select ds_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt']."), '".$_POST['ds_obs_mapa_risco']."') ";
+
+				//echo $sql;
+
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				}
+				
+				$secondsWait = 0;
+				header("Refresh:$secondsWait");	
+				
+			} else {
+				echo "<div class=\"alert alert-warning alert-dismissible\">
+					<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
+					<strong>Atenção!</strong>Paciente ou Local cadastrado no mapa. Exclua o paciente do mapa para este paciente para incluí-lo novamente.	</div>";
+				
+				
+			}
+			
+			
+		} catch(PDOException $e)
+		{
+			die($e->getMessage());
+		}
+	}
+	
+	if(isset($_POST['finaliza'])){					
+		
+		if ($pdo==null){
+			header(Config::$webLogin);
+		}
+		
+		try
+		{	
+			
+			if ($_POST['fl_mapa_risco_fchd'] == 1){
+							
+				$sql = "UPDATE tratamento.tb_hstr_pnel_mapa_risco SET tp_pcnt_mapa_risco = round((SELECT date_part( 'day', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_mapa_risco))*24*60 + date_part( 'hour', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_mapa_risco))*60 + date_part( 'minute', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_mapa_risco)))), dt_final_mapa_risco = current_timestamp, cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and dt_final_mapa_risco is null ";
+				
+				//echo $sql;
+				
+				$result = pg_query($pdo, $sql);
+				
+				if($result){
+					echo "";
+				} 
+				
+			} else {
+			
+				$sql = "SELECT id_hstr_pnel_mapa_risco
+						  FROM tratamento.tb_hstr_pnel_mapa_risco 
+						WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and dt_final_mapa_risco is null ";
+				
+				//echo $sql;
+
+				$rethstrpcnt = pg_query($pdo, $sql);
+				
+				if(!$rethstrpcnt) {
+					echo pg_last_error($pdo);		
+					exit;
+				}
+				
+				$rowhstrmaparisco = pg_fetch_row($rethstrpcnt);
+								
+				$id_hstr_pnel_mapa_risco = $rowhstrmaparisco[0];
+			
+				$sql = "DELETE FROM tratamento.tb_hstr_obs_pnel_mapa_risco WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_hstr_pnel_mapa_risco = ".$id_hstr_pnel_mapa_risco." ";
+				
+				//echo $sql;
+				
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				} 
+				
+				$sql = "DELETE FROM tratamento.tb_hstr_pnel_mapa_risco WHERE id_hstr_pnel_mapa_risco = ".$id_hstr_pnel_mapa_risco." ";
+				
+				//echo $sql;
+				
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				} 
+			
+			}
+			//voltar aqui
+			$secondsWait = 0;
+			header("Refresh:$secondsWait");
+
+				
+		} catch(PDOException $e)
+		{
+			die($e->getMessage());
+		}
+	}
+	
+	if(isset($_POST['alterastatus'])){					
+		
+		if ($pdo==null){
+			header(Config::$webLogin);
+		}
+		
+		try
+		{	
+			
+			$sql = "SELECT id_hstr_pnel_mapa_risco
+						  FROM tratamento.tb_hstr_pnel_mapa_risco 
+						WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and dt_final_mapa_risco is null ";
+				
+			//echo $sql;
+
+			$rethstrpcnt = pg_query($pdo, $sql);
+			
+			if(!$rethstrpcnt) {
+				echo pg_last_error($pdo);		
+				exit;
+			}
+			
+			$rowhstrmaparisco = pg_fetch_row($rethstrpcnt);
+							
+			$id_hstr_pnel_mapa_risco = $rowhstrmaparisco[0];
+			
+			$sql = "UPDATE tratamento.tb_hstr_pnel_mapa_risco SET ds_utlma_obs_mapa_risco = '". $_POST['ds_utlma_obs_mapa_risco'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_status_pcnt = ". $_POST['id_status_pcnt'] ." and id_hstr_pnel_mapa_risco = ".$id_hstr_pnel_mapa_risco." ";
+			
+			//echo $sql;
+			
+			$result = pg_query($pdo, $sql);
+			
+			if($result){
+				echo "";
+			} 
+			
+			$sql = "UPDATE tratamento.tb_hstr_obs_pnel_mapa_risco SET ds_obs_mapa_risco = '". $_POST['ds_utlma_obs_mapa_risco'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_status_pcnt = ". $_POST['id_status_pcnt'] ." and id_hstr_pnel_mapa_risco = ".$id_hstr_pnel_mapa_risco." ";
+			
+			//echo $sql;
+			
+			$result = pg_query($pdo, $sql);
+			
+			if($result){
+				echo "";
+			} 
+				
+			//voltar aqui
+			$secondsWait = 0;
+			header("Refresh:$secondsWait");
+
+				
+		} catch(PDOException $e)
+		{
+			die($e->getMessage());
+		}
+	}
+	
+	if(isset($_POST['insererisco'])){					
+		
+		if ($pdo==null){
+			header(Config::$webLogin);
+		}
+		
+		try
+		{	
+		
+			$sql = "SELECT id_hstr_pnel_mapa_risco
+						  FROM tratamento.tb_hstr_pnel_mapa_risco 
+						WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and dt_final_mapa_risco is null ";
+				
+			//echo $sql;
+
+			$rethstrpcnt = pg_query($pdo, $sql);
+			
+			if(!$rethstrpcnt) {
+				echo pg_last_error($pdo);		
+				exit;
+			}
+			
+			$rowhstrmaparisco = pg_fetch_row($rethstrpcnt);
+							
+			$id_hstr_pnel_mapa_risco = $rowhstrmaparisco[0];
+			
+			$sql = "INSERT INTO tratamento.tb_risco_rnado_pcnt(id_risco_rnado_pcnt, id_risco_pcnt, id_hstr_pnel_mapa_risco, nm_pcnt, ds_risco_pacnt, cd_usua_incs, dt_incs, cd_pcnt) VALUES ((select NEXTVAL('tratamento.sq_risco_rnado_pcnt')), ".$_POST['id_risco_pcnt'].", ".$id_hstr_pnel_mapa_risco.", (SELECT nm_pcnt FROM tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."'), (SELECT ds_risco_pcnt FROM tratamento.tb_c_risco_pcnt where id_risco_pcnt = '".$_POST['id_risco_pcnt']."'), '".$_SESSION['usuario']."', current_timestamp, '".$_POST['cd_pcnt']."'); ";
+			
+			//echo $sql;
+			
+			$result = pg_query($pdo, $sql);
+			
+			if($result){
+				echo "";
+			} 
+					
+			$secondsWait = 0;
+			header("Refresh:$secondsWait");
+				
+		} catch(PDOException $e)
+		{
+			die($e->getMessage());
+		}
+	}
+	
+	
+	if(isset($_POST['excluistatus'])){					
+		
+		if ($pdo==null){
+			header(Config::$webLogin);
+		}
+		
+		try
+		{	
+			
+			$sql = "SELECT id_hstr_pnel_mapa_risco
+						  FROM tratamento.tb_hstr_pnel_mapa_risco 
+						WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and dt_final_mapa_risco is null ";
+			
+			//echo $sql;
+
+			$rethstrpcnt = pg_query($pdo, $sql);
+			
+			if(!$rethstrpcnt) {
+				echo pg_last_error($pdo);		
+				exit;
+			}
+			
+			$rowhstrtratamento = pg_fetch_row($rethstrpcnt);
+							
+			$dt_inic_mapa_risco = $rowhstrtratamento[0];
+		
+			$sql = "DELETE FROM tratamento.tb_hstr_obs_pnel_mapa_risco WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_status_pcnt = ". $_POST['id_status_pcnt'] ." and id_hstr_pnel_mapa_risco = ".$id_hstr_pnel_mapa_risco." ";
+			
+			//echo $sql;
+			
+			$result = pg_query($pdo, $sql);
+
+			if($result){
+				echo "";
+			} 
+						
+			$sql = "SELECT distinct maparisco_obs.id_status_pcnt
+								  , maparisco_obs.ds_status_pcnt
+								  , status_pcnt.cd_cor_status_pcnt
+					  FROM tratamento.tb_hstr_obs_pnel_mapa_risco maparisco_obs
+					     , tratamento.tb_c_status_pcnt status_pcnt
+					WHERE maparisco_obs.id_status_pcnt = status_pcnt.id_status_pcnt					  
+					  and maparisco_obs.cd_pcnt = '".$_POST['cd_pcnt']."' 					  
+					  and maparisco_obs.id_hstr_pnel_mapa_risco = ".$id_hstr_pnel_mapa_risco." 
+					  and maparisco_obs.id_hstr_obs_pnel_mapa_risco = (SELECT MAX(id_hstr_obs_pnel_mapa_risco) 
+															  FROM tratamento.tb_hstr_obs_pnel_mapa_risco 
+															WHERE cd_pcnt = '".$_POST['cd_pcnt']."'
+															  and id_hstr_pnel_mapa_risco = ".$id_hstr_pnel_mapa_risco." )";
+			
+			//echo $sql;
+
+			$retultimostatus = pg_query($pdo, $sql);
+			
+			if(!$retultimostatus) {
+				echo pg_last_error($pdo);		
+				exit;
+			}
+			
+			$rowretultimostatus = pg_fetch_row($retultimostatus);
+			
+			$id_status_pcnt = $rowretultimostatus[1];
+			$ds_status_pcnt = $rowretultimostatus[2];
+			$cd_cor_status_pcnt = $rowretultimostatus[3];
+					
+			$sql = "UPDATE tratamento.tb_hstr_pnel_mapa_risco set id_status_pcnt = ".$id_status_pcnt.", ds_status_pcnt = '".$ds_status_pcnt."', cd_cor_status_pcnt = '".$cd_cor_status_pcnt."' WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_hstr_pnel_mapa_risco = ".$id_hstr_pnel_mapa_risco." ";
+			
+			//echo $sql;
+			
+			$result = pg_query($pdo, $sql);
+
+			if($result){
+				echo "";
+			} 
+		
+			//voltar aqui
+			$secondsWait = 0;
+			header("Refresh:$secondsWait");
+				
+		} catch(PDOException $e)
+		{
+			die($e->getMessage());
+		}
+	}
+	
+	
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,18 +538,19 @@
 				
 				<?php
 			
-					echo "<p style='font-weight: bold'>". substr($row[0], 0, 20) . "</p>";			
+					echo "<p style='font-weight: bold'>". substr($row[3], 0, 20) . "</p>";			
+					echo "<p style='background-color:".$row[4]."'>". $row[1]. "</p>";	
 				
 					$pdo = database::connect();
 					
-					$sql="SELECT risco.ds_risco_pcnt
+					$sql="SELECT distinct risco.ds_risco_pcnt
 								 , risco.cd_cor_risco_pcnt
 							FROM tratamento.tb_hstr_pnel_mapa_risco mapa_risco
 							   , tratamento.tb_risco_rnado_pcnt	risco_rnado   
 							   , tratamento.tb_c_risco_pcnt risco
 							WHERE mapa_risco.id_hstr_pnel_mapa_risco = risco_rnado.id_hstr_pnel_mapa_risco
 							  AND risco.id_risco_pcnt = risco_rnado.id_risco_pcnt
-							  AND mapa_risco.cd_pcnt = ".$row[0]."
+							  AND mapa_risco.cd_pcnt = '".$row[0]."'
 							  AND mapa_risco.dt_final_mapa_risco is null";		
 					
 					$ret_risco = pg_query($pdo, $sql);
@@ -118,7 +563,7 @@
 				
 					while($row_risco = pg_fetch_row($ret_risco)) 
 					{																		 
-						echo "<div style='background-color:".$row_risco[1]."; color:black;'>" . trim($row_risco[1]). "</div>";						
+						echo "<div style='background-color:".$row_risco[1]."; color:black;'>" . trim($row_risco[0]). "</div>";						
 					}	
 				?>
 				</div>
@@ -257,11 +702,11 @@
 		
 		$(document).on('click', '.view_data', function(){
 			//$('#dataModal').modal();
-			var nm_loc_nome = $(this).attr("id");
+			var local = $(this).attr("id");
 			$.ajax({
 				url:"../mapa/selecao_detalhe_paciente_mapa.php",
 				method:"POST",
-				data:{nm_loc_nome:nm_loc_nome},
+				data:{local:local},
 				success:function(data){
 					$('#detalhe_paciente').html(data);
 					$('#dataModal').modal('show');

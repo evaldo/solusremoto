@@ -70,7 +70,7 @@
 											<select  id="selfl_trtmto_fchd" class="form-control" onchange=" 
 														var selObj = document.getElementById('selfl_trtmto_fchd');
 														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('fl_trtmto_fchd').value = selValue;">
+														document.getElementById('fl_mapa_risco_fchd').value = selValue;">
 												<option value="1">Finalizar</option>
 												<option value="2">Excluir</option>
 											</select>
@@ -86,7 +86,7 @@
 						</div>				
 						<!--style="display:none"-->
 						<input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 	
-						<input type="text" id="fl_trtmto_fchd" name="fl_trtmto_fchd" value="1" style="display:none"> 							
+						<input type="text" id="fl_mapa_risco_fchd" name="fl_trtmto_fchd" value="1" style="display:none"> 							
 					</form>
 				</div>
 			</div>

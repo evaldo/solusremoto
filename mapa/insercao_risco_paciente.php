@@ -20,7 +20,7 @@
 	<body style="margin-right: 0; margin-left: 0">	
 		<div class="container" style="width: 100%;  margin-right: 0; margin-left: 0; position: relative;">
 		  <div class="modal-dialog">
-				<div class="modal-content" style="width:800px">
+				<div class="modal-content" style="width:500px">
 					<div class="container">						
 						<h4 class="modal-title">Inserção de Riscos do Paciente</h4>
 					</div>								
@@ -97,7 +97,7 @@
 								</table>																
 							</div>								
 							<div class="modal-footer">	
-								<input type="submit" class="btn btn-danger" name="insere" value="Inserir">&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="submit" class="btn btn-danger" name="insererisco" value="Inserir">&nbsp;&nbsp;&nbsp;&nbsp;
 								<input type="submit" class="btn btn-primary" onclick="history.go()" value="Voltar">						
 							</div>
 							<input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 	

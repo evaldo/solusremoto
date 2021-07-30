@@ -29,10 +29,10 @@
 							<div class="table-responsive">  							
 								<table class="table table-bordered">									 									  
 									  <tr>  
-										<td style="width:150px"><label>Escolha o paciente para inserir o mapa:</label></td>  
+										<td style="width:150px"><label>Escolha o paciente para inserir no mapa:</label></td>  
 										<?php
 										
-										$sql = "SELECT distinct mapa.cd_pcnt, mapa.nm_pcnt from tratamento.tb_hstr_pnel_mapa_risco mapa where mapa.dt_final_mapa_risco is null order by 2";
+										$sql = "SELECT distinct cd_pcnt, nm_pcnt from tratamento.tb_c_pcnt order by 2";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -93,9 +93,13 @@
 											</select>											
 										</td>  																				
 									 </tr>
+									 <tr>  
+										<td style="width:150px"><label>Observação:</label></td>  
+										<td style="width:200px"><textarea rows="3" cols="70" id="ds_obs_mapa_risco" class="form-control" name="ds_obs_mapa_risco"></textarea></td>  
+									 </tr>
 									 
 									  <tr>  
-										<td style="width:150px"><label>Escolha o status:</label></td>  
+										<td style="width:150px"><label>Escolha o local de tratamento:</label></td>  
 										<?php
 										
 										$sql = "SELECT id_local_trtmto, ds_local_trtmto FROM tratamento.tb_c_local_trtmto ORDER BY ds_local_trtmto ASC";
@@ -130,7 +134,7 @@
 								</table>																
 							</div>								
 							<div class="modal-footer">	
-								<input type="submit" class="btn btn-danger" name="insere" value="Inserir">&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="submit" class="btn btn-danger" name="inseremapa" value="Inserir">&nbsp;&nbsp;&nbsp;&nbsp;
 								<input type="submit" class="btn btn-primary" onclick="history.go()" value="Voltar">						
 							</div>
 							<input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 	

@@ -21,7 +21,7 @@
 		  <div class="modal-dialog">
 				<div class="modal-content" style="width:800px">
 					<div class="container">						
-						<h4 class="modal-title">Excluir Status no Mapa de Tratamento. Paciente: <?php echo $_POST['nm_pcnt'];?></h4>
+						<h4 class="modal-title">Excluir Status no Mapa de Tratamento. Paciente</h4>
 					</div>								
 					<form class="form-inline" method="post" id="formulario">
 						<div class="modal-body">
@@ -102,7 +102,6 @@
 						</div>		
 						<!-- style="display:none"-->						
 						<input type="text" id="id_status_pcnt" name="id_status_pcnt" style="display:none">	
-						<input type="text" id="nm_pcnt" name="nm_pcnt" value="<?php echo $_POST['nm_pcnt'];?>" style="display:none">
 						<input type="text" id="cd_pcnt" name="cd_pcnt" value="<?php echo $_POST['cd_pcnt'];?>" style="display:none">
 						<input type="text" id="id_hstr_pnel_mapa_risco" name="id_hstr_pnel_mapa_risco" style="display:none">
 						<input type="text" id="id_hstr_obs_pnel_mapa_risco" name="id_hstr_obs_pnel_mapa_risco" style="display:none">

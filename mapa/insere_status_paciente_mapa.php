@@ -3,6 +3,8 @@
 		
 	session_start();
 	
+	error_reporting(0); 	
+	
 	include '../database.php';
 	$pdo = database::connect();
 	
@@ -107,8 +109,7 @@
 						</div>		
 						<!-- style="display:none"-->
 						<input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 						
-						<input type="text" id="id_status_pcnt" name="id_status_pcnt" style="display:none">	
-						<input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none">
+						<input type="text" id="id_status_pcnt" name="id_status_pcnt" style="display:none">							
 					</form>
 				</div>
 			</div>

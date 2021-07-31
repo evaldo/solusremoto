@@ -32,22 +32,20 @@
 										<td style="width:150px"><label>Escolha o paciente-status:</label></td>  
 										<?php
 										
-										$sql = "SELECT mapa_hstr.cd_pcnt
+										$sql = "SELECT distinct mapa_hstr.cd_pcnt
 													 , mapa_hstr.nm_pcnt||'->'||status.ds_status_pcnt as nm_pcnt_status
 													 , mapa_hstr.id_status_pcnt
 													 , mapa_hstr.ds_obs_mapa_risco
 													 , mapa_hstr.id_hstr_pnel_mapa_risco
 													 , mapa_hstr.id_hstr_obs_pnel_mapa_risco
+													 , mapa_hstr.nm_pcnt
 												FROM tratamento.tb_hstr_obs_pnel_mapa_risco mapa_hstr
 												   , tratamento.tb_c_status_pcnt status 
 												WHERE mapa_hstr.id_status_pcnt = status.id_status_pcnt
-												  AND mapa_hstr.dt_inic_status_pcnt = (
-																					SELECT MAX(mapa_hstr_data.dt_inic_status_pcnt)
-																						FROM tratamento.tb_hstr_obs_pnel_mapa_risco mapa_hstr_data
-																						   , tratamento.tb_hstr_pnel_mapa_risco mapa
-																					WHERE mapa_hstr_data.id_hstr_pnel_mapa_risco = mapa.id_hstr_pnel_mapa_risco
-																					  AND mapa.dt_final_mapa_risco is null
-																					  AND mapa_hstr_data.cd_pcnt = mapa_hstr.cd_pcnt
+												  AND mapa_hstr.id_hstr_obs_pnel_mapa_risco = (
+																					SELECT max(id_hstr_obs_pnel_mapa_risco)
+																						FROM tratamento.tb_hstr_obs_pnel_mapa_risco mapa
+																					WHERE mapa.cd_pcnt =  mapa_hstr.cd_pcnt
 																					)
 												ORDER BY mapa_hstr.nm_pcnt asc        ";
 										
@@ -64,13 +62,11 @@
 											<select  id="pcnt" class="form-control" onchange=" 
 														var selObj = document.getElementById('pcnt');
 														var selValue = selObj.options[selObj.selectedIndex].value;
-														var selnm_pcnt = $(this).find(':selected').data('nm_pcnt');
 														var selid_status_pcnt = $(this).find(':selected').data('id_status_pcnt');
 														var selds_utlma_obs_mapa_risco = $(this).find(':selected').data('ds_utlma_obs_mapa_risco');
 														var selid_hstr_pnel_mapa_risco = $(this).find(':selected').data('id_hstr_pnel_mapa_risco');
 														var selid_hstr_obs_pnel_mapa_risco = $(this).find(':selected').data('id_hstr_obs_pnel_mapa_risco');
 														document.getElementById('cd_pcnt').value = selValue;
-														document.getElementById('nm_pcnt').value = selnm_pcnt;
 														document.getElementById('id_status_pcnt').value = selid_status_pcnt;
 														document.getElementById('ds_utlma_obs_mapa_risco').value = selds_utlma_obs_mapa_risco;
 														document.getElementById('id_hstr_pnel_mapa_risco').value = selid_hstr_pnel_mapa_risco;
@@ -102,7 +98,7 @@
 						</div>		
 						<!-- style="display:none"-->						
 						<input type="text" id="id_status_pcnt" name="id_status_pcnt" style="display:none">	
-						<input type="text" id="cd_pcnt" name="cd_pcnt" value="<?php echo $_POST['cd_pcnt'];?>" style="display:none">
+						<input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none">
 						<input type="text" id="id_hstr_pnel_mapa_risco" name="id_hstr_pnel_mapa_risco" style="display:none">
 						<input type="text" id="id_hstr_obs_pnel_mapa_risco" name="id_hstr_obs_pnel_mapa_risco" style="display:none">
 					</form>

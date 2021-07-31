@@ -86,7 +86,7 @@
 						</div>				
 						<!--style="display:none"-->
 						<input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 	
-						<input type="text" id="fl_mapa_risco_fchd" name="fl_trtmto_fchd" value="1" style="display:none"> 							
+						<input type="text" id="fl_mapa_risco_fchd" name="fl_mapa_risco_fchd" value="1" style="display:none"> 							
 					</form>
 				</div>
 			</div>

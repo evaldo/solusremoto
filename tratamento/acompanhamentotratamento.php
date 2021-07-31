@@ -5,7 +5,7 @@
     include '../database.php';
     $pdo = database::connect();
 	
-	//error_reporting(0); 	
+	error_reporting(0); 	
 		
 	$textoconsulta = "";
 	$retSqlServer = "";

@@ -2,7 +2,9 @@
 //insercao_usuario.php
 	session_start();			
 	
-    include '../database.php';	
+    include '../database.php';
+
+	error_reporting(0); 		
 	
 	$pdo = database::connect();
 	$optconsulta = "";

@@ -21,7 +21,7 @@
 		  <div class="modal-dialog">
 				<div class="modal-content" style="width:800px">
 					<div class="container">						
-						<h4 class="modal-title">Excluir Status no Mapa de Tratamento. Paciente</h4>
+						<h4 class="modal-title">Excluir Status do Paciente no Mapa de Tratamento</h4>
 					</div>								
 					<form class="form-inline" method="post" id="formulario">
 						<div class="modal-body">

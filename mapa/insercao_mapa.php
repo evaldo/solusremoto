@@ -50,7 +50,7 @@
 														var selObj = document.getElementById('pcnt');
 														var selValue = selObj.options[selObj.selectedIndex].value;
 														document.getElementById('cd_pcnt').value = selValue;">
-												<option value="0"></option>
+												<option value="0">Escolha o Paciente...</option>
 																									
 											<?php
 												$cont=1;																	
@@ -83,7 +83,7 @@
 														var selObj = document.getElementById('status');
 														var selValue = selObj.options[selObj.selectedIndex].value;
 														document.getElementById('id_status_pcnt').value = selValue;">
-												<option value="0"></option>
+												<option value="0">Escolha o Status...</option>
 																									
 											<?php
 												$cont=1;																	
@@ -120,7 +120,7 @@
 														var selObj = document.getElementById('local');
 														var selValue = selObj.options[selObj.selectedIndex].value;
 														document.getElementById('id_local_trtmto').value = selValue;">
-												<option value="0"></option>
+												<option value="0">Escolha o Local...</option>
 																									
 											<?php
 												$cont=1;																	

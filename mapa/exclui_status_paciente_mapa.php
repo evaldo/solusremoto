@@ -42,6 +42,9 @@
 												FROM tratamento.tb_hstr_obs_pnel_mapa_risco mapa_hstr
 												   , tratamento.tb_c_status_pcnt status 
 												WHERE mapa_hstr.id_status_pcnt = status.id_status_pcnt
+												  AND mapa_hstr.cd_pcnt in (SELECT cd_pcnt
+																			  FROM tratamento.tb_hstr_pnel_mapa_risco 
+																			WHERE dt_final_mapa_risco is null)
 												  AND mapa_hstr.id_hstr_obs_pnel_mapa_risco = (
 																					SELECT max(id_hstr_obs_pnel_mapa_risco)
 																						FROM tratamento.tb_hstr_obs_pnel_mapa_risco mapa

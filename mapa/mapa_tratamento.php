@@ -494,6 +494,7 @@
 			$sql = "SELECT mapa_hstr.id_status_pcnt
 			             , mapa_hstr.ds_status_pcnt
 						 , status.cd_cor_status_pcnt
+						 , mapa_hstr.ds_obs_mapa_risco
 					FROM tratamento.tb_hstr_obs_pnel_mapa_risco mapa_hstr
 					   , tratamento.tb_c_status_pcnt status 
 					WHERE mapa_hstr.id_status_pcnt = status.id_status_pcnt
@@ -518,11 +519,12 @@
 			$id_status_pcnt = $rowretultimostatus[0];
 			$ds_status_pcnt = $rowretultimostatus[1];
 			$cd_cor_status_pcnt = $rowretultimostatus[2];
+			$ds_utlma_obs_mapa_risco = $rowretultimostatus[3];
 			
 			If($ds_status_pcnt==''){
 				$sql = "UPDATE tratamento.tb_hstr_pnel_mapa_risco set id_status_pcnt = null, ds_status_pcnt = null, cd_cor_status_pcnt = null WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_hstr_pnel_mapa_risco = ".$_POST['id_hstr_pnel_mapa_risco']." ";
 			} else {					
-				$sql = "UPDATE tratamento.tb_hstr_pnel_mapa_risco set id_status_pcnt = ".$id_status_pcnt.", ds_status_pcnt = '".$ds_status_pcnt."', cd_cor_status_pcnt = '".$cd_cor_status_pcnt."' WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_hstr_pnel_mapa_risco = ".$id_hstr_pnel_mapa_risco." ";
+				$sql = "UPDATE tratamento.tb_hstr_pnel_mapa_risco set ds_utlma_obs_mapa_risco = '".$ds_utlma_obs_mapa_risco ."' , id_status_pcnt = ".$id_status_pcnt.", ds_status_pcnt = '".$ds_status_pcnt."', cd_cor_status_pcnt = '".$cd_cor_status_pcnt."' WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and dt_final_mapa_risco is null ";
 			}
 			
 			//echo $sql;

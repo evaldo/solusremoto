@@ -6,61 +6,26 @@
 	
 	error_reporting(0); 
 	
-	$itens_por_pagina=10;
-	$pagina=intval($_GET['pagina']);
-	
     global $pdo;	
 	
 	$pdo = database::connect();
+	
 	$optconsulta = "";
-	$textoconsulta = "";
-	
+	$textoconsulta = "";	
 	$sql = '';
-	
-	$textoconsulta = "";
 	
 	if(isset($_POST['botaoconsultar'])&& $_POST['textoconsulta']<>""){
 		
 		$textoconsulta = strtoupper($_POST['textoconsulta']);
 		
-		$sql = "SELECT count(id_local_trtmto)
-				from tratamento.tb_c_local_trtmto 
-				where upper(ds_local_trtmto) like '%" . $textoconsulta . "%'";
-			
-		if ($pdo==null){
-				header(Config::$webLogin);
-		}	
-		$ret = pg_query($pdo, $sql);
-		if(!$ret) {
-			echo pg_last_error($pdo);
-			exit;
-		}	
-		$row = pg_fetch_row($ret);
-		$num_total = $row[0];	
-		$num_paginas = ceil($num_total/$itens_por_pagina);
-		
-		$sql ="SELECT id_local_trtmto, ds_local_trtmto, nu_seq_local_pnel 
-				from tratamento.tb_c_local_trtmto 
-				where upper(ds_local_trtmto) like '%" . $textoconsulta . "%' order by nu_seq_local_pnel LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";
+		$sql ="SELECT id_pddo_trtmto, nm_pcnt, to_char(dt_rlzd, 'dd/mm/yyyy') as dt_rlzd
+				from tratamento.tb_pddo_trtmto 
+				where upper(nm_pcnt) like upper('%" . $textoconsulta . "%') order by dt_rlzd, nm_pcnt asc ";
 		
 	} else{
 		
-			$sql = "SELECT count(id_local_trtmto)
-				from tratamento.tb_c_local_trtmto";
-			
-			if ($pdo==null){
-					header(Config::$webLogin);
-			}	
-			$ret = pg_query($pdo, $sql);
-			if(!$ret) {
-				echo pg_last_error($pdo);
-				exit;
-			}	
-			$row = pg_fetch_row($ret);
-			$num_total = $row[0];	
-			$num_paginas = ceil($num_total/$itens_por_pagina);
-		
-			$sql ="SELECT id_local_trtmto, ds_local_trtmto, nu_seq_local_pnel from tratamento.tb_c_local_trtmto order by nu_seq_local_pnel LIMIT $itens_por_pagina OFFSET $pagina*$itens_por_pagina";	
+			$sql ="SELECT id_pddo_trtmto, nm_pcnt, to_char(dt_rlzd, 'dd/mm/yyyy') as dt_rlzd
+				from tratamento.tb_pddo_trtmto order by dt_rlzd, nm_pcnt asc";	
 	}
 	
 	if ($pdo==null){
@@ -217,18 +182,6 @@
 		
 		</div> <!-- /#list -->
 		
-		<div>			
-			<ul class="pagination">
-				<li class="page-item"><a class="page-link" href="cadastro_local_tratamento.php?pagina=0">Primeiro</a></li>
-				<?php 				
-				for ($i=0; $i<$num_paginas;$i++){										
-				?>
-					<li class="page-item" ><a class="page-link" href="cadastro_local_tratamento.php?pagina=<?php echo $i;?>">
-						<?php echo $i+1;?></a></li>
-				<?php } ?>
-				<li class="page-item"><a class="page-link" href="cadastro_local_tratamento.php?pagina=<?php echo $num_paginas-1; ?>">Último</a></li>
-			</ul>		
-		</div> <!-- /#bottom -->
 	 </div> <!-- /#main -->
 
 	 <script src="../js/jquery.min.js"></script>
@@ -278,7 +231,7 @@
 			event.preventDefault();			
 			$.ajax({
 				type: "POST",
-				url:"../insercao/insercao_local_tratamento.php",															
+				url:"../insercao/insercao_pedido_tratamento.php",															
 				success : function(completeHtmlPage) {				
 					$("html").empty();
 					$("html").append(completeHtmlPage);

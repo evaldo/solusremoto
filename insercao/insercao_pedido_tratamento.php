@@ -64,29 +64,29 @@
 									   
 									   <tr>
 											<td style="width:50px"><label>Peso(Kg):</label></td> 
-											<td style="width:10px"><input type="text" class="form-control" name="nu_peso_pcnt"></td>
+											<td style="width:10px"><input type="text" class="form-control" name="nu_peso_pcnt" value="0.0"></td>
 									   </tr>
 									   
 									   <tr>
 											<td style="width:50px"><label>Altura(Cm):</label></td> 
-											<td style="width:10px"><input type="text" class="form-control" name="vl_altura_pcnt"></td>
+											<td style="width:10px"><input type="text" class="form-control" name="vl_altura_pcnt" value="0.0"></td>
 									   </tr>
 									   
 									   <tr>
 											<td style="width:50px"><label>Sup. Corp(m2):</label></td> 
-											<td style="width:10px"><input type="text" class="form-control" name="vl_sup_corp"></td>
+											<td style="width:10px"><input type="text" class="form-control" name="vl_sup_corp" value="0.0"></td>
 									   </tr>
 										
 									   <tr>
 									 
 										<td style="width:150px"><label>Indicação Clínica:</label></td>  
-										<td style="width:200px"><textarea rows="10" cols="50" id="ds_utlma_obs_mapa_risco" class="form-control" name="ds_indic_clnic"></textarea></td> 
+										<td style="width:200px"><textarea rows="6" cols="50" id="ds_utlma_obs_mapa_risco" class="form-control" name="ds_indic_clnic" value=" "></textarea></td> 
 									 
 									   </tr>
-									 
+									   
 									   <tr>
 											<td ><label>Data do Diagnóstico:</label></td>
-											<td ><input type="date" class="form-control" id="dt_diagn" name="dt_diagn"></td>
+											<td ><input type="date" class="form-control" id="dt_diagn" name="dt_diagn" value="<?php $hoje = date ( 'Y-m-d' ); echo $hoje ; ?>"></td>
 									   </tr>
 									   
 									   <tr>
@@ -126,7 +126,11 @@
 									 <tr>  
 										<td style="width:150px"><label>Estadiamento:</label></td>  										
 										<td style="width:150px">
-											<select  id="ds_estmt" class="form-control" >
+											<select  id="sl_estmt" class="form-control" onchange=" 
+														var selObj = document.getElementById('sl_estmt');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('ds_estmt').value = selValue;">
+												<option value="">Escolha uma opção</option>
 												<option value="I">I</option>											
 												<option value="II">II</option>
 												<option value="III">III</option>
@@ -138,7 +142,11 @@
 									  <tr>  
 										<td style="width:150px"><label>Tipo Quimio. (Linha):</label></td>  										
 										<td style="width:150px">
-											<select  id="ds_estmt" class="form-control" >
+											<select  id="sl_tipo_linha_trtmto" class="form-control" onchange=" 
+														var selObj = document.getElementById('sl_tipo_linha_trtmto');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('ds_tipo_linha_trtmto').value = selValue;">
+												<option value="">Escolha uma opção</option>
 												<option value="1 Linha">1 Linha</option>											
 												<option value="2 Linha">2 Linha</option>
 												<option value="3 Linha">3 Linha</option>
@@ -150,7 +158,11 @@
 									 <tr>  
 										<td style="width:150px"><label>Finalidade:</label></td>  										
 										<td style="width:150px">
-											<select  id="ds_fnlde" class="form-control" >
+											<select  id="sl_fnlde" class="form-control" onchange=" 
+														var selObj = document.getElementById('sl_fnlde');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('ds_fnlde').value = selValue;">
+												<option value="">Escolha uma opção</option>
 												<option value="Paliativo">Paliativo</option>											
 												<option value="Adjuvante">Adjuvante</option>
 												<option value="Neo-Adjuvante">Neo-Adjuvante</option>
@@ -162,7 +174,11 @@
 									 <tr>  
 										<td style="width:150px"><label>Tumor:</label></td>  										
 										<td style="width:150px">
-											<select  id="ic_tipo_tumor" class="form-control" >
+											<select  id="sl_tipo_tumor" class="form-control" onchange=" 
+														var selObj = document.getElementById('sl_tipo_tumor');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('ic_tipo_tumor').value = selValue;">
+												<option value="">Escolha uma opção</option>
 												<option value="T1">T1</option>											
 												<option value="T2">T2</option>
 												<option value="T3">T3</option>
@@ -177,7 +193,11 @@
 									  <tr>  
 										<td style="width:150px"><label>Nódulo:</label></td>  										
 										<td style="width:150px">
-											<select  id="ic_tipo_nodulo" class="form-control" >
+											<select  id="sl_tipo_nodulo" class="form-control" onchange=" 
+														var selObj = document.getElementById('sl_tipo_nodulo');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('ic_tipo_nodulo').value = selValue;">
+												<option value="">Escolha uma opção</option>
 												<option value="N1">N1</option>											
 												<option value="N2">N2</option>
 												<option value="N3">N3</option>
@@ -191,7 +211,11 @@
 									 <tr>  
 										<td style="width:150px"><label>Metástase:</label></td>  										
 										<td style="width:150px">
-											<select  id="ic_tipo_metastase" class="form-control" >
+											<select  id="sl_tipo_metastase" class="form-control" onchange=" 
+														var selObj = document.getElementById('sl_tipo_metastase');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('ic_tipo_metastase').value = selValue;">
+												<option value="">Escolha uma opção</option>
 												<option value="M1">M1</option>											
 												<option value="M0">M0</option>														
 												<option value="MX">MX</option>												
@@ -203,77 +227,85 @@
 									 <tr>
 									 
 											<td style="width:150px"><label>Plano Terapêutico:</label></td>  
-											<td style="width:200px"><textarea rows="10" cols="50" id="ds_plano_trptco" class="form-control" name="ds_plano_trptco"></textarea></td> 
+											<td style="width:200px"><textarea rows="6" cols="50" id="ds_plano_trptco" class="form-control" name="ds_plano_trptco" value=" "></textarea></td> 
 									 
 									 </tr>
 									 
 									 <tr>
 									 
 											<td style="width:150px"><label>Informações Relevantes:</label></td>  
-											<td style="width:200px"><textarea rows="10" cols="50" id="ds_info_rlvnte" class="form-control" name="ds_info_rlvnte"></textarea></td> 
+											<td style="width:200px"><textarea rows="6" cols="50" id="ds_info_rlvnte" class="form-control" name="ds_info_rlvnte" value=" "></textarea></td> 
 									 
 									 </tr>
 									 
 									 <tr>
 									 
 											<td style="width:150px"><label>Diagnóstico Cito/Histopatológico:</label></td>  
-											<td style="width:200px"><textarea rows="10" cols="50" id="ds_diagn_cito_hstpagico" class="form-control" name="ds_diagn_cito_hstpagico"></textarea></td> 
+											<td style="width:200px"><textarea rows="6" cols="50" id="ds_diagn_cito_hstpagico" class="form-control" name="ds_diagn_cito_hstpagico" value=" "></textarea></td> 
 									 
 									 </tr>
 									 
 									 <tr>
 									 
 											<td style="width:150px"><label>Cirurgia:</label></td>  
-											<td style="width:200px"><textarea rows="5" cols="50" id="ds_tp_cirurgia" class="form-control" name="ds_tp_cirurgia"></textarea></td> 
+											<td style="width:200px"><textarea rows="5" cols="50" id="ds_tp_cirurgia" class="form-control" name="ds_tp_cirurgia" value=" "></textarea></td> 
 									 
 									 </tr>
 									 
 									 <tr>
 									 
 											<td style="width:150px"><label>Área Irradiada:</label></td>  
-											<td style="width:200px"><textarea rows="5" cols="50" id="ds_area_irrda" class="form-control" name="ds_area_irrda"></textarea></td> 
+											<td style="width:200px"><textarea rows="5" cols="50" id="ds_area_irrda" class="form-control" value=" " name="ds_area_irrda"></textarea></td> 
 									 
 									 </tr>
 									 
 									 <tr>
 											<td ><label>Data de Realização:</label></td>
-											<td ><input type="date" class="form-control" id="dt_rlzd" name="dt_rlzd"></td>
+											<td ><input type="date" class="form-control" id="dt_rlzd" name="dt_rlzd" value="<?php $hoje = date ( 'Y-m-d' ); echo $hoje ; ?>"></td>
 									 </tr>
 									 
 									 <tr>
 											<td ><label>Data da Aplicação:</label></td>
-											<td ><input type="date" class="form-control" id="dt_aplc" name="dt_aplc"></td>
+											<td ><input type="date" class="form-control" id="dt_aplc" name="dt_aplc" value="<?php $hoje = date ( 'Y-m-d' ); echo $hoje ; ?>"></td>
 									 </tr>
 									 
 									  <tr>
 									 
 											<td style="width:150px"><label>Observação/Justificativa:</label></td>  
-											<td style="width:200px"><textarea rows="10" cols="50" id="ds_obs_jfta" class="form-control" name="ds_obs_jfta"></textarea></td> 
+											<td style="width:200px"><textarea rows="6" cols="50" id="ds_obs_jfta" class="form-control" value=" " name="ds_obs_jfta"></textarea></td> 
 									 
 									 </tr>
 									 
 									 <tr>
 											<td style="width:50px"><label>Quantidade de Ciclos Previstos:</label></td> 
-											<td style="width:10px"><input type="text" class="form-control" name="nu_qtde_ciclo_prta" id="nu_qtde_ciclo_prta"></td>
+											<td style="width:10px"><input type="text" class="form-control" name="nu_qtde_ciclo_prta" value="0" id="nu_qtde_ciclo_prta"></td>
 									 </tr>
 									 
 									 <tr>
 											<td style="width:50px"><label>Ciclo Atual:</label></td> 
-											<td style="width:50px"><input type="text" class="form-control" name="ds_ciclo_atual" id="ds_ciclo_atual"></td>
+											<td style="width:50px"><input type="text" class="form-control" name="ds_ciclo_atual" value="0" id="ds_ciclo_atual"></td>
 									 </tr>
 									 
 									  <tr>
 											<td style="width:50px"><label>Número de Dias do Ciclo Atual:</label></td> 
-											<td style="width:50px"><input type="text" class="form-control" name="ds_dia_ciclo_atual" id="ds_dia_ciclo_atual"></td>
+											<td style="width:50px"><input type="text" class="form-control" name="ds_dia_ciclo_atual" value="0" id="ds_dia_ciclo_atual"></td>
 									 </tr>
 									 
 									 <tr>
 											<td style="width:50px"><label>Intervalo entre Ciclos (em dias):</label></td> 
-											<td style="width:50px"><input type="text" class="form-control" name="ds_intrv_entre_ciclo_dia" id="ds_intrv_entre_ciclo_dia"></td>
+											<td style="width:50px"><input type="text" class="form-control" value="0" name="ds_intrv_entre_ciclo_dia" id="ds_intrv_entre_ciclo_dia"></td>
 									 </tr>
 									 
 									 <input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 
 									 <input type="text" id="cd_cid" name="cd_cid" style="display:none"> 
+									 
+									 <input type="text" id="ds_estmt" name="ds_estmt" style="display:none"> 
+									 <input type="text" id="ds_tipo_linha_trtmto" name="ds_tipo_linha_trtmto" style="display:none"> 
+									 <input type="text" id="ds_fnlde" name="ds_fnlde" style="display:none"> 
+									 <input type="text" id="ic_tipo_tumor" name="ic_tipo_tumor" style="display:none"> 
+									 <input type="text" id="ic_tipo_nodulo" name="ic_tipo_nodulo" style="display:none"> 
+									 <input type="text" id="ic_tipo_metastase" name="ic_tipo_metastase" style="display:none"> 
+									 
 								</table>																
 							</div>								
 							<div class="modal-footer">	

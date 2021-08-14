@@ -45,14 +45,16 @@
 		
 		try
 		{	
+			if ($_POST['id_hstr_pnel_solic_trtmto']=='null' || $_POST['id_hstr_pnel_solic_trtmto']==null || $_POST['id_hstr_pnel_solic_trtmto']=='') {
+				$_POST['id_hstr_pnel_solic_trtmto']='null';
+			}
 		
 			$sql = "INSERT INTO tratamento.tb_pddo_trtmto(id_pddo_trtmto, id_hstr_pnel_solic_trtmto, cd_pcnt, nm_pcnt, dt_nasc_pcnt, vl_idade_pcnt, nu_peso_pcnt, vl_altura_pcnt, vl_sup_corp, ds_indic_clnic, dt_diagn, cd_cid, ds_plano_trptco, ds_info_rlvnte, ds_diagn_cito_hstpagico, ds_tp_cirurgia, ds_area_irrda, dt_rlzd, dt_aplc, ds_obs_jfta, nu_qtde_ciclo_prta, ds_ciclo_atual, ds_dia_ciclo_atual, ds_intrv_entre_ciclo_dia, ds_estmt, ds_tipo_linha_trtmto, ds_fnlde, ic_tipo_tumor, ic_tipo_nodulo, ic_tipo_metastase, cd_usua_incs, dt_incs)
-	VALUES ((select NEXTVAL('tratamento.sq_pddo_trtmto')), null, '". $_POST['cd_pcnt']."', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '". $_POST['cd_pcnt']."'), (select dt_nasc_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '". $_POST['cd_pcnt']."'), (select date_part('year', age(now(), (select dt_nasc_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '". $_POST['cd_pcnt']."')))), ". str_replace(",", ".", $_POST['nu_peso_pcnt']).", ". str_replace(",", ".", $_POST['vl_altura_pcnt']).", ". str_replace(",", ".", $_POST['vl_sup_corp']).", '". $_POST['ds_indic_clnic']."', '". $_POST['dt_diagn']."', '". $_POST['cd_cid']."', '". $_POST['ds_plano_trptco']."', '". $_POST['ds_info_rlvnte']."', '". $_POST['ds_diagn_cito_hstpagico']."', '". $_POST['ds_tp_cirurgia']."', '". $_POST['ds_area_irrda']."', '". $_POST['dt_rlzd']."', '". $_POST['dt_aplc']."', '". $_POST['ds_obs_jfta']."', '". $_POST['nu_qtde_ciclo_prta']."', '". $_POST['ds_ciclo_atual']."', '". $_POST['ds_dia_ciclo_atual']."', '". $_POST['ds_intrv_entre_ciclo_dia']."', '". $_POST['ds_estmt']."' ,'". $_POST['ds_tipo_linha_trtmto']."', '". $_POST['ds_fnlde']."', '". $_POST['ic_tipo_tumor']."', '". $_POST['ic_tipo_nodulo']."', '". $_POST['ic_tipo_metastase']."', '".$_SESSION['usuario']."', current_timestamp);";
+	VALUES ((select NEXTVAL('tratamento.sq_pddo_trtmto')), ". $_POST['id_hstr_pnel_solic_trtmto'].", '". $_POST['cd_pcnt']."', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '". $_POST['cd_pcnt']."'), (select dt_nasc_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '". $_POST['cd_pcnt']."'), (select date_part('year', age(now(), (select dt_nasc_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '". $_POST['cd_pcnt']."')))), ". str_replace(",", ".", $_POST['nu_peso_pcnt']).", ". str_replace(",", ".", $_POST['vl_altura_pcnt']).", ". str_replace(",", ".", $_POST['vl_sup_corp']).", '". $_POST['ds_indic_clnic']."', '". $_POST['dt_diagn']."', '". $_POST['cd_cid']."', '". $_POST['ds_plano_trptco']."', '". $_POST['ds_info_rlvnte']."', '". $_POST['ds_diagn_cito_hstpagico']."', '". $_POST['ds_tp_cirurgia']."', '". $_POST['ds_area_irrda']."', '". $_POST['dt_rlzd']."', '". $_POST['dt_aplc']."', '". $_POST['ds_obs_jfta']."', '". $_POST['nu_qtde_ciclo_prta']."', '". $_POST['ds_ciclo_atual']."', '". $_POST['ds_dia_ciclo_atual']."', '". $_POST['ds_intrv_entre_ciclo_dia']."', '". $_POST['ds_estmt']."' ,'". $_POST['ds_tipo_linha_trtmto']."', '". $_POST['ds_fnlde']."', '". $_POST['ic_tipo_tumor']."', '". $_POST['ic_tipo_nodulo']."', '". $_POST['ic_tipo_metastase']."', '".$_SESSION['usuario']."', current_timestamp);";
 	
 			//echo $sql;
 
 			$result = pg_query($pdo, $sql);
-
 			if($result){
 				echo "";
 			}  
@@ -74,9 +76,13 @@
 		
 		try
 		{	
+		
+			if ($_POST['id_hstr_pnel_solic_trtmto']=='null' || $_POST['id_hstr_pnel_solic_trtmto']==null || $_POST['id_hstr_pnel_solic_trtmto']=='') {
+				$_POST['id_hstr_pnel_solic_trtmto']='null';
+			}
 			
 			$sql = "UPDATE tratamento.tb_pddo_trtmto
-	SET nu_peso_pcnt=". str_replace(",", ".", $_POST['nu_peso_pcnt']).", vl_altura_pcnt=". str_replace(",", ".", $_POST['vl_altura_pcnt']).", vl_sup_corp=". str_replace(",", ".", $_POST['vl_sup_corp']).", ds_indic_clnic='". $_POST['ds_indic_clnic']."', dt_diagn='". $_POST['dt_diagn']."', cd_cid='". $_POST['cd_cid']."', ds_plano_trptco='". $_POST['ds_plano_trptco']."', ds_info_rlvnte='". $_POST['ds_info_rlvnte']."', ds_diagn_cito_hstpagico='". $_POST['ds_diagn_cito_hstpagico']."', ds_tp_cirurgia='". $_POST['ds_tp_cirurgia']."', ds_area_irrda='". $_POST['ds_area_irrda']."', dt_rlzd='". $_POST['dt_rlzd']."', dt_aplc='". $_POST['dt_aplc']."', ds_obs_jfta='". $_POST['ds_obs_jfta']."', nu_qtde_ciclo_prta='". $_POST['nu_qtde_ciclo_prta']."', ds_ciclo_atual='". $_POST['ds_ciclo_atual']."', ds_dia_ciclo_atual='". $_POST['ds_dia_ciclo_atual']."', ds_intrv_entre_ciclo_dia='". $_POST['ds_intrv_entre_ciclo_dia']."', ds_estmt='". $_POST['ds_estmt']."', ds_tipo_linha_trtmto='". $_POST['ds_tipo_linha_trtmto']."', ds_fnlde='". $_POST['ds_fnlde']."', ic_tipo_tumor='". $_POST['ic_tipo_tumor']."', ic_tipo_nodulo='". $_POST['ic_tipo_nodulo']."', ic_tipo_metastase='". $_POST['ic_tipo_metastase']."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_pddo_trtmto = ". $_SESSION['id_pddo_trtmto']."";	
+	SET id_hstr_pnel_solic_trtmto = ". $_POST['id_hstr_pnel_solic_trtmto']." ,nu_peso_pcnt=". str_replace(",", ".", $_POST['nu_peso_pcnt']).", vl_altura_pcnt=". str_replace(",", ".", $_POST['vl_altura_pcnt']).", vl_sup_corp=". str_replace(",", ".", $_POST['vl_sup_corp']).", ds_indic_clnic='". $_POST['ds_indic_clnic']."', dt_diagn='". $_POST['dt_diagn']."', cd_cid='". $_POST['cd_cid']."', ds_plano_trptco='". $_POST['ds_plano_trptco']."', ds_info_rlvnte='". $_POST['ds_info_rlvnte']."', ds_diagn_cito_hstpagico='". $_POST['ds_diagn_cito_hstpagico']."', ds_tp_cirurgia='". $_POST['ds_tp_cirurgia']."', ds_area_irrda='". $_POST['ds_area_irrda']."', dt_rlzd='". $_POST['dt_rlzd']."', dt_aplc='". $_POST['dt_aplc']."', ds_obs_jfta='". $_POST['ds_obs_jfta']."', nu_qtde_ciclo_prta='". $_POST['nu_qtde_ciclo_prta']."', ds_ciclo_atual='". $_POST['ds_ciclo_atual']."', ds_dia_ciclo_atual='". $_POST['ds_dia_ciclo_atual']."', ds_intrv_entre_ciclo_dia='". $_POST['ds_intrv_entre_ciclo_dia']."', ds_estmt='". $_POST['ds_estmt']."', ds_tipo_linha_trtmto='". $_POST['ds_tipo_linha_trtmto']."', ds_fnlde='". $_POST['ds_fnlde']."', ic_tipo_tumor='". $_POST['ic_tipo_tumor']."', ic_tipo_nodulo='". $_POST['ic_tipo_nodulo']."', ic_tipo_metastase='". $_POST['ic_tipo_metastase']."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_pddo_trtmto = ". $_SESSION['id_pddo_trtmto']."";	
 			
 			//echo $sql;
 			
@@ -239,10 +245,7 @@
 					<h4 class="modal-title">Impressão</h4>
 				</div>
 				<div class="modal-body" id="impressao">
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-				</div>
+				</div>				
 			</div>
 		</div>
 	</div>

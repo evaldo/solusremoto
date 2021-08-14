@@ -19,7 +19,7 @@
 	<body style="margin-right: 0; margin-left: 0">	
 		<div class="container" style="width: 100%;  margin-right: 0; margin-left: 0; position: relative;">
 		  <div class="modal-dialog">
-				<div class="modal-content" style="width:700px">
+				<div class="modal-content" style="width:750px">
 					<div class="container">						
 						<h4 class="modal-title">Inclusão de Pedido de Tratamento</h4>
 					</div>								
@@ -48,6 +48,44 @@
 														var selObj = document.getElementById('pcnt');
 														var selValue = selObj.options[selObj.selectedIndex].value;
 														document.getElementById('cd_pcnt').value = selValue;">
+														<option value="null"></option>
+																									
+											<?php
+												$cont=1;																	
+											
+												while($row = pg_fetch_row($ret)) {
+												?>												
+													<option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option>																		
+											<?php $cont=$cont+1;} ?>	
+											</select>
+										
+										</td>	
+									   </tr>
+									   
+									   <tr>  
+										<td style="width:150px"><label>Tratamento:</label></td>  
+										<?php
+										
+										$sql = "SELECT id_hstr_pnel_solic_trtmto
+													 , nm_pcnt||'-'||ds_status_trtmto
+												FROM tratamento.tb_hstr_pnel_solic_trtmto trtmto
+												  WHERE trtmto.fl_trtmto_fchd = 0
+													and trtmto.ds_equipe = 'Oncologistas';";
+										
+										if ($pdo==null){
+												header(Config::$webLogin);
+										}	
+										$ret = pg_query($pdo, $sql);
+										if(!$ret) {
+											echo pg_last_error($pdo);
+											exit;
+										}
+										?>
+										<td style="width:150px">
+											<select  id="sel_hstr_pnel_solic_trtmto" class="form-control" onchange=" 
+														var selObj = document.getElementById('sel_hstr_pnel_solic_trtmto');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('id_hstr_pnel_solic_trtmto').value = selValue;">
 														<option value="null"></option>
 																									
 											<?php
@@ -296,10 +334,9 @@
 											<td style="width:50px"><input type="text" class="form-control" value="0" name="ds_intrv_entre_ciclo_dia" id="ds_intrv_entre_ciclo_dia"></td>
 									 </tr>
 									 
-									 <input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 
-									 <input type="text" id="cd_cid" name="cd_cid" style="display:none"> 
-									 
+									 <input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 									 
 									 <input type="text" id="ds_estmt" name="ds_estmt" style="display:none"> 
+									 <input type="text" id="id_hstr_pnel_solic_trtmto" name="id_hstr_pnel_solic_trtmto" style="display:none"> 
 									 <input type="text" id="ds_tipo_linha_trtmto" name="ds_tipo_linha_trtmto" style="display:none"> 
 									 <input type="text" id="ds_fnlde" name="ds_fnlde" style="display:none"> 
 									 <input type="text" id="ic_tipo_tumor" name="ic_tipo_tumor" style="display:none"> 

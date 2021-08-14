@@ -66,7 +66,7 @@
 	<body style="margin-right: 0; margin-left: 0">	
 		<div class="container" style="width: 100%;  margin-right: 0; margin-left: 0; position: relative;">
 		  <div class="modal-dialog">
-				<div class="modal-content" style="width:700px">
+				<div class="modal-content" style="width:750px">
 					<div class="container">						
 						<h4 class="modal-title">Alteração do Pedido de Tratamento</h4>
 					</div>								
@@ -102,6 +102,50 @@
 											
 												while($row = pg_fetch_row($ret)) {
 													if($row[0]==$rowpddotrtmto[2]){														
+												?>												
+													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[1]; ?></option>
+												<?php																		
+													} else {
+												?>
+													<option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option>												
+													<?php } 
+												$cont=$cont+1;} ?>	
+											</select>
+										
+										</td>	
+									   </tr>
+									   
+									   <tr>  
+										<td style="width:150px"><label>Tratamento:</label></td>  
+										<?php
+										
+										$sql = "SELECT id_hstr_pnel_solic_trtmto
+													 , nm_pcnt||'-'||ds_status_trtmto
+												FROM tratamento.tb_hstr_pnel_solic_trtmto trtmto
+												  WHERE trtmto.fl_trtmto_fchd = 0
+													and trtmto.ds_equipe = 'Oncologistas';";
+										
+										if ($pdo==null){
+												header(Config::$webLogin);
+										}	
+										$ret = pg_query($pdo, $sql);
+										if(!$ret) {
+											echo pg_last_error($pdo);
+											exit;
+										}
+										?>
+										<td style="width:150px">
+											<select  id="sel_hstr_pnel_solic_trtmto" class="form-control" onchange=" 
+														var selObj = document.getElementById('sel_hstr_pnel_solic_trtmto');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('id_hstr_pnel_solic_trtmto').value = selValue;">
+														<option value="null"></option>
+																									
+											<?php
+												$cont=1;																	
+											
+												while($row = pg_fetch_row($ret)) {
+													if($row[0]==$rowpddotrtmto[1]){														
 												?>												
 													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[1]; ?></option>
 												<?php																		
@@ -213,7 +257,12 @@
 													<option value="II" >II</option>
 													<option value="III">III</option>
 													<option value="IV" selected>IV</option>												
-												<?php } ?>
+												<?php } else { ?>													
+													<option value="I">I</option>											
+													<option value="II">II</option>
+													<option value="III">III</option>
+													<option value="IV">IV</option>
+												<?php }  ?>
 											</select>
 										</td>	
 									 </tr>
@@ -249,7 +298,12 @@
 													<option value="1 Linha">2 Linha</option>
 													<option value="3 Linha">3 Linha</option>
 													<option value="Outras" selected>Outras</option>													
-												<?php } ?>
+												<?php } else { ?>													
+													<option value="1 Linha">1 Linha</option>											
+													<option value="1 Linha">2 Linha</option>
+													<option value="3 Linha">3 Linha</option>
+													<option value="Outras">Outras</option>
+												<?php }  ?>
 											</select>
 										</td>	
 									 </tr>
@@ -284,8 +338,13 @@
 													<option value="Paliativo" >Paliativo</option>											
 													<option value="Adjuvante" >Adjuvante</option>
 													<option value="Neo-Adjuvante" >Neo-Adjuvante</option>
-													<option value="Curativo" selected>Curativo</option>															
-												<?php } ?>
+													<option value="Curativo" selected>Curativo</option>	
+												<?php } else { ?>													
+													<option value="Paliativo" >Paliativo</option>											
+													<option value="Adjuvante" >Adjuvante</option>
+													<option value="Neo-Adjuvante" >Neo-Adjuvante</option>
+													<option value="Curativo">Curativo</option>	
+												<?php }  ?>
 											</select>
 										</td>	
 									 </tr>
@@ -360,7 +419,15 @@
 													<option value="TIS" >TIS</option>												
 													<option value="TX" >TX</option>												
 													<option value="Nao Se Aplica" selected>Nao Se Aplica</option>
-												<?php } ?>
+												<?php } else { ?>													
+													<option value="T1" >T1</option>											
+													<option value="T2" >T2</option>
+													<option value="T3" >T3</option>
+													<option value="T0" >T0</option>												
+													<option value="TIS" >TIS</option>												
+													<option value="TX" >TX</option>												
+													<option value="Nao Se Aplica">Nao Se Aplica</option>
+												<?php }  ?>
 											</select>
 										</td>	
 									 </tr>
@@ -420,7 +487,14 @@
 													<option value="N0" >N0</option>														
 													<option value="NX" >NX</option>												
 													<option value="Nao Se Aplica" selected>Nao Se Aplica</option>
-												<?php } ?>
+												<?php } else { ?>													
+													<option value="N1" >N1</option>											
+													<option value="N2" >N2</option>
+													<option value="N3" >N3</option>
+													<option value="N0" >N0</option>														
+													<option value="NX" >NX</option>												
+													<option value="Nao Se Aplica">Nao Se Aplica</option>
+												<?php }  ?>
 											</select>
 										</td>	
 									 </tr>
@@ -456,7 +530,12 @@
 													<option value="M0" >M0</option>														
 													<option value="MX" >MX</option>												
 													<option value="Nao Se Aplica" selected>Nao Se Aplica</option>
-												<?php } ?>
+												<?php } else { ?>													
+													<option value="M1" >M1</option>											
+													<option value="M0" >M0</option>														
+													<option value="MX" >MX</option>												
+													<option value="Nao Se Aplica">Nao Se Aplica</option>
+												<?php }  ?>
 											</select>
 										</td>	
 									 </tr>
@@ -535,6 +614,8 @@
 									 
 									 <input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 
 									 <input type="text" id="cd_cid" name="cd_cid" style="display:none"> 
+									 
+									 <input type="text" id="id_hstr_pnel_solic_trtmto" name="id_hstr_pnel_solic_trtmto" value="<?php echo $rowpddotrtmto[1]; ?>" style="display:none"> 
 									 
 									 <input type="text" id="ds_estmt" name="ds_estmt" value="<?php echo $rowpddotrtmto[24]; ?>" style="display:none"> 
 									 <input type="text" id="ds_tipo_linha_trtmto" name="ds_tipo_linha_trtmto" value="<?php echo $rowpddotrtmto[25]; ?>" style="display:none"> 

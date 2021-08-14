@@ -44,7 +44,8 @@
 											   , tratamento.tb_c_status_trtmto status
 											where trtmto_status.id_status_trtmto = status.id_status_trtmto
 											  and trtmto_status.fl_trtmto_fchd = 0 
-											  and status.fl_status_inicial_trtmto = 0												  
+											  and status.fl_status_inicial_trtmto = 0	
+											  and trtmto_status.cd_pcnt = '".$_POST['cd_pcnt']."' 	
 											order by trtmto_status.nm_pcnt
 												   , trtmto_status.nu_seq_equipe_pnel asc";
 										

@@ -643,9 +643,9 @@
 					<input type="button" style="font-size: 11px;" value="Finalizar Tratamento" class="btn btn-primary btn-xs finaliza"/>
 				<?php } ?>
 				
-				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Exportar para Excel" id="exportarpaineltratamento" style="display:none">&nbsp;
+				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Exportar Tratamentos" id="exportarpaineltratamento" style="display:none">&nbsp;
 				
-				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Imprimir PDF" id="exportarplanejamentopdf" onclick="window.open('../tcpdf/relatorio/impressao_relatoriotratamento.php');">&nbsp;
+				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Imprimir Tratamentos" id="exportarplanejamentopdf" onclick="window.open('../tcpdf/relatorio/impressao_relatoriotratamento.php');">&nbsp;
 				
 			</div>
 			
@@ -667,6 +667,7 @@
 								?>
 									<th style="text-align:center">Id</th>
 									<th style="text-align:center">Paciente</th>
+									<th style="text-align:center">Pedido</th>
 								<?php	
 									while($rowequipe = pg_fetch_row($retequipe)) {
 									
@@ -686,9 +687,30 @@
 							while($row = pg_fetch_row($ret)) {
 								?>											
 								<tr style="font-size: 11px;">
-									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[8];?>" style="text-align:center" " id="<?php echo $row[0];?>" value="<?php echo $row[0];?>" ><?php echo $row[0];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[8];?>" style="text-align:center" id="<?php echo $row[0];?>" value="<?php echo $row[0];?>" ><?php echo $row[0];?></td>
 									
-									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[1];?>" style=" " id="<?php echo $row[1];?>" value="<?php echo $row[1];?>" ><?php echo $row[1];?></td>
+									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[1];?>" id="<?php echo $row[1];?>" value="<?php echo $row[1];?>" ><?php echo $row[1];?></td>
+									
+									<?php
+									$sqlpddotrtmto = "SELECT id_pddo_trtmto, nm_pcnt from tratamento.tb_pddo_trtmto 
+													  where id_pddo_trtmto = (SELECT max(id_pddo_trtmto) from tratamento.tb_pddo_trtmto where cd_pcnt = '".$row[0]."') and id_hstr_pnel_solic_trtmto is not null ";	
+									
+									$retpddotrtmto = pg_query($pdo, $sqlpddotrtmto);
+									if(pg_num_rows($retpddotrtmto)==0) {
+										?>
+										
+										<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[1];?>" id="pedido" value="pedido" ></td>
+										
+										<?php
+									} else {
+										$rowpddotrtmto = pg_fetch_row($retpddotrtmto);
+										?>
+										
+										<td data-placement="top" id="pedido" value="pedido"><input type="image" src="../img/printpedido.png" height="23" width="23" class="imprimirpdf"/></td>
+										
+										<?php						
+									}
+									?>
 									
 									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[8];?>" style="text-align:center;background-color:<?php echo $row[14] ;?>" id="<?php echo $row[2];?>" value="<?php echo $row[2];?>" ><?php echo $row[2];?></td>
 									
@@ -775,7 +797,19 @@
 			</div>
 		</div>
 	</div>
-</div>	
+</div>
+<div id="imprimir" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Impressão</h4>
+			</div>
+			<div class="modal-body" id="impressao">
+			</div>				
+		</div>
+	</div>
+</div>
 
 <script>
 	
@@ -887,6 +921,23 @@
 			}
 		});
 	});	
+	
+	$("#tabela").on('click', '.imprimirpdf', function(){
+		
+		var currentRow=$(this).closest("tr"); 							
+		var cd_pcnt = currentRow.find("td:eq(0)").text();
+		var nm_pcnt = currentRow.find("td:eq(1)").text();
+							
+		$.ajax({
+			url:"impressao_por_acompanhamentopedidotratamento.php",
+			method:"POST",			
+			data:{cd_pcnt:cd_pcnt, nm_pcnt:nm_pcnt},
+			success:function(data){
+				$('#impressao').html(data);
+				$('#imprimir').modal('show');
+			}
+		});
+	});
 	
 </script>
 <?php ?>

@@ -32,7 +32,7 @@
 										<td style="width:150px"><label>Escolha o paciente-equipe-status:</label></td>  
 										<?php
 										
-										$sql = "SELECT trtmto.cd_pcnt, trtmto.nm_pcnt||'->'||trtmto.ds_equipe||' '||trtmto.ds_status_trtmto, trtmto.id_equipe, trtmto.id_status_trtmto, trtmto.ds_utlma_obs_pcnt from tratamento.tb_hstr_pnel_solic_trtmto trtmto, tratamento.tb_c_status_trtmto status where trtmto.id_status_trtmto = status.id_status_trtmto and status.fl_status_inicial_trtmto = 0 and trtmto.fl_trtmto_fchd = 0 order by trtmto.nm_pcnt, trtmto.nu_seq_equipe_pnel asc";
+										$sql = "SELECT trtmto.cd_pcnt, trtmto.nm_pcnt||'->'||trtmto.ds_equipe||' '||trtmto.ds_status_trtmto, trtmto.id_equipe, trtmto.id_status_trtmto, trtmto.ds_utlma_obs_pcnt from tratamento.tb_hstr_pnel_solic_trtmto trtmto, tratamento.tb_c_status_trtmto status where trtmto.id_status_trtmto = status.id_status_trtmto and status.fl_status_inicial_trtmto = 0 and trtmto.fl_trtmto_fchd = 0 and trtmto.cd_pcnt = '".$_POST['cd_pcnt']."' order by trtmto.nm_pcnt, trtmto.nu_seq_equipe_pnel asc";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);

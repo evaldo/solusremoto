@@ -11,9 +11,15 @@
 		}
 		
 		try
-		{		
+		{	
+		
+			$usuario = substr_replace($usuario, '"', 0, 0);
+			$usuario = substr_replace($usuario, '"', strlen($usuario), strlen($usuario));
+
 			$sql="ALTER USER ".$usuario." WITH PASSWORD '".$senhanova."'";			
 			pg_query($sql);
+			
+			//echo $sql;
 			
 			session_destroy();
 			unset( $_SESSION['usuario'] );
@@ -45,7 +51,7 @@
 			<form  class="was-validated" method="post">
 			  <div class="form-group">
 				<label for="usuariolabel">Usuário:</label>
-				<input type="text" class="form-control" id="usuario" placeholder="<?php session_start(); echo $_SESSION['usuario'];?>" name="usuario" readonly>	
+				<input type="text" class="form-control" id="usuario" placeholder="<?php session_start(); echo $_SESSION['usuario'] ;?>" name="usuario" readonly>	
 			  </div>
 			  <div class="form-group">
 				<label for="senhalabel">Nova Senha:</label>

@@ -647,6 +647,8 @@
 				
 				<input class="btn btn-primary" style="font-size: 11px;" type="submit" value="Imprimir Tratamentos" id="exportarplanejamentopdf" onclick="window.open('../tcpdf/relatorio/impressao_relatoriotratamento.php');">&nbsp;
 				
+				<input class="btn btn-primary" style="font-size: 11px;" type="button" value="Histórico de Obs." name="hstrobs" data-toggle="modal" data-target="#modalhstrstatus">&nbsp;
+				
 			</div>
 			
 			<div id="list" class="row" style="margin-left: 5px; margin-right: 5px">
@@ -810,7 +812,74 @@
 		</div>
 	</div>
 </div>
-
+<div class="modal fade" id="modalhstrstatus" role="dialog">
+	<div class="modal-dialog modal-lg" >
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="model-title" id="leito_acmpte_rtgrd">Histórico de Observações do Tratamento</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>				
+			</div>			
+			<form action=""> 
+			
+				<div class="modal-body">
+					
+					<div class="form-group">
+						<label>Escolha o Paciente:</label></td>
+						<?php
+						
+						$sql = "SELECT cd_pcnt, nm_pcnt from tratamento.tb_c_pcnt order by 2";
+						
+						if ($pdo==null){
+								header(Config::$webLogin);
+						}	
+						$ret = pg_query($pdo, $sql);
+						if(!$ret) {
+							echo pg_last_error($pdo);
+							exit;
+						}
+						?>						
+						<select  id="pcnt" class="form-control" onchange=" 
+									var selObj = document.getElementById('pcnt');
+									var selValue = selObj.options[selObj.selectedIndex].value;
+									document.getElementById('cd_pcnt').value = selValue;">
+									<option value="">Selecione o paciente</option></option>
+																				
+						<?php
+							$cont=1;																	
+						
+							while($row = pg_fetch_row($ret)) {
+							?>												
+								<option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option>																		
+						<?php $cont=$cont+1;} ?>	
+						</select>
+						<!--style="display:none"-->
+						<input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none">
+					</div>
+					<div class="form-group">
+						<label>Escolha a Equipe:</label></td>
+						<select class="form-control" name="tipoconsultaequipe" onchange="mostrahistoricoobs(this.value)">
+							<option value="">Selecione a Equipe:</option>
+							<option value="13">Oncologistas</option>
+							<option value="7">Autorização</option>
+							<option value="8">Nutrição</option>
+							<option value="9">Psicologia</option>
+							<option value="10">Farmárcia</option>
+							<option value="11">Enfermagem</option>
+						</select>
+					</div>
+					<div class="form-group" id="retornoconsulta">
+						
+					</div>					
+				</div>
+			</form>	
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script>
 	
 	$(document).ready(function(){
@@ -832,6 +901,26 @@
 			});			
 		});	
 	});
+	
+	function mostrahistoricoobs(strEquipe) {
+	  var xhttp;   
+	  var cd_pcnt = document.getElementById("cd_pcnt").value;
+	  
+	  if (strEquipe == "") {
+		document.getElementById("retornoconsulta").innerHTML = "";
+		return;
+	  }
+	  xhttp = new XMLHttpRequest();
+	  xhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+		  document.getElementById("retornoconsulta").innerHTML = this.responseText;
+		}
+	  };	  	  
+	 
+	  xhttp.open("GET", "../tratamento/recupera_hstr_obs_tratamento.php?equipe="+strEquipe+"&pac="+cd_pcnt, true);
+	  
+	  xhttp.send();
+	}
 	
 	$(document).ready(function(){
 		$(document).on('click', '.insere', function(){

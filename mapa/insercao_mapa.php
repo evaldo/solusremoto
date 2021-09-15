@@ -104,7 +104,11 @@
 										<td style="width:150px"><label>Escolha o local de tratamento:</label></td>  
 										<?php
 										
-										$sql = "SELECT id_local_trtmto, ds_local_trtmto FROM tratamento.tb_c_local_trtmto ORDER BY ds_local_trtmto ASC";
+										$sql = "SELECT id_local_trtmto
+													 , ds_local_trtmto 
+												FROM tratamento.tb_c_local_trtmto 
+												WHERE id_local_trtmto not in (select id_local_trtmto from tratamento.tb_hstr_pnel_mapa_risco where dt_final_mapa_risco is null)
+												ORDER BY ds_local_trtmto ASC";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);

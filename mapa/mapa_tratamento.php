@@ -230,7 +230,7 @@
 					
 					$rowinseremaparisco = pg_fetch_row($retinseremaparisco);
 					
-					$sqlinsertpanelrisco = "INSERT INTO tratamento.tb_hstr_pnel_mapa_risco(id_hstr_pnel_mapa_risco, cd_pcnt, nm_pcnt, ds_utlma_obs_mapa_risco, fl_acesso_vnso_pefrco, fl_cttr_vnso_central, fl_via_aplc_edvnso, fl_via_aplc_sctnea, fl_via_aplc_intramusc, fl_via_aplc_vscal, cd_usua_incs, dt_incs, dt_inic_mapa_risco, dt_final_mapa_risco, id_local_trtmto, ds_local_trtmto, id_status_pcnt, ds_status_pcnt, cd_cor_status_pcnt) VALUES ((select NEXTVAL('tratamento.sq_hstr_pnel_mapa_risco')), '".$rowinseremaparisco[1]."', '".$rowinseremaparisco[2]."', '".$_POST['ds_obs_mapa_risco']."', ".$rowinseremaparisco[4].", ".$rowinseremaparisco[5]." , ".$rowinseremaparisco[6].", ".$rowinseremaparisco[7]." , ".$rowinseremaparisco[8]." , ".$rowinseremaparisco[9]." ,'".$_SESSION['usuario']."', '".$rowdataatual[0]."', '".$rowdataatual[0]."', null, ".$_POST['id_local_trtmto'].", (select ds_local_trtmto from tratamento.tb_c_local_trtmto where id_local_trtmto = ".$_POST['id_local_trtmto']."), ".$_POST['id_status_pcnt'].", '".$ds_status_pcnt."', (select cd_cor_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt'].") ) ";
+					$sqlinsertpanelrisco = "INSERT INTO tratamento.tb_hstr_pnel_mapa_risco(id_hstr_pnel_mapa_risco, cd_pcnt, nm_pcnt, ds_utlma_obs_mapa_risco, fl_acesso_vnso_pefrco, fl_cttr_vnso_central, fl_via_aplc_edvnso, fl_via_aplc_sctnea, fl_via_aplc_intramusc, fl_via_aplc_vscal, cd_usua_incs, dt_incs, dt_inic_mapa_risco, dt_final_mapa_risco, id_local_trtmto, ds_local_trtmto, id_status_pcnt, ds_status_pcnt, cd_cor_status_pcnt, cd_cnvo) VALUES ((select NEXTVAL('tratamento.sq_hstr_pnel_mapa_risco')), '".$rowinseremaparisco[1]."', '".$rowinseremaparisco[2]."', '".$_POST['ds_obs_mapa_risco']."', ".$rowinseremaparisco[4].", ".$rowinseremaparisco[5]." , ".$rowinseremaparisco[6].", ".$rowinseremaparisco[7]." , ".$rowinseremaparisco[8]." , ".$rowinseremaparisco[9]." ,'".$_SESSION['usuario']."', '".$rowdataatual[0]."', '".$rowdataatual[0]."', null, ".$_POST['id_local_trtmto'].", (select ds_local_trtmto from tratamento.tb_c_local_trtmto where id_local_trtmto = ".$_POST['id_local_trtmto']."), ".$_POST['id_status_pcnt'].", '".$ds_status_pcnt."', (select cd_cor_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt']."), (SELECT cd_cnvo FROM tratamento.tb_c_pcnt where cd_pcnt = '".$rowinseremaparisco[1]."') ) ";
 			
 					//echo $sqlinsertpanelrisco;
 		
@@ -331,7 +331,7 @@
 					if($rowretmaparisco[0]==0){
 						
 							$sqlinsertpanelrisco = "INSERT INTO tratamento.tb_hstr_pnel_mapa_risco(
-					id_hstr_pnel_mapa_risco, cd_pcnt, nm_pcnt, nu_seq_local_pnel, id_status_pcnt, ds_status_pcnt, dt_inic_mapa_risco, dt_final_mapa_risco, tp_pcnt_mapa_risco, cd_usua_incs, dt_incs, id_local_trtmto, ds_local_trtmto, ds_utlma_obs_mapa_risco, cd_cor_status_pcnt) VALUES ((select NEXTVAL('tratamento.sq_hstr_pnel_mapa_risco')), '". $_POST['cd_pcnt'] ."', (SELECT nm_pcnt FROM tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."'), (select nu_seq_local_pnel from tratamento.tb_c_local_trtmto where id_local_trtmto = ".$_POST['id_local_trtmto']."), ".$_POST['id_status_pcnt'].",  (select ds_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt']."), '".$rowdataatual[0]."', null, 0, '".$_SESSION['usuario']."', current_timestamp, ".$_POST['id_local_trtmto'].", (select ds_local_trtmto from tratamento.tb_c_local_trtmto where id_local_trtmto = ".$_POST['id_local_trtmto']."), '".$_POST['ds_obs_mapa_risco']."', (select cd_cor_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt']."));";
+					id_hstr_pnel_mapa_risco, cd_pcnt, nm_pcnt, nu_seq_local_pnel, id_status_pcnt, ds_status_pcnt, dt_inic_mapa_risco, dt_final_mapa_risco, tp_pcnt_mapa_risco, cd_usua_incs, dt_incs, id_local_trtmto, ds_local_trtmto, ds_utlma_obs_mapa_risco, cd_cor_status_pcnt, cd_cnvo) VALUES ((select NEXTVAL('tratamento.sq_hstr_pnel_mapa_risco')), '". $_POST['cd_pcnt'] ."', (SELECT nm_pcnt FROM tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."'), (select nu_seq_local_pnel from tratamento.tb_c_local_trtmto where id_local_trtmto = ".$_POST['id_local_trtmto']."), ".$_POST['id_status_pcnt'].",  (select ds_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt']."), '".$rowdataatual[0]."', null, 0, '".$_SESSION['usuario']."', current_timestamp, ".$_POST['id_local_trtmto'].", (select ds_local_trtmto from tratamento.tb_c_local_trtmto where id_local_trtmto = ".$_POST['id_local_trtmto']."), '".$_POST['ds_obs_mapa_risco']."', (select cd_cor_status_pcnt from tratamento.tb_c_status_pcnt where id_status_pcnt = ".$_POST['id_status_pcnt']."), (SELECT cd_cnvo FROM tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."'));";
 					
 								//echo $sqlinsertpanelrisco;
 					
@@ -804,8 +804,11 @@
 			$rowpaciente = pg_fetch_row($retpaciente);
 									
 			if($rowpaciente[0]==0){
-				$sqlinsertpcnt = "INSERT INTO tratamento.tb_c_pcnt(cd_pcnt, nm_pcnt, dt_nasc_pcnt, ds_mncp_pcnt, cd_usua_incs, dt_incs)
-		VALUES ('". $_POST['cd_pcnt'] ."', '". $_POST['nm_pcnt'] ."', '". $_POST['dt_nasc_pcnt'] ."', '". $_POST['ds_mncp'] ."', '".$_SESSION['usuario']."', current_timestamp)";
+				$sqlinsertpcnt = "INSERT INTO tratamento.tb_c_pcnt(cd_pcnt, nm_pcnt, dt_nasc_pcnt, ds_mncp_pcnt, cd_usua_incs, dt_incs, id_cnvo, cd_cnvo)
+		VALUES ('". $_POST['cd_pcnt'] ."', '". $_POST['nm_pcnt'] ."', '". $_POST['dt_nasc_pcnt'] ."', '". $_POST['ds_mncp'] ."', '".$_SESSION['usuario']."', current_timestamp, (select id_cnvo from tratamento.tb_c_cnvo where cd_cnvo = '". $_POST['cd_cnvo'] ."'), '". $_POST['cd_cnvo'] ."')";
+		
+				//echo $sqlinsertpcnt;
+		
 				$result = pg_query($pdo, $sqlinsertpcnt);
 
 				if($result){
@@ -813,7 +816,9 @@
 				}  
 				
 			} else {
-				$sqlupdatepcnt = "UPDATE tratamento.tb_c_pcnt SET nm_pcnt='". $_POST['nm_pcnt'] ."', dt_nasc_pcnt = '". $_POST['dt_nasc_pcnt'] ."', ds_mncp_pcnt= '". $_POST['ds_mncp'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."'";
+				$sqlupdatepcnt = "UPDATE tratamento.tb_c_pcnt SET nm_pcnt='". $_POST['nm_pcnt'] ."', dt_nasc_pcnt = '". $_POST['dt_nasc_pcnt'] ."', ds_mncp_pcnt= '". $_POST['ds_mncp'] ."', id_cnvo = (select id_cnvo from tratamento.tb_c_cnvo where cd_cnvo = '". $_POST['cd_cnvo'] ."'), cd_cnvo = '". $_POST['cd_cnvo'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."'";
+				
+				//echo $sqlupdatepcnt;
 				
 				$result = pg_query($pdo, $sqlupdatepcnt);
 

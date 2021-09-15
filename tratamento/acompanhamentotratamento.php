@@ -167,8 +167,11 @@
 			$rowpaciente = pg_fetch_row($retpaciente);
 									
 			if($rowpaciente[0]==0){
-				$sqlinsertpcnt = "INSERT INTO tratamento.tb_c_pcnt(cd_pcnt, nm_pcnt, dt_nasc_pcnt, ds_mncp_pcnt, cd_usua_incs, dt_incs)
-		VALUES ('". $_POST['cd_pcnt'] ."', '". $_POST['nm_pcnt'] ."', '". $_POST['dt_nasc_pcnt'] ."', '". $_POST['ds_mncp'] ."', '".$_SESSION['usuario']."', current_timestamp)";
+				$sqlinsertpcnt = "INSERT INTO tratamento.tb_c_pcnt(cd_pcnt, nm_pcnt, dt_nasc_pcnt, ds_mncp_pcnt, cd_usua_incs, dt_incs, id_cnvo, cd_cnvo)
+		VALUES ('". $_POST['cd_pcnt'] ."', '". $_POST['nm_pcnt'] ."', '". $_POST['dt_nasc_pcnt'] ."', '". $_POST['ds_mncp'] ."', '".$_SESSION['usuario']."', current_timestamp, (select id_cnvo from tratamento.tb_c_cnvo where cd_cnvo = '". $_POST['cd_cnvo'] ."'), '". $_POST['cd_cnvo'] ."')";
+		
+				//echo $sqlinsertpcnt;		
+		
 				$result = pg_query($pdo, $sqlinsertpcnt);
 
 				if($result){
@@ -176,7 +179,7 @@
 				}  
 				
 			} else {
-				$sqlupdatepcnt = "UPDATE tratamento.tb_c_pcnt SET nm_pcnt='". $_POST['nm_pcnt'] ."', dt_nasc_pcnt = '". $_POST['dt_nasc_pcnt'] ."', ds_mncp_pcnt= '". $_POST['ds_mncp'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."'";
+				$sqlupdatepcnt = "UPDATE tratamento.tb_c_pcnt SET nm_pcnt='". $_POST['nm_pcnt'] ."', id_cnvo = (select id_cnvo from tratamento.tb_c_cnvo where cd_cnvo = '". $_POST['cd_cnvo'] ."'), cd_cnvo = '". $_POST['cd_cnvo'] ."', dt_nasc_pcnt = '". $_POST['dt_nasc_pcnt'] ."', ds_mncp_pcnt= '". $_POST['ds_mncp'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."'";
 				
 				$result = pg_query($pdo, $sqlupdatepcnt);
 
@@ -238,13 +241,13 @@
 				while($rowretequipetratamento = pg_fetch_row($retequipetratamento)) {
 				
 					$sql = "INSERT INTO tratamento.tb_hstr_pnel_solic_trtmto(
-		id_hstr_pnel_solic_trtmto, cd_pcnt, nm_pcnt, dt_nasc_pcnt, ds_mncp_pcnt, id_equipe, ds_equipe, nu_seq_equipe_pnel, id_status_trtmto, ds_status_trtmto, fl_trtmto_fchd, dt_inicial_trtmto, dt_final_trtmto, ds_utlma_obs_pcnt, tp_dia_trtmto, tp_hora_trtmto, tp_minuto_trtmto, cd_usua_incs, dt_incs, cd_usua_altr, dt_altr, cd_cor_status_trtmto)
-		VALUES ((select NEXTVAL('tratamento.sq_hstr_pnel_solic_trtmto')), '". $_POST['cd_pcnt'] ."', '". $_POST['nm_pcnt'] ."', '". $_POST['dt_nasc_pcnt'] ."', '". $_POST['ds_mncp'] ."',".$rowretequipetratamento[0].", '".$rowretequipetratamento[1]."', ".$rowretequipetratamento[2].", ".$rowretequipetratamento[3].", '".$rowretequipetratamento[4]."', 0, '".$rowdataatual[0]."', null, 'INICIO DO TRATAMENTO', 0, 0, 0, '".$_SESSION['usuario']."', current_timestamp, null, null, '".$rowretequipetratamento[5]."');";
+		id_hstr_pnel_solic_trtmto, cd_pcnt, nm_pcnt, dt_nasc_pcnt, ds_mncp_pcnt, id_equipe, ds_equipe, nu_seq_equipe_pnel, id_status_trtmto, ds_status_trtmto, fl_trtmto_fchd, dt_inicial_trtmto, dt_final_trtmto, ds_utlma_obs_pcnt, tp_dia_trtmto, tp_hora_trtmto, tp_minuto_trtmto, cd_usua_incs, dt_incs, cd_usua_altr, dt_altr, cd_cor_status_trtmto, cd_cnvo)
+		VALUES ((select NEXTVAL('tratamento.sq_hstr_pnel_solic_trtmto')), '". $_POST['cd_pcnt'] ."', '". $_POST['nm_pcnt'] ."', '". $_POST['dt_nasc_pcnt'] ."', '". $_POST['ds_mncp'] ."',".$rowretequipetratamento[0].", '".$rowretequipetratamento[1]."', ".$rowretequipetratamento[2].", ".$rowretequipetratamento[3].", '".$rowretequipetratamento[4]."', 0, '".$rowdataatual[0]."', null, 'INICIO DO TRATAMENTO', 0, 0, 0, '".$_SESSION['usuario']."', current_timestamp, null, null, '".$rowretequipetratamento[5]."', '". $_POST['cd_cnvo'] ."');";
 		
 					//echo $sql;
 		
 					$result = pg_query($pdo, $sql);
-
+					
 					if($result){
 						echo "";
 					}
@@ -255,7 +258,7 @@
 					//echo $sql;
 
 					$result = pg_query($pdo, $sql);
-
+					
 					if($result){
 						echo "";
 					}
@@ -694,8 +697,12 @@
 									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[1];?>" id="<?php echo $row[1];?>" value="<?php echo $row[1];?>" ><?php echo $row[1];?></td>
 									
 									<?php
-									$sqlpddotrtmto = "SELECT id_pddo_trtmto, nm_pcnt from tratamento.tb_pddo_trtmto 
-													  where id_pddo_trtmto = (SELECT max(id_pddo_trtmto) from tratamento.tb_pddo_trtmto where cd_pcnt = '".$row[0]."') and id_hstr_pnel_solic_trtmto is not null ";	
+									$sqlpddotrtmto = "SELECT pnel.cd_pcnt 
+													from tratamento.tb_hstr_pnel_solic_trtmto pnel
+													   , tratamento.tb_pddo_trtmto pddo
+													where pnel.id_hstr_pnel_solic_trtmto = pddo.id_hstr_pnel_solic_trtmto
+													  and pnel.fl_trtmto_fchd = 0
+													  and pnel.cd_pcnt = '".$row[0]."' ";	
 									
 									$retpddotrtmto = pg_query($pdo, $sqlpddotrtmto);
 									if(pg_num_rows($retpddotrtmto)==0) {

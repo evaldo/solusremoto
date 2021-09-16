@@ -54,20 +54,68 @@
 	
 			//echo $sql;
 			
+			$_SESSION['cd_pcnt'] = $_POST['cd_pcnt'];
+			$_SESSION['cd_cnvo'] = $_POST['cd_cnvo'];
+			$_SESSION['nu_peso_pcnt'] = $_POST['nu_peso_pcnt'];
+			$_SESSION['vl_altura_pcnt'] = $_POST['vl_altura_pcnt'];
+			$_SESSION['vl_sup_corp'] = $_POST['vl_sup_corp'];
+			$_SESSION['ds_indic_clnic'] = $_POST['ds_indic_clnic'];
+			$_SESSION['dt_diagn'] = $_POST['dt_diagn'];
+			$_SESSION['cd_cid'] = $_POST['cd_cid'];
+			$_SESSION['ds_estmt'] = $_POST['ds_estmt'];
+			$_SESSION['ds_tipo_linha_trtmto'] = $_POST['ds_tipo_linha_trtmto'];
+			$_SESSION['ds_fnlde'] = $_POST['ds_fnlde'];
+			$_SESSION['ic_tipo_tumor'] = $_POST['ic_tipo_tumor'];
+			$_SESSION['ic_tipo_nodulo'] = $_POST['ic_tipo_nodulo'];
+			$_SESSION['ic_tipo_metastase'] = $_POST['ic_tipo_metastase'];
+			$_SESSION['ds_plano_trptco'] = $_POST['ds_plano_trptco'];
+			$_SESSION['ds_info_rlvnte'] = $_POST['ds_info_rlvnte'];
+			$_SESSION['ds_diagn_cito_hstpagico'] = $_POST['ds_diagn_cito_hstpagico'];
+			$_SESSION['ds_tp_cirurgia'] = $_POST['ds_tp_cirurgia'];
+			$_SESSION['ds_area_irrda'] = $_POST['ds_area_irrda'];
+			$_SESSION['dt_rlzd'] = $_POST['dt_rlzd'];
+			$_SESSION['dt_aplc'] = $_POST['dt_aplc'];
+			$_SESSION['ds_obs_jfta'] = $_POST['ds_obs_jfta'];
+			$_SESSION['nu_qtde_ciclo_prta'] = $_POST['nu_qtde_ciclo_prta'];
+			$_SESSION['ds_ciclo_atual'] = $_POST['ds_ciclo_atual'];
+			$_SESSION['ds_dia_ciclo_atual'] = $_POST['ds_dia_ciclo_atual'];			
+			$_SESSION['ds_intrv_entre_ciclo_dia'] = $_POST['ds_intrv_entre_ciclo_dia'];
+			
 			$fp = fopen("log_pedido.txt", "a");
-
+			
 			// Escreve a mensagem passada através da variável $msg
-			$msg = "Log de Inclusao do Pedido de Tratamento\n";
+			$msg = "---------------------Log de Inclusao do Pedido de Tratamento------------------------\n";
 			$msg .= "Mensagem gerada pelo usuario: '".$_SESSION['usuario']."' em ".date('d/m/Y')."\n";
+			$msg .= "-----------------------------------------------------------------------------------\n";
 			$msg .= "Codigo Paciente: '".$_POST['cd_pcnt']."'\n";
+			$msg .= "Convênio: '".$_POST['cd_cnvo']."'\n";
 			$msg .= "Peso: '".$_POST['nu_peso_pcnt']."'\n";
 			$msg .= "Altura: '".$_POST['vl_altura_pcnt']."'\n";
 			$msg .= "Sup Corp: '".$_POST['vl_sup_corp']."'\n";
 			$msg .= "Indicacao Clinica: '".$_POST['ds_indic_clnic']."'\n";
 			$msg .= "Data do Diagnostico: '".$_POST['dt_diagn']."'\n";
-			$msg .= "\n";
-			$msg .= "\n";
-			$msg .= "\n";
+			$msg .= "CID: '".$_POST['cd_cid']."'\n";
+			$msg .= "Estadiamento: '".$_POST['ds_estmt']."'\n";
+			$msg .= "Tipo Quimio (Linha): '".$_POST['ds_tipo_linha_trtmto']."'\n";
+			$msg .= "Finalidade: '".$_POST['ds_fnlde']."'\n";
+			$msg .= "Tipo de Tumor: '".$_POST['ic_tipo_tumor']."'\n";
+			$msg .= "Tipo de Nodulo: '".$_POST['ic_tipo_nodulo']."'\n";
+			$msg .= "Tipo de Metastase: '".$_POST['ic_tipo_metastase']."'\n";
+			$msg .= "Plano Terapêutio: '".$_POST['ds_plano_trptco']."'\n";
+			$msg .= "Informações Relevantes: '".$_POST['ds_info_rlvnte']."'\n";
+			$msg .= "Diagnóstico Histopatologico: '".$_POST['ds_diagn_cito_hstpagico']."'\n";
+			$msg .= "Tipo de Cirurgia: '".$_POST['ds_tp_cirurgia']."'\n";
+			$msg .= "Área Irradiada: '".$_POST['ds_area_irrda']."'\n";
+			$msg .= "Data de Realização: '".$_POST['dt_rlzd']."'\n";
+			$msg .= "Data da Aplicação: '".$_POST['dt_aplc']."'\n";
+			$msg .= "Observação Justificativa: '".$_POST['ds_obs_jfta']."'\n";
+			$msg .= "Quantidade de Ciclos Prevsitos: '".$_POST['nu_qtde_ciclo_prta']."'\n";
+			$msg .= "Ciclo Atual: '".$_POST['ds_ciclo_atual']."'\n";
+			$msg .= "Dias do ciclo atual: '".$_POST['ds_dia_ciclo_atual']."'\n";			
+			$msg .= "Intervalo de Ciclos: '".$_POST['ds_intrv_entre_ciclo_dia']."'\n";			
+			$msg .= "\n";			
+			$msg .= "\n";			
+			$msg .= "-----------------------------------------------------------------------------------\n";
 			
 			$escreve = fwrite($fp, $msg);
 
@@ -192,8 +240,10 @@
 			<form class="form-inline" action="#" method="post" >				
 				<b>Consultar Pacientes:</b>:&nbsp;&nbsp													
 				<input class="form-control" name="textoconsulta" type="text" placeholder="Pesquisar">&nbsp;&nbsp;&nbsp;&nbsp;
-				<input class="btn btn-primary" type="submit" value="Consultar" name="botaoconsultar">&nbsp;&nbsp;											
-				<input type="button" value="Novo Registro" class="btn btn-primary btn-xs insere"/>				
+				<input class="btn btn-primary" style="font-size: 11px;"  type="submit" value="Consultar" name="botaoconsultar">&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="button" style="font-size: 11px;"  value="Novo Registro" class="btn btn-primary btn-xs insere"/>&nbsp;&nbsp;&nbsp;&nbsp;
+				<input class="btn btn-primary" style="font-size: 11px;"  type="button" value="Exportar Último Pedido" id="exportarultimopedido">&nbsp;&nbsp;&nbsp;&nbsp;
+				<input class="btn btn-primary" style="font-size: 11px;"  type="button" value="Recuperar Último Pedido" id="recuperaulitmo">&nbsp;&nbsp;&nbsp;&nbsp;
 			</form>
 		</div> <!-- /#top -->
 	 	
@@ -325,6 +375,30 @@
 				 }
 			});
 		});		
+				
+		$('#recuperaulitmo').click(function(){	
+			$.ajax({
+			type : 'POST',
+				 url: '../alteracao/alteracao_ulitmo_pedido.php',
+				 success : function(completeHtmlPage) {				
+					$("html").empty();
+					$("html").append(completeHtmlPage);
+				}
+			});
+		});	
+
+		$('#exportarultimopedido').click(function(){			
+		
+			$.ajax({
+				type : 'POST',
+				url : 'excelultimopedido.php', // give complete url here								
+				success : function(completeHtmlPage) {	
+					alert("Faça o download do arquivo de impressão. Abra no Excel e solicite para Salvar Como com o nome desejado.");
+					$("html").empty();
+					$("html").append(completeHtmlPage);
+				}
+			});
+		});			
 		
 		
 		$("#tabela").on('click', '.visualiza', function(){
@@ -345,6 +419,19 @@
 				}
 			});
         });
+		
+		$('#exportarultimopedido').click(function(){			
+		
+		$.ajax({
+			type : 'POST',
+			url : 'excelultimopedido.php', // give complete url here								
+			success : function(completeHtmlPage) {	
+				alert("Faça o download do arquivo de impressão. Abra no Excel e solicite para Salvar Como com o nome desejado.");
+				$("html").empty();
+				$("html").append(completeHtmlPage);
+			}
+		});
+	});	
 		
 		$("#tabela").on('click', '.imprimirpdf', function(){
 			

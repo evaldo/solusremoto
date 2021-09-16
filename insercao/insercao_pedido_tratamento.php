@@ -19,7 +19,7 @@
 	<body style="margin-right: 0; margin-left: 0">	
 		<div class="container" style="width: 100%;  margin-right: 0; margin-left: 0; position: relative;">
 		  <div class="modal-dialog">
-				<div class="modal-content" style="width:750px">
+				<div class="modal-content" style="width:800px">
 					<div class="container">						
 						<h4 class="modal-title">Inclusão de Pedido de Tratamento</h4>
 					</div>								
@@ -56,6 +56,40 @@
 												while($row = pg_fetch_row($ret)) {
 												?>												
 													<option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option>																		
+											<?php $cont=$cont+1;} ?>	
+											</select>
+										
+										</td>	
+									   </tr>
+									   
+									    <tr>  
+										<td style="width:150px"><label>Convênio:</label></td>  
+										<?php
+										
+										$sql = "SELECT id_cnvo, cd_cnvo from tratamento.tb_c_cnvo order by 2";
+										
+										if ($pdo==null){
+												header(Config::$webLogin);
+										}	
+										$ret = pg_query($pdo, $sql);
+										if(!$ret) {
+											echo pg_last_error($pdo);
+											exit;
+										}
+										?>
+										<td style="width:150px">
+											<select  id="cnvo" class="form-control" onchange=" 
+														var selObj = document.getElementById('cnvo');
+														var selValue = selObj.options[selObj.selectedIndex].value;
+														document.getElementById('cd_cnvo').value = selValue;">
+														<option value="null"></option>
+																									
+											<?php
+												$cont=1;																	
+											
+												while($row = pg_fetch_row($ret)) {
+												?>												
+													<option value="<?php echo $row[1]; ?>"><?php echo $row[1]; ?></option>																		
 											<?php $cont=$cont+1;} ?>	
 											</select>
 										
@@ -335,6 +369,8 @@
 									 </tr>
 									 
 									 <input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 									 
+									 <input type="text" id="cd_cnvo" name="cd_cnvo" style="display:none"> 									 
+									 <input type="text" id="cd_cid" name="cd_cid" style="display:none"> 									 
 									 <input type="text" id="ds_estmt" name="ds_estmt" style="display:none"> 
 									 <input type="text" id="id_hstr_pnel_solic_trtmto" name="id_hstr_pnel_solic_trtmto" style="display:none"> 
 									 <input type="text" id="ds_tipo_linha_trtmto" name="ds_tipo_linha_trtmto" style="display:none"> 

@@ -41,6 +41,7 @@
 				, dt_incs
 				, cd_usua_altr
 				, dt_altr 
+				, cd_cnvo
 				from tratamento.tb_pddo_trtmto
 	where id_pddo_trtmto = ".$_POST['id_pddo_trtmto']."  ";
 	
@@ -55,6 +56,7 @@
     $output = ' <div class="table-responsive">  
 					<p><b>Nome do paciente:</b> '.$row[3].'&nbsp; </p>
 					<p><b>Data de Nascimento: </b>'.$row[4].'</p>
+					<p><b>Convenio: </b>'.$row[34].'. </p>
 					<p><b>Idade: </b>'.$row[5].'.</p>
 					<p><b>Data do Diagn&oacute;stico: </b>'.$row[10].'. </p>
 					<p><b>CID 10 Principal: </b>'.$row[11].'</p>

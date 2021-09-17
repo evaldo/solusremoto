@@ -2,6 +2,8 @@
 	
 	session_start();
 	
+	error_reporting(0); 
+	
 	$arquivo = "ultimopedidodigitado.xls";		
 	$fp = fopen($arquivo, "w");
 	

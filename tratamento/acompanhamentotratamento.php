@@ -30,111 +30,133 @@
 		try
 		{
 		
-			$sql = "select count(1) from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']." and id_equipe = ".$_POST['id_equipe']." ";
+			
+			$sql = "select count(1) from tratamento.tb_c_equipe_usua where id_equipe = ".$_POST['id_equipe']." and cd_usua_acesso = (SELECT cd_usua_acesso FROM tratamento.tb_c_usua_acesso where nm_usua_acesso = '".$_SESSION['usuario']."') ";
 				
 			//echo $sql;
 
-			$retstatusequipe = pg_query($pdo, $sql);
+			$retequipeusua = pg_query($pdo, $sql);
 			
-			if(!$retstatusequipe) {
+			if(!$retequipeusua) {
 				echo pg_last_error($pdo);		
 				exit;
 			}
 			
-			$rowstatusequipe = pg_fetch_row($retstatusequipe);
+			$rowequipeusua = pg_fetch_row($retequipeusua);
 			
-			if ($rowstatusequipe[0]==0){
+			if ($rowequipeusua[0]==0 && $_SESSION['fl_sist_admn']=='N'){
 				echo "<div class=\"alert alert-warning alert-dismissible\">
 						<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
-						<strong>Atenção!</strong> Inserção não realizada. Selecione o status para Equipe correta.</div>";
+						<strong>Atenção!</strong> Usuário não pode manter o status para esta equipe.	</div>";
+			} else {			
 			
-			} else {
-				$sql = "SELECT MAX(id_hstr_obs_pnel_solic_trtmto) FROM tratamento.tb_hstr_obs_pnel_solic_trtmto WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_status_equipe = ".$_POST['id_equipe']." ";
+			
+				$sql = "select count(1) from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']." and id_equipe = ".$_POST['id_equipe']." ";
 					
 				//echo $sql;
 
-				$retmaxstatusequipe = pg_query($pdo, $sql);
+				$retstatusequipe = pg_query($pdo, $sql);
 				
-				if(!$retmaxstatusequipe) {
+				if(!$retstatusequipe) {
 					echo pg_last_error($pdo);		
 					exit;
 				}
 				
-				$rowmaxstatusequipe = pg_fetch_row($retmaxstatusequipe);
+				$rowstatusequipe = pg_fetch_row($retstatusequipe);
 				
-				$sql = "SELECT count(1) FROM tratamento.tb_hstr_pnel_solic_trtmto WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_equipe = ".$_POST['id_equipe']." and id_status_trtmto = ".$_POST['id_status_trtmto']." and fl_trtmto_fchd = 0 ";
+				if ($rowstatusequipe[0]==0){
+					echo "<div class=\"alert alert-warning alert-dismissible\">
+							<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
+							<strong>Atenção!</strong> Inserção não realizada. Selecione o status para Equipe correta.</div>";
 				
-				//echo $sql;
-
-				$rethstrobs = pg_query($pdo, $sql);
-				
-				if(!$rethstrobs) {
-					echo pg_last_error($pdo);		
-					exit;
-				}
-				
-				$rowhstrobs = pg_fetch_row($rethstrobs);
-				
-				if ($rowhstrobs[0]==0){
+				} else {
+					$sql = "SELECT MAX(id_hstr_obs_pnel_solic_trtmto) FROM tratamento.tb_hstr_obs_pnel_solic_trtmto WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_status_equipe = ".$_POST['id_equipe']." ";
 						
-					$sql = "SELECT id_hstr_pnel_solic_trtmto, dt_inicial_trtmto 
-							  FROM tratamento.tb_hstr_pnel_solic_trtmto 
-							WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_equipe = ".$_POST['id_equipe']." and fl_trtmto_fchd = 0 ";
-					
 					//echo $sql;
 
-					$rethstrtratamento = pg_query($pdo, $sql);
+					$retmaxstatusequipe = pg_query($pdo, $sql);
 					
-					if(!$rethstrtratamento) {
+					if(!$retmaxstatusequipe) {
 						echo pg_last_error($pdo);		
 						exit;
 					}
 					
-					$rowhstrtratamento = pg_fetch_row($rethstrtratamento);
+					$rowmaxstatusequipe = pg_fetch_row($retmaxstatusequipe);
 					
-					$id_hstr_pnel_solic_trtmto = $rowhstrtratamento[0];
-					$dt_inicial_trtmto = $rowhstrtratamento[1];
-					
-					$sql = "update tratamento.tb_hstr_pnel_solic_trtmto set ds_utlma_obs_pcnt = '".$_POST['ds_obs_pcnt']."', id_status_trtmto = ".$_POST['id_status_trtmto'].", ds_status_trtmto = (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."), cd_cor_status_trtmto = (select cd_cor_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."), cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_hstr_pnel_solic_trtmto = ".$id_hstr_pnel_solic_trtmto."";
+					$sql = "SELECT count(1) FROM tratamento.tb_hstr_pnel_solic_trtmto WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_equipe = ".$_POST['id_equipe']." and id_status_trtmto = ".$_POST['id_status_trtmto']." and fl_trtmto_fchd = 0 ";
 					
 					//echo $sql;
 
-					$result = pg_query($pdo, $sql);
-
-					if($result){
-						echo "";
+					$rethstrobs = pg_query($pdo, $sql);
+					
+					if(!$rethstrobs) {
+						echo pg_last_error($pdo);		
+						exit;
 					}
-
-					$sql = "INSERT INTO tratamento.tb_hstr_obs_pnel_solic_trtmto(id_hstr_obs_pnel_solic_trtmto, id_hstr_pnel_solic_trtmto, id_status_equipe, ds_status_equipe, dt_inic_status_equipe_trtmto, dt_final_status_equipe_trtmto, ds_obs_pcnt, tp_minuto_status_equipe_trtmto, cd_usua_incs, dt_incs, dt_inicial_trtmto, cd_pcnt, nm_pcnt, id_status_trtmto, ds_status_trtmto)
-			VALUES ((select NEXTVAL('tratamento.sq_hstr_obs_pnel_solic_trtmto')), ".$id_hstr_pnel_solic_trtmto.", ".$_POST['id_equipe'].", (select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe']."), current_timestamp, null, '".$_POST['ds_obs_pcnt']."', 0, '".$_SESSION['usuario']."', current_timestamp, '".$dt_inicial_trtmto."', '".$_POST['cd_pcnt']."', '".$_POST['nm_pcnt']."',".$_POST['id_status_trtmto'].", (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."));";
-
-					//echo $sql;
-
-					$result = pg_query($pdo, $sql);
-
-					if($result){
-						echo "";
-					} 
 					
-					$sql = "UPDATE tratamento.tb_hstr_obs_pnel_solic_trtmto set dt_final_status_equipe_trtmto= current_timestamp, tp_minuto_status_equipe_trtmto = round((SELECT date_part( 'day', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_status_equipe_trtmto))*24*60 + date_part( 'hour', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_status_equipe_trtmto))*60 + date_part( 'minute', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_status_equipe_trtmto)))), cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_hstr_obs_pnel_solic_trtmto = ".$rowmaxstatusequipe[0]."";
-
-					//echo $sql;
-
-					$result = pg_query($pdo, $sql);
-
-					if($result){
-						echo "";
-					} 
-
-					$secondsWait = 0;
-					header("Refresh:$secondsWait");
-				
-				} else {
+					$rowhstrobs = pg_fetch_row($rethstrobs);
 					
-					echo "<div class=\"alert alert-warning alert-dismissible\">
-						<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
-						<strong>Atenção!</strong> Status já existe para o paciente e equipe. Tente novamente com outro stauts.	</div>";
+					if ($rowhstrobs[0]==0){
+							
+						$sql = "SELECT id_hstr_pnel_solic_trtmto, dt_inicial_trtmto 
+								  FROM tratamento.tb_hstr_pnel_solic_trtmto 
+								WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and id_equipe = ".$_POST['id_equipe']." and fl_trtmto_fchd = 0 ";
+						
+						//echo $sql;
 
+						$rethstrtratamento = pg_query($pdo, $sql);
+						
+						if(!$rethstrtratamento) {
+							echo pg_last_error($pdo);		
+							exit;
+						}
+						
+						$rowhstrtratamento = pg_fetch_row($rethstrtratamento);
+						
+						$id_hstr_pnel_solic_trtmto = $rowhstrtratamento[0];
+						$dt_inicial_trtmto = $rowhstrtratamento[1];
+						
+						$sql = "update tratamento.tb_hstr_pnel_solic_trtmto set ds_utlma_obs_pcnt = '".$_POST['ds_obs_pcnt']."', id_status_trtmto = ".$_POST['id_status_trtmto'].", ds_status_trtmto = (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."), cd_cor_status_trtmto = (select cd_cor_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."), cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_hstr_pnel_solic_trtmto = ".$id_hstr_pnel_solic_trtmto."";
+						
+						//echo $sql;
+
+						$result = pg_query($pdo, $sql);
+
+						if($result){
+							echo "";
+						}
+
+						$sql = "INSERT INTO tratamento.tb_hstr_obs_pnel_solic_trtmto(id_hstr_obs_pnel_solic_trtmto, id_hstr_pnel_solic_trtmto, id_status_equipe, ds_status_equipe, dt_inic_status_equipe_trtmto, dt_final_status_equipe_trtmto, ds_obs_pcnt, tp_minuto_status_equipe_trtmto, cd_usua_incs, dt_incs, dt_inicial_trtmto, cd_pcnt, nm_pcnt, id_status_trtmto, ds_status_trtmto)
+				VALUES ((select NEXTVAL('tratamento.sq_hstr_obs_pnel_solic_trtmto')), ".$id_hstr_pnel_solic_trtmto.", ".$_POST['id_equipe'].", (select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe']."), current_timestamp, null, '".$_POST['ds_obs_pcnt']."', 0, '".$_SESSION['usuario']."', current_timestamp, '".$dt_inicial_trtmto."', '".$_POST['cd_pcnt']."', '".$_POST['nm_pcnt']."',".$_POST['id_status_trtmto'].", (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."));";
+
+						//echo $sql;
+
+						$result = pg_query($pdo, $sql);
+
+						if($result){
+							echo "";
+						} 
+						
+						$sql = "UPDATE tratamento.tb_hstr_obs_pnel_solic_trtmto set dt_final_status_equipe_trtmto= current_timestamp, tp_minuto_status_equipe_trtmto = round((SELECT date_part( 'day', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_status_equipe_trtmto))*24*60 + date_part( 'hour', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_status_equipe_trtmto))*60 + date_part( 'minute', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inic_status_equipe_trtmto)))), cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_hstr_obs_pnel_solic_trtmto = ".$rowmaxstatusequipe[0]."";
+
+						//echo $sql;
+
+						$result = pg_query($pdo, $sql);
+
+						if($result){
+							echo "";
+						} 
+
+						$secondsWait = 0;
+						header("Refresh:$secondsWait");
+					
+					} else {
+						
+						echo "<div class=\"alert alert-warning alert-dismissible\">
+							<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
+							<strong>Atenção!</strong> Status já existe para o paciente e equipe. Tente novamente com outro stauts.	</div>";
+
+					}
 				}
 			}
 		
@@ -366,47 +388,67 @@
 		try
 		{	
 			
-			$sql = "SELECT distinct to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi')
-						  FROM tratamento.tb_hstr_pnel_solic_trtmto 
-						WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and fl_trtmto_fchd = 0 ";
+			
+			$sql = "select count(1) from tratamento.tb_c_equipe_usua where id_equipe = ".$_POST['id_equipe']." and cd_usua_acesso = (SELECT cd_usua_acesso FROM tratamento.tb_c_usua_acesso where nm_usua_acesso = '".$_SESSION['usuario']."') ";
 				
 			//echo $sql;
 
-			$rethstrtratamento = pg_query($pdo, $sql);
+			$retequipeusua = pg_query($pdo, $sql);
 			
-			if(!$rethstrtratamento) {
+			if(!$retequipeusua) {
 				echo pg_last_error($pdo);		
 				exit;
 			}
 			
-			$rowhstrtratamento = pg_fetch_row($rethstrtratamento);
-							
-			$dt_inicial_trtmto = $rowhstrtratamento[0];
+			$rowequipeusua = pg_fetch_row($retequipeusua);
 			
-			$sql = "UPDATE tratamento.tb_hstr_pnel_solic_trtmto SET ds_utlma_obs_pcnt = '". $_POST['ds_utlma_obs_pcnt'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_equipe = ". $_POST['id_equipe'] ." and id_status_trtmto = ". $_POST['id_status_trtmto'] ." and fl_trtmto_fchd = 0 ";
+			if ($rowequipeusua[0]==0 && $_SESSION['fl_sist_admn']=='N'){
+				echo "<div class=\"alert alert-warning alert-dismissible\">
+						<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
+						<strong>Atenção!</strong> Usuário não pode manter o status para esta equipe.	</div>";
+			} else {			
 			
-			//echo $sql;
-			
-			$result = pg_query($pdo, $sql);
-			
-			if($result){
-				echo "";
-			} 
-			
-			$sql = "UPDATE tratamento.tb_hstr_obs_pnel_solic_trtmto SET ds_obs_pcnt = '". $_POST['ds_utlma_obs_pcnt'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_status_equipe = ". $_POST['id_equipe'] ." and id_status_trtmto = ". $_POST['id_status_trtmto'] ." and to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."' ";
-			
-			//echo $sql;
-			
-			$result = pg_query($pdo, $sql);
-			
-			if($result){
-				echo "";
-			} 
-				
-			//voltar aqui
-			$secondsWait = 0;
-			header("Refresh:$secondsWait");
+				$sql = "SELECT distinct to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi')
+							  FROM tratamento.tb_hstr_pnel_solic_trtmto 
+							WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and fl_trtmto_fchd = 0 ";
+					
+				//echo $sql;
 
+				$rethstrtratamento = pg_query($pdo, $sql);
+				
+				if(!$rethstrtratamento) {
+					echo pg_last_error($pdo);		
+					exit;
+				}
+				
+				$rowhstrtratamento = pg_fetch_row($rethstrtratamento);
+								
+				$dt_inicial_trtmto = $rowhstrtratamento[0];
+				
+				$sql = "UPDATE tratamento.tb_hstr_pnel_solic_trtmto SET ds_utlma_obs_pcnt = '". $_POST['ds_utlma_obs_pcnt'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_equipe = ". $_POST['id_equipe'] ." and id_status_trtmto = ". $_POST['id_status_trtmto'] ." and fl_trtmto_fchd = 0 ";
+				
+				//echo $sql;
+				
+				$result = pg_query($pdo, $sql);
+				
+				if($result){
+					echo "";
+				} 
+				
+				$sql = "UPDATE tratamento.tb_hstr_obs_pnel_solic_trtmto SET ds_obs_pcnt = '". $_POST['ds_utlma_obs_pcnt'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_status_equipe = ". $_POST['id_equipe'] ." and id_status_trtmto = ". $_POST['id_status_trtmto'] ." and to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."' ";
+				
+				//echo $sql;
+				
+				$result = pg_query($pdo, $sql);
+				
+				if($result){
+					echo "";
+				} 
+					
+				//voltar aqui
+				$secondsWait = 0;
+				header("Refresh:$secondsWait");
+			}
 				
 		} catch(PDOException $e)
 		{
@@ -424,78 +466,99 @@
 		try
 		{	
 			
-			$sql = "SELECT distinct to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi')
-					  FROM tratamento.tb_hstr_pnel_solic_trtmto 
-					WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and fl_trtmto_fchd = 0 ";
 			
+			$sql = "select count(1) from tratamento.tb_c_equipe_usua where id_equipe = ".$_POST['id_equipe']." and cd_usua_acesso = (SELECT cd_usua_acesso FROM tratamento.tb_c_usua_acesso where nm_usua_acesso = '".$_SESSION['usuario']."') ";
+				
 			//echo $sql;
 
-			$rethstrtratamento = pg_query($pdo, $sql);
+			$retequipeusua = pg_query($pdo, $sql);
 			
-			if(!$rethstrtratamento) {
+			if(!$retequipeusua) {
 				echo pg_last_error($pdo);		
 				exit;
 			}
 			
-			$rowhstrtratamento = pg_fetch_row($rethstrtratamento);
-							
-			$dt_inicial_trtmto = $rowhstrtratamento[0];
-		
-			$sql = "DELETE FROM tratamento.tb_hstr_obs_pnel_solic_trtmto WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."' and id_status_equipe = ". $_POST['id_equipe'] ." and id_status_trtmto = ". $_POST['id_status_trtmto'] ." ";
+			$rowequipeusua = pg_fetch_row($retequipeusua);
 			
-			//echo $sql;
-			
-			$result = pg_query($pdo, $sql);
-
-			if($result){
-				echo "";
-			} 
+			if ($rowequipeusua[0]==0 && $_SESSION['fl_sist_admn']=='N'){
+				echo "<div class=\"alert alert-warning alert-dismissible\">
+						<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
+						<strong>Atenção!</strong> Usuário não pode manter o status para esta equipe.	</div>";
+			} else {
 						
-			$sql = "SELECT distinct trtmto_obs.id_status_equipe
-			                      , trtmto_obs.id_status_trtmto
-								  , trtmto_obs.ds_status_trtmto
-								  , trtmto_status.cd_cor_status_trtmto
-					  FROM tratamento.tb_hstr_obs_pnel_solic_trtmto trtmto_obs
-					     , tratamento.tb_c_status_trtmto trtmto_status
-					WHERE trtmto_obs.id_status_trtmto = trtmto_status.id_status_trtmto					  
-					  and trtmto_obs.cd_pcnt = '".$_POST['cd_pcnt']."' 
-					  and trtmto_obs.id_status_equipe = ". $_POST['id_equipe'] ." 
-					  and to_char(trtmto_obs.dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."'
-					  and trtmto_obs.id_hstr_obs_pnel_solic_trtmto = (SELECT MAX(id_hstr_obs_pnel_solic_trtmto) 
-															  FROM tratamento.tb_hstr_obs_pnel_solic_trtmto 
-															WHERE cd_pcnt = '".$_POST['cd_pcnt']."' 
-															  and id_status_equipe = ". $_POST['id_equipe'] ." 
-															  and to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."')";
-			
-			//echo $sql;
+				$sql = "SELECT distinct to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi')
+						  FROM tratamento.tb_hstr_pnel_solic_trtmto 
+						WHERE cd_pcnt = '".$_POST['cd_pcnt']."' and fl_trtmto_fchd = 0 ";
+				
+				//echo $sql;
 
-			$retultimostatus = pg_query($pdo, $sql);
+				$rethstrtratamento = pg_query($pdo, $sql);
+				
+				if(!$rethstrtratamento) {
+					echo pg_last_error($pdo);		
+					exit;
+				}
+				
+				$rowhstrtratamento = pg_fetch_row($rethstrtratamento);
+								
+				$dt_inicial_trtmto = $rowhstrtratamento[0];
 			
-			if(!$retultimostatus) {
-				echo pg_last_error($pdo);		
-				exit;
-			}
-			
-			$rowretultimostatus = pg_fetch_row($retultimostatus);
+				$sql = "DELETE FROM tratamento.tb_hstr_obs_pnel_solic_trtmto WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."' and id_status_equipe = ". $_POST['id_equipe'] ." and id_status_trtmto = ". $_POST['id_status_trtmto'] ." ";
+				
+				//echo $sql;
+				
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				} 
 							
-			$id_status_equipe = $rowretultimostatus[0];
-			$id_status_trtmto = $rowretultimostatus[1];
-			$ds_status_trtmto = $rowretultimostatus[2];
-			$cd_cor_status_trtmto = $rowretultimostatus[3];
-					
-			$sql = "UPDATE tratamento.tb_hstr_pnel_solic_trtmto set id_status_trtmto = ".$id_status_trtmto.", ds_status_trtmto = '".$ds_status_trtmto."', cd_cor_status_trtmto = '".$cd_cor_status_trtmto."' WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and fl_trtmto_fchd = 0 and to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."' and id_equipe = ". $_POST['id_equipe'] ." ";
-			
-			//echo $sql;
-			
-			$result = pg_query($pdo, $sql);
+				$sql = "SELECT distinct trtmto_obs.id_status_equipe
+									  , trtmto_obs.id_status_trtmto
+									  , trtmto_obs.ds_status_trtmto
+									  , trtmto_status.cd_cor_status_trtmto
+						  FROM tratamento.tb_hstr_obs_pnel_solic_trtmto trtmto_obs
+							 , tratamento.tb_c_status_trtmto trtmto_status
+						WHERE trtmto_obs.id_status_trtmto = trtmto_status.id_status_trtmto					  
+						  and trtmto_obs.cd_pcnt = '".$_POST['cd_pcnt']."' 
+						  and trtmto_obs.id_status_equipe = ". $_POST['id_equipe'] ." 
+						  and to_char(trtmto_obs.dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."'
+						  and trtmto_obs.id_hstr_obs_pnel_solic_trtmto = (SELECT MAX(id_hstr_obs_pnel_solic_trtmto) 
+																  FROM tratamento.tb_hstr_obs_pnel_solic_trtmto 
+																WHERE cd_pcnt = '".$_POST['cd_pcnt']."' 
+																  and id_status_equipe = ". $_POST['id_equipe'] ." 
+																  and to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."')";
+				
+				//echo $sql;
 
-			if($result){
-				echo "";
-			} 
-		
-			//voltar aqui
-			$secondsWait = 0;
-			header("Refresh:$secondsWait");
+				$retultimostatus = pg_query($pdo, $sql);
+				
+				if(!$retultimostatus) {
+					echo pg_last_error($pdo);		
+					exit;
+				}
+				
+				$rowretultimostatus = pg_fetch_row($retultimostatus);
+								
+				$id_status_equipe = $rowretultimostatus[0];
+				$id_status_trtmto = $rowretultimostatus[1];
+				$ds_status_trtmto = $rowretultimostatus[2];
+				$cd_cor_status_trtmto = $rowretultimostatus[3];
+						
+				$sql = "UPDATE tratamento.tb_hstr_pnel_solic_trtmto set id_status_trtmto = ".$id_status_trtmto.", ds_status_trtmto = '".$ds_status_trtmto."', cd_cor_status_trtmto = '".$cd_cor_status_trtmto."' WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and fl_trtmto_fchd = 0 and to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."' and id_equipe = ". $_POST['id_equipe'] ." ";
+				
+				//echo $sql;
+				
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				} 
+			
+				//voltar aqui
+				$secondsWait = 0;
+				header("Refresh:$secondsWait");
+			}
 				
 		} catch(PDOException $e)
 		{

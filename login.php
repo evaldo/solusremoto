@@ -19,7 +19,7 @@
 			header(Config::$webLogin);
 		}	
 		
-		$sql="SELECT cd_faixa_ip_1, cd_faixa_ip_2, fl_acesso_ip FROM tratamento.tb_c_usua_acesso where nm_usua_acesso = '" . $_SESSION['usuario'] . "'";
+		$sql="SELECT cd_faixa_ip_1, cd_faixa_ip_2, fl_acesso_ip, fl_sist_admn FROM tratamento.tb_c_usua_acesso where nm_usua_acesso = '" . $_SESSION['usuario'] . "'";
 		
 				
 		$ret = pg_query($pdo, $sql);
@@ -31,6 +31,7 @@
 		$ip_1 = $row[0];	
 		$ip_2 = $row[1];
 		$fl_acesso_ip = $row[2];
+		$_SESSION['fl_sist_admn'] = $row[3];
 		
 		//echo substr($user_ip, 0, 9);
 		//echo substr($ip_1, 0, 9); 

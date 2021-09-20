@@ -12,7 +12,7 @@
 	$sql = '';
 	
 		
-	$sql ="select * from tratamento.vw_painel_trtmto order by nm_pcnt";
+	$sql ="select * from tratamento.vw_painel_trtmto order by dt_incs DESC";
 			
 	$ret = pg_query($pdo, $sql);
 	
@@ -720,7 +720,7 @@
 			<div id="list" class="row" style="margin-left: 5px; margin-right: 5px">
 				
 				<div class="table-responsive" style="margin-top: 60px;">				
-					<table id="tabela" class="table table-striped table-bordered">
+					<table id="tabela" class="table table-bordered">
 						<thead class="thead-dark">
 							<tr style="font-size: 11px;">
 								<?php
@@ -736,6 +736,7 @@
 									<th style="text-align:center">Id</th>
 									<th style="text-align:center">Paciente</th>
 									<th style="text-align:center">Pedido</th>
+									<th style="text-align:center">Inclusão</th>
 								<?php	
 									while($rowequipe = pg_fetch_row($retequipe)) {
 									
@@ -783,6 +784,8 @@
 										<?php						
 									}
 									?>
+									
+									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[20];?>" style="text-align:center" id="<?php echo $row[20];?>" value="<?php echo $row[20];?>" ><?php echo $row[20];?></td>
 									
 									<td data-toggle="tooltip" data-placement="top" title="<?php echo $row[8];?>" style="text-align:center;background-color:<?php echo $row[14] ;?>" id="<?php echo $row[2];?>" value="<?php echo $row[2];?>" ><?php echo $row[2];?></td>
 									

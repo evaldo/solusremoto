@@ -78,7 +78,7 @@
 		try
 		{	
 		
-			$sql = "INSERT INTO tratamento.tb_c_status_trtmto(id_status_trtmto, id_equipe, ds_status_trtmto, fl_ativo, fl_status_intrpe_trtmto_equipe, fl_status_finaliza_trtmto_equipe, cd_cor_status_trtmto, cd_usua_incs, dt_incs, fl_status_inicial_trtmto) values ((select NEXTVAL('tratamento.sq_status_trtmto')), ". $_POST['id_equipe'].", '". $_POST['ds_status_trtmto']."', ". $_POST['fl_ativo'].", ". $_POST['fl_status_intrpe_trtmto_equipe'].",  ". $_POST['fl_status_finaliza_trtmto_equipe'].", '".$_POST['cd_cor_status_trtmto']."','".$_SESSION['usuario']."', current_timestamp,  ". $_POST['fl_status_inicial_trtmto'].");";
+			$sql = "INSERT INTO tratamento.tb_c_status_trtmto(id_status_trtmto, id_equipe, ds_status_trtmto, fl_ativo, fl_status_intrpe_trtmto_equipe, fl_status_finaliza_trtmto_equipe, cd_cor_status_trtmto, cd_usua_incs, dt_incs, fl_status_inicial_trtmto) values ((select NEXTVAL('tratamento.sq_status_trtmto')), ". $_POST['id_equipe'].", upper('". $_POST['ds_status_trtmto']."'), ". $_POST['fl_ativo'].", ". $_POST['fl_status_intrpe_trtmto_equipe'].",  ". $_POST['fl_status_finaliza_trtmto_equipe'].", '".$_POST['cd_cor_status_trtmto']."','".$_SESSION['usuario']."', current_timestamp,  ". $_POST['fl_status_inicial_trtmto'].");";
 
 			$result = pg_query($pdo, $sql);
 
@@ -108,7 +108,7 @@
 		{	
 			
 			$sql = "UPDATE tratamento.tb_c_status_trtmto
-	SET id_equipe=". $_POST['id_equipe'].", ds_status_trtmto='". $_POST['ds_status_trtmto']."', fl_ativo=". $_POST['fl_ativo'].", fl_status_intrpe_trtmto_equipe=". $_POST['fl_status_intrpe_trtmto_equipe'].", fl_status_finaliza_trtmto_equipe=". $_POST['fl_status_finaliza_trtmto_equipe'].", cd_cor_status_trtmto='".$_POST['cd_cor_status_trtmto']."', cd_usua_altr='".$_SESSION['usuario']."', fl_status_inicial_trtmto = ". $_POST['fl_status_inicial_trtmto'].", dt_altr=current_timestamp
+	SET id_equipe=". $_POST['id_equipe'].", ds_status_trtmto=upper('". $_POST['ds_status_trtmto']."'), fl_ativo=". $_POST['fl_ativo'].", fl_status_intrpe_trtmto_equipe=". $_POST['fl_status_intrpe_trtmto_equipe'].", fl_status_finaliza_trtmto_equipe=". $_POST['fl_status_finaliza_trtmto_equipe'].", cd_cor_status_trtmto='".$_POST['cd_cor_status_trtmto']."', cd_usua_altr='".$_SESSION['usuario']."', fl_status_inicial_trtmto = ". $_POST['fl_status_inicial_trtmto'].", dt_altr=current_timestamp
 	WHERE id_status_trtmto = ". $_SESSION['id_status_trtmto']."";
 			
 			//echo $sql;

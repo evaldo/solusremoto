@@ -116,7 +116,7 @@
 						$id_hstr_pnel_solic_trtmto = $rowhstrtratamento[0];
 						$dt_inicial_trtmto = $rowhstrtratamento[1];
 						
-						$sql = "update tratamento.tb_hstr_pnel_solic_trtmto set ds_utlma_obs_pcnt = '".$_POST['ds_obs_pcnt']."', id_status_trtmto = ".$_POST['id_status_trtmto'].", ds_status_trtmto = (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."), cd_cor_status_trtmto = (select cd_cor_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."), cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_hstr_pnel_solic_trtmto = ".$id_hstr_pnel_solic_trtmto."";
+						$sql = "update tratamento.tb_hstr_pnel_solic_trtmto set ds_utlma_obs_pcnt = upper('".$_POST['ds_obs_pcnt']."'), id_status_trtmto = ".$_POST['id_status_trtmto'].", ds_status_trtmto = (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."), cd_cor_status_trtmto = (select cd_cor_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."), cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp where id_hstr_pnel_solic_trtmto = ".$id_hstr_pnel_solic_trtmto."";
 						
 						//echo $sql;
 
@@ -127,7 +127,7 @@
 						}
 
 						$sql = "INSERT INTO tratamento.tb_hstr_obs_pnel_solic_trtmto(id_hstr_obs_pnel_solic_trtmto, id_hstr_pnel_solic_trtmto, id_status_equipe, ds_status_equipe, dt_inic_status_equipe_trtmto, dt_final_status_equipe_trtmto, ds_obs_pcnt, tp_minuto_status_equipe_trtmto, cd_usua_incs, dt_incs, dt_inicial_trtmto, cd_pcnt, nm_pcnt, id_status_trtmto, ds_status_trtmto)
-				VALUES ((select NEXTVAL('tratamento.sq_hstr_obs_pnel_solic_trtmto')), ".$id_hstr_pnel_solic_trtmto.", ".$_POST['id_equipe'].", (select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe']."), current_timestamp, null, '".$_POST['ds_obs_pcnt']."', 0, '".$_SESSION['usuario']."', current_timestamp, '".$dt_inicial_trtmto."', '".$_POST['cd_pcnt']."', '".$_POST['nm_pcnt']."',".$_POST['id_status_trtmto'].", (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."));";
+				VALUES ((select NEXTVAL('tratamento.sq_hstr_obs_pnel_solic_trtmto')), ".$id_hstr_pnel_solic_trtmto.", ".$_POST['id_equipe'].", (select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe']."), current_timestamp, null, upper('".$_POST['ds_obs_pcnt']."'), 0, '".$_SESSION['usuario']."', current_timestamp, '".$dt_inicial_trtmto."', '".$_POST['cd_pcnt']."', '".$_POST['nm_pcnt']."',".$_POST['id_status_trtmto'].", (select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto']."));";
 
 						//echo $sql;
 
@@ -190,7 +190,7 @@
 									
 			if($rowpaciente[0]==0){
 				$sqlinsertpcnt = "INSERT INTO tratamento.tb_c_pcnt(cd_pcnt, nm_pcnt, dt_nasc_pcnt, ds_mncp_pcnt, cd_usua_incs, dt_incs, id_cnvo, cd_cnvo)
-		VALUES ('". $_POST['cd_pcnt'] ."', '". $_POST['nm_pcnt'] ."', '". $_POST['dt_nasc_pcnt'] ."', '". $_POST['ds_mncp'] ."', '".$_SESSION['usuario']."', current_timestamp, (select id_cnvo from tratamento.tb_c_cnvo where cd_cnvo = '". $_POST['cd_cnvo'] ."'), '". $_POST['cd_cnvo'] ."')";
+		VALUES ('". $_POST['cd_pcnt'] ."', upper('". $_POST['nm_pcnt'] ."'), '". $_POST['dt_nasc_pcnt'] ."', '". $_POST['ds_mncp'] ."', '".$_SESSION['usuario']."', current_timestamp, (select id_cnvo from tratamento.tb_c_cnvo where cd_cnvo = '". $_POST['cd_cnvo'] ."'), '". $_POST['cd_cnvo'] ."')";
 		
 				//echo $sqlinsertpcnt;		
 		
@@ -201,7 +201,7 @@
 				}  
 				
 			} else {
-				$sqlupdatepcnt = "UPDATE tratamento.tb_c_pcnt SET nm_pcnt='". $_POST['nm_pcnt'] ."', id_cnvo = (select id_cnvo from tratamento.tb_c_cnvo where cd_cnvo = '". $_POST['cd_cnvo'] ."'), cd_cnvo = '". $_POST['cd_cnvo'] ."', dt_nasc_pcnt = '". $_POST['dt_nasc_pcnt'] ."', ds_mncp_pcnt= '". $_POST['ds_mncp'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."'";
+				$sqlupdatepcnt = "UPDATE tratamento.tb_c_pcnt SET nm_pcnt=upper('". $_POST['nm_pcnt'] ."'), id_cnvo = (select id_cnvo from tratamento.tb_c_cnvo where cd_cnvo = '". $_POST['cd_cnvo'] ."'), cd_cnvo = '". $_POST['cd_cnvo'] ."', dt_nasc_pcnt = '". $_POST['dt_nasc_pcnt'] ."', ds_mncp_pcnt= '". $_POST['ds_mncp'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."'";
 				
 				$result = pg_query($pdo, $sqlupdatepcnt);
 
@@ -318,7 +318,7 @@
 			
 			if ($_POST['fl_trtmto_fchd'] == 1){
 							
-				$sql = "UPDATE tratamento.tb_hstr_pnel_solic_trtmto SET tp_minuto_trtmto = round((SELECT date_part( 'day', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto))*24*60 + date_part( 'hour', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto))*60 + date_part( 'minute', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto)))), tp_hora_trtmto = round((SELECT date_part( 'day', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto))*24 + date_part( 'hour', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto)))), tp_dia_trtmto = round((SELECT date_part( 'day', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto)))), fl_trtmto_fchd = 1, cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and fl_trtmto_fchd = 0";
+				$sql = "UPDATE tratamento.tb_hstr_pnel_solic_trtmto SET tp_minuto_trtmto = round((SELECT date_part( 'day', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto))*24*60 + date_part( 'hour', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto))*60 + date_part( 'minute', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto)))), tp_hora_trtmto = round((SELECT date_part( 'day', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto))*24 + date_part( 'hour', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto)))), tp_dia_trtmto = round((SELECT date_part( 'day', age(current_timestamp::timestamp WITHOUT TIME ZONE , dt_inicial_trtmto)))), fl_trtmto_fchd = 1, cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp, dt_final_trtmto = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and fl_trtmto_fchd = 0";
 				
 				//echo $sql;
 				
@@ -425,7 +425,7 @@
 								
 				$dt_inicial_trtmto = $rowhstrtratamento[0];
 				
-				$sql = "UPDATE tratamento.tb_hstr_pnel_solic_trtmto SET ds_utlma_obs_pcnt = '". $_POST['ds_utlma_obs_pcnt'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_equipe = ". $_POST['id_equipe'] ." and id_status_trtmto = ". $_POST['id_status_trtmto'] ." and fl_trtmto_fchd = 0 ";
+				$sql = "UPDATE tratamento.tb_hstr_pnel_solic_trtmto SET ds_utlma_obs_pcnt = UPPER('". $_POST['ds_utlma_obs_pcnt'] ."'), cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_equipe = ". $_POST['id_equipe'] ." and id_status_trtmto = ". $_POST['id_status_trtmto'] ." and fl_trtmto_fchd = 0 ";
 				
 				//echo $sql;
 				
@@ -435,7 +435,7 @@
 					echo "";
 				} 
 				
-				$sql = "UPDATE tratamento.tb_hstr_obs_pnel_solic_trtmto SET ds_obs_pcnt = '". $_POST['ds_utlma_obs_pcnt'] ."', cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_status_equipe = ". $_POST['id_equipe'] ." and id_status_trtmto = ". $_POST['id_status_trtmto'] ." and to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."' ";
+				$sql = "UPDATE tratamento.tb_hstr_obs_pnel_solic_trtmto SET ds_obs_pcnt = UPPER('". $_POST['ds_utlma_obs_pcnt'] ."'), cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and id_status_equipe = ". $_POST['id_equipe'] ." and id_status_trtmto = ". $_POST['id_status_trtmto'] ." and to_char(dt_inicial_trtmto, 'dd/mm/yyyy hh24:mi') = '".$dt_inicial_trtmto."' ";
 				
 				//echo $sql;
 				

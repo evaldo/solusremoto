@@ -101,7 +101,7 @@
 										<?php
 										
 										$sql = "SELECT id_hstr_pnel_solic_trtmto
-													 , nm_pcnt||'-'||ds_status_trtmto
+													 , substring(nm_pcnt, 1, 25)||'-'||ds_status_trtmto
 												FROM tratamento.tb_hstr_pnel_solic_trtmto trtmto
 												  WHERE trtmto.fl_trtmto_fchd = 0
 													and trtmto.ds_equipe = 'Oncologistas';";

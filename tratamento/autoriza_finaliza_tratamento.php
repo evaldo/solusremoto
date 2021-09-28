@@ -6,9 +6,61 @@
 	
 	$pdo = database::connect();
 	
-	$nm_pcnt = '';	
-	$dt_nasc_pcnt = '';	
-	$ds_mncp_pcnt = '';
+	if(isset($_POST['autoriza'])){					
+		
+		if ($pdo==null){
+			header(Config::$webLogin);
+		}
+		
+		try
+		{	
+			
+			if ($_POST['fl_autrz_trtmto'] == 1){
+							
+				$sql = "UPDATE tratamento.tb_hstr_pnel_solic_trtmto SET fl_autrz_trtmto = 1, cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and fl_trtmto_fchd = 0";
+				
+				//echo $sql;
+				
+				$result = pg_query($pdo, $sql);
+				
+				if($result){
+					echo "";
+				} 
+				
+				echo "<div class=\"alert alert-warning alert-dismissible\">
+							<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
+							<strong>Atenção!</strong>Alteração da Autorização de Finalização Realizada!!</div>";
+				
+				$secondsWait = 3;
+				header("Refresh:$secondsWait");
+				
+			} else {
+			
+				$sql = "UPDATE tratamento.tb_hstr_pnel_solic_trtmto SET fl_autrz_trtmto = 0, cd_usua_altr = '".$_SESSION['usuario']."', dt_altr = current_timestamp WHERE cd_pcnt = '". $_POST['cd_pcnt'] ."' and fl_trtmto_fchd = 0";
+				
+				//echo $sql;
+				
+				$result = pg_query($pdo, $sql);
+
+				if($result){
+					echo "";
+				} 
+				
+				echo "<div class=\"alert alert-warning alert-dismissible\">
+							<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>
+							<strong>Atenção!</strong>Alteração da Autorização de Finalização Realizada!!</div>";
+				
+				$secondsWait = 3;
+				header("Refresh:$secondsWait");
+			
+			}
+				
+		} catch(PDOException $e)
+		{
+			die($e->getMessage());
+		}
+	}
+	
 	
 ?>	
 
@@ -24,7 +76,7 @@
 		  <div class="modal-dialog">
 				<div class="modal-content" style="width:800px">
 					<div class="container">						
-						<h4 class="modal-title">Finalizar Tratamento</h4>
+						<h4 class="modal-title">Autorização para Finalizar o Tratamento</h4>
 					</div>								
 					<form class="form-inline" method="post" id="formulario">
 						<div class="modal-body">
@@ -35,7 +87,7 @@
 										<td style="width:150px"><label>Escolha o paciente para finalização do tratamento:</label></td>  
 										<?php
 										
-										$sql = "SELECT distinct cd_pcnt, nm_pcnt from tratamento.tb_hstr_pnel_solic_trtmto where fl_trtmto_fchd = 0 and fl_autrz_trtmto = '1' order by 2";
+										$sql = "SELECT distinct cd_pcnt, nm_pcnt from tratamento.tb_hstr_pnel_solic_trtmto where fl_trtmto_fchd = 0 order by 2";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -65,14 +117,14 @@
 									 </tr>
 								
 									 <tr>  
-										<td style="width:150px"><label>Finalizar ou Excluir o Tratamento?</label></td>	
+										<td style="width:150px"><label>Autorizar a Finalização do Tratamento?</label></td>	
 										<td style="width:150px">
-											<select  id="selfl_trtmto_fchd" class="form-control" onchange=" 
-														var selObj = document.getElementById('selfl_trtmto_fchd');
+											<select  id="selfl_autrz_trtmto" class="form-control" onchange=" 
+														var selObj = document.getElementById('selfl_autrz_trtmto');
 														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('fl_trtmto_fchd').value = selValue;">
-												<option value="1">Finalizar</option>
-												<option value="2">Excluir</option>
+														document.getElementById('fl_autrz_trtmto').value = selValue;">
+												<option value="0">Não Autorizar a Finalização</option>
+												<option value="1">Autorizar a Finalização</option>
 											</select>
 										</td>  								
 									 </tr>
@@ -80,13 +132,13 @@
 								</table>																
 							</div>
 							<div class="modal-footer">	
-								<input type="submit" class="btn btn-danger" name="finaliza" value="Confirmar">&nbsp;&nbsp;&nbsp;&nbsp;
+								<input type="submit" class="btn btn-danger" name="autoriza" value="Confirmar">&nbsp;&nbsp;&nbsp;&nbsp;
 								<input type="button" class="btn btn-primary" onclick="history.go()" value="Voltar">									
 							</div>									
 						</div>				
 						<!--style="display:none"-->
 						<input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 	
-						<input type="text" id="fl_trtmto_fchd" name="fl_trtmto_fchd" value="1" style="display:none"> 							
+						<input type="text" id="fl_autrz_trtmto" name="fl_autrz_trtmto" value="0" style="display:none"> 							
 					</form>
 				</div>
 			</div>

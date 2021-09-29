@@ -637,7 +637,7 @@
 		</div>
 		<div class="topnav" id="topnav">		
 			<a class="active" href="#" onclick="recarregar()"><i class="fa fa-home" aria-hidden="true"></i></a> 
-			<a href="#" class="notification"><span class="badge" id="alerta"></span><i class="fa fa-bell" aria-hidden="true"></i>
+			<a href="#" class="notification" onclick="removeIframe();prepareIframe('manutalerta', './alerta/manut_alerta.php?tipoconsultaalerta=consultaregsnaolidos');"><span class="badge" id="alerta"></span><i class="fa fa-bell" aria-hidden="true"></i>
 			</a>			
 			<?php
 			
@@ -688,6 +688,7 @@
 				<div class="dropdown-content">					
 					<a href="logout.php">Logout</a>
 					<a href="#" onclick="removeIframe();prepareIframe('alterasenha', 'altera_senha.php');">Alterar Senha</a>
+					<a href="#" onclick="removeIframe();prepareIframe('manutalertalidos', './alerta/manut_alerta.php?tipoconsultaalerta=consultaregslidos');">Historico de Alertas</a>
 				</div>				
 			</div>
 			

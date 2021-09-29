@@ -4,14 +4,43 @@
 	var auto_refresh = setInterval(
 	function ()
 	{
-		$('#qtderegmapa').load('aviso_quatidade_reg_mapa.php').fadeIn("slow");}, 1000); // refresh every 10000 milliseconds
+		$('#qtderegmapa').load('aviso_quatidade_reg_mapa.php').fadeIn("slow");}, 1000); // refresh every 1000 milliseconds
 </script>
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.notification {
+  background-color: #555;
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification:hover {
+  background: red;
+}
+
+.notification .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+</style>
 <body>
-	<div id="qtderegmapa">
-		
-	</div>
-	<div >
-		Ops!!!
+	<div class="container">				
+		<a href="#" class="notification">
+		  <span>Alertas</span>
+		  <span class="badge" id="qtderegmapa"></span>
+		</a>
 	</div>
 </body>
 

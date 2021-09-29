@@ -143,7 +143,16 @@
 			$result = pg_query($pdo, $sql);
 			if($result){
 				echo "";
-			}  
+			} 
+
+			$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alert, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'INSERCAO DE PEDIDO DE TRATAMENTO', '".str_replace("'"," ", $msg)."', '".$_SESSION['usuario']."', current_timestamp)";
+			
+			$result = pg_query($pdo, $sql);
+			if($result){
+				echo "";
+			} 
+			
+			//echo $sql;
 			
 			$secondsWait = 0;
 			header("Refresh:$secondsWait");
@@ -195,6 +204,48 @@
 			if($result){
 				echo "";
 			}  
+			
+			// Escreve a mensagem passada através da variável $msg
+			$msg = "---------------------Log de Alteração do Pedido de Tratamento------------------------\n";
+			$msg .= "Mensagem gerada pelo usuario: '".$_SESSION['usuario']."' em ".date('d/m/Y')."\n";
+			$msg .= "-----------------------------------------------------------------------------------\n";
+			$msg .= "Codigo Paciente: '".$_POST['cd_pcnt']."'\n";
+			$msg .= "Convênio: '".$_POST['cd_cnvo']."'\n";
+			$msg .= "Peso: '".$_POST['nu_peso_pcnt']."'\n";
+			$msg .= "Altura: '".$_POST['vl_altura_pcnt']."'\n";
+			$msg .= "Sup Corp: '".$_POST['vl_sup_corp']."'\n";
+			$msg .= "Indicacao Clinica: '".$_POST['ds_indic_clnic']."'\n";
+			$msg .= "Data do Diagnostico: '".$dt_diagn."'\n";
+			$msg .= "CID: '".$_POST['cd_cid']."'\n";
+			$msg .= "Estadiamento: '".$_POST['ds_estmt']."'\n";
+			$msg .= "Tipo Quimio (Linha): '".$_POST['ds_tipo_linha_trtmto']."'\n";
+			$msg .= "Finalidade: '".$_POST['ds_fnlde']."'\n";
+			$msg .= "Tipo de Tumor: '".$_POST['ic_tipo_tumor']."'\n";
+			$msg .= "Tipo de Nodulo: '".$_POST['ic_tipo_nodulo']."'\n";
+			$msg .= "Tipo de Metastase: '".$_POST['ic_tipo_metastase']."'\n";
+			$msg .= "Plano Terapêutio: '".$_POST['ds_plano_trptco']."'\n";
+			$msg .= "Informações Relevantes: '".$_POST['ds_info_rlvnte']."'\n";
+			$msg .= "Diagnóstico Histopatologico: '".$_POST['ds_diagn_cito_hstpagico']."'\n";
+			$msg .= "Tipo de Cirurgia: '".$_POST['ds_tp_cirurgia']."'\n";
+			$msg .= "Área Irradiada: '".$_POST['ds_area_irrda']."'\n";
+			$msg .= "Data de Realização: '".$dt_rlzd."'\n";
+			$msg .= "Data da Aplicação: '".$dt_aplc."'\n";
+			$msg .= "Observação Justificativa: '".$_POST['ds_obs_jfta']."'\n";
+			$msg .= "Quantidade de Ciclos Prevsitos: '".$_POST['nu_qtde_ciclo_prta']."'\n";
+			$msg .= "Ciclo Atual: '".$_POST['ds_ciclo_atual']."'\n";
+			$msg .= "Dias do ciclo atual: '".$_POST['ds_dia_ciclo_atual']."'\n";			
+			$msg .= "Intervalo de Ciclos: '".$_POST['ds_intrv_entre_ciclo_dia']."'\n";			
+			$msg .= "\n";			
+			$msg .= "\n";			
+			$msg .= "-----------------------------------------------------------------------------------\n";
+
+			
+			$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alert, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_pddo_trtmto')),'ALTERACAO DE PEDIDO DE TRATAMENTO', '".str_replace("'"," ", $msg)."', '".$_SESSION['usuario']."', current_timestamp)";
+			
+			$result = pg_query($pdo, $sql);
+			if($result){
+				echo "";
+			}
 			
 			$secondsWait = 0;
 			header("Refresh:$secondsWait");

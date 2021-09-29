@@ -150,6 +150,18 @@
 			}
 			
 	</script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+
+	<script type="text/javascript">
+		var auto_refresh = setInterval(
+				function ()
+					{
+						$('#alerta').load('./alerta/alerta_transacao_crud.php').fadeIn("slow");
+					}
+					, 1000
+				); 
+					//refresh every 1000 milliseconds
+	</script>
 	
 	<style>
 			
@@ -589,7 +601,30 @@
 				   background-color: #333;
 				   color: white;
 				   text-align: right;
-				}				
+				}
+				.notification {
+				  background-color: #555;
+				  color: white;
+				  text-decoration: none;
+				  padding: 15px 26px;
+				  position: relative;
+				  display: inline-block;
+				  border-radius: 2px;
+				}
+
+				.notification:hover {
+				  background: red;
+				}
+
+				.notification .badge {
+				  position: absolute;
+				  top: 0px;
+				  right: -10px;
+				  padding: 5px 10px;
+				  border-radius: 50%;
+				  background-color: red;
+				  color: white;
+				}				  
 			
 	</style>
 		<title>Acompanhamento do Tratamento</title>
@@ -601,7 +636,9 @@
 			</div>					  		  
 		</div>
 		<div class="topnav" id="topnav">		
-			<a class="active" href="#" onclick="recarregar()"><i class="fa fa-home" aria-hidden="true"></i></a> 		
+			<a class="active" href="#" onclick="recarregar()"><i class="fa fa-home" aria-hidden="true"></i></a> 
+			<a href="#" class="notification"><span class="badge" id="alerta"></span><i class="fa fa-bell" aria-hidden="true"></i>
+			</a>			
 			<?php
 			
 				while($row_menu_princ = pg_fetch_row($ret_menu_princ)) {	
@@ -652,7 +689,8 @@
 					<a href="logout.php">Logout</a>
 					<a href="#" onclick="removeIframe();prepareIframe('alterasenha', 'altera_senha.php');">Alterar Senha</a>
 				</div>				
-			</div>			
+			</div>
+			
 			<a href="javascript:void(0);" style="font-size:15px;" class="icon" onclick="fuTopNav()">&#9776;</a>
 		</div>		
 		

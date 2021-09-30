@@ -32,7 +32,7 @@
 										<td style="width:150px"><label>Paciente:</label></td>  
 										<?php
 										
-										$sql = "SELECT cd_pcnt, nm_pcnt from tratamento.tb_c_pcnt order by 2";
+										$sql = "SELECT cd_pcnt, substr(nm_pcnt, 1, 25) as nm_pcnt from tratamento.tb_c_pcnt order by 2";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -100,11 +100,10 @@
 										<td style="width:150px"><label>Tratamento:</label></td>  
 										<?php
 										
-										$sql = "SELECT id_hstr_pnel_solic_trtmto
-													 , substring(nm_pcnt, 1, 25)||'-'||ds_status_trtmto
-												FROM tratamento.tb_hstr_pnel_solic_trtmto trtmto
-												  WHERE trtmto.fl_trtmto_fchd = 0
-													and trtmto.ds_equipe = 'Oncologistas';";
+										$sql = "SELECT trtmto.id_status_trtmto, trtmto.ds_status_trtmto 
+												FROM tratamento.tb_c_status_trtmto trtmto
+												  WHERE trtmto.id_equipe = 13 
+												order by 2 asc";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -114,21 +113,27 @@
 											echo pg_last_error($pdo);
 											exit;
 										}
+										
 										?>
 										<td style="width:150px">
-											<select  id="sel_hstr_pnel_solic_trtmto" class="form-control" onchange=" 
-														var selObj = document.getElementById('sel_hstr_pnel_solic_trtmto');
+											<select  id="sel_id_status_trtmto" class="form-control" onchange=" 
+														var selObj = document.getElementById('sel_id_status_trtmto');
 														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('id_hstr_pnel_solic_trtmto').value = selValue;">
-														<option value="null"></option>
+														document.getElementById('id_status_trtmto').value = selValue;">
+														<option value="0"></option>
 																									
 											<?php
+											
 												$cont=1;																	
 											
 												while($row = pg_fetch_row($ret)) {
 												?>												
 													<option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option>																		
-											<?php $cont=$cont+1;} ?>	
+													<?php 
+													$cont=$cont+1;
+												}
+
+												?>	
 											</select>
 										
 										</td>	
@@ -372,7 +377,7 @@
 									 <input type="text" id="cd_cnvo" name="cd_cnvo" style="display:none"> 									 
 									 <input type="text" id="cd_cid" name="cd_cid" style="display:none"> 									 
 									 <input type="text" id="ds_estmt" name="ds_estmt" style="display:none"> 
-									 <input type="text" id="id_hstr_pnel_solic_trtmto" name="id_hstr_pnel_solic_trtmto" style="display:none"> 
+									 <input type="text" id="id_status_trtmto" name="id_status_trtmto" style="display:none" value="0"> 
 									 <input type="text" id="ds_tipo_linha_trtmto" name="ds_tipo_linha_trtmto" style="display:none"> 
 									 <input type="text" id="ds_fnlde" name="ds_fnlde" style="display:none"> 
 									 <input type="text" id="ic_tipo_tumor" name="ic_tipo_tumor" style="display:none"> 

@@ -126,7 +126,7 @@
 							echo "";
 						}
 						
-						$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alert, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'INSERCAO DE STATUS DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - '||(select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe'].")||' - '||(select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto'].")||' - '||upper('".$_POST['ds_obs_pcnt']."'), '".$_SESSION['usuario']."', current_timestamp)";
+						$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alrt, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'INSERCAO DE STATUS DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - '||(select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe'].")||' - '||(select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto'].")||' - '||upper('".$_POST['ds_obs_pcnt']."'), '".$_SESSION['usuario']."', current_timestamp)";
 						
 						$result = pg_query($pdo, $sql);
 
@@ -283,7 +283,7 @@
 						echo "";
 					}
 					
-					$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alert, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'INSERCAO DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - INICIO DE TRATAMENTO - ".$rowretequipetratamento[1]."', '".$_SESSION['usuario']."', current_timestamp)";
+					$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alrt, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'INSERCAO DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - INICIO DE TRATAMENTO - ".$rowretequipetratamento[1]."', '".$_SESSION['usuario']."', current_timestamp)";
 						
 					$result = pg_query($pdo, $sql);
 
@@ -346,7 +346,7 @@
 					echo "";
 				}
 
-				$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alert, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'FINALIZAÇÃO DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - FINALIZAÇÃO DE TRATAMENTO', '".$_SESSION['usuario']."', current_timestamp)";
+				$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alrt, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'FINALIZAÇÃO DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - FINALIZAÇÃO DE TRATAMENTO', '".$_SESSION['usuario']."', current_timestamp)";
 						
 				$result = pg_query($pdo, $sql);
 
@@ -394,7 +394,7 @@
 					echo "";
 				} 
 				
-				$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alert, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'EXCLUSÃO DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - EXCLUSÃO DE TRATAMENTO', '".$_SESSION['usuario']."', current_timestamp)";
+				$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alrt, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'EXCLUSÃO DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - EXCLUSÃO DE TRATAMENTO', '".$_SESSION['usuario']."', current_timestamp)";
 						
 				$result = pg_query($pdo, $sql);
 
@@ -480,7 +480,7 @@
 					echo "";
 				} 
 				
-				$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alert, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'ALTERACAO DE STATUS DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - '||(select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe'].")||' - '||(select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto'].")||' - '||upper('".$_POST['ds_utlma_obs_pcnt']."'), '".$_SESSION['usuario']."', current_timestamp)";
+				$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alrt, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'ALTERACAO DE STATUS DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - '||(select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe'].")||' - '||(select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$_POST['id_status_trtmto'].")||' - '||upper('".$_POST['ds_utlma_obs_pcnt']."'), '".$_SESSION['usuario']."', current_timestamp)";
 						
 						$result = pg_query($pdo, $sql);
 
@@ -598,7 +598,7 @@
 					echo "";
 				} 
 				
-				$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alert, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'EXCLUSAO DE STATUS DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - '||(select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe'].")||' - '||(select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$id_status_trtmto."), '".$_SESSION['usuario']."', current_timestamp)";
+				$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alrt, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'EXCLUSAO DE STATUS DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - '||(select ds_equipe from tratamento.tb_c_equipe where id_equipe = ".$_POST['id_equipe'].")||' - '||(select ds_status_trtmto from tratamento.tb_c_status_trtmto where id_status_trtmto = ".$id_status_trtmto."), '".$_SESSION['usuario']."', current_timestamp)";
 						
 				$result = pg_query($pdo, $sql);
 

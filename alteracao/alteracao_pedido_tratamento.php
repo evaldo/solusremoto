@@ -160,11 +160,55 @@
 										<td style="width:150px"><label>Tratamento:</label></td>  
 										<?php
 										
-										$sql = "SELECT id_hstr_pnel_solic_trtmto
-													 , substring(nm_pcnt, 1, 25)||'-'||ds_status_trtmto
-												FROM tratamento.tb_hstr_pnel_solic_trtmto trtmto
-												  WHERE trtmto.fl_trtmto_fchd = 0
-													and trtmto.ds_equipe = 'Oncologistas';";
+										$statustratamentoatual = '';
+										
+										$sql = "SELECT count(id_hstr_pnel_solic_trtmto) FROM tratamento.tb_hstr_pnel_solic_trtmto WHERE cd_pcnt = '".$rowpddotrtmto[2]."' and id_equipe = 13 and fl_trtmto_fchd = 0  ";
+					
+										$retcountpanelsolictrtmto = pg_query($pdo, $sql);
+											
+										if(!$retcountpanelsolictrtmto) {
+											echo pg_last_error($pdo);		
+											exit;
+										}
+											
+										$rowcountpanelsolictrtmto = pg_fetch_row($retcountpanelsolictrtmto);
+										
+										if ($rowcountpanelsolictrtmto[0] > 0) {
+										
+										
+											$sql = "SELECT MAX(id_hstr_pnel_solic_trtmto) FROM tratamento.tb_hstr_pnel_solic_trtmto WHERE cd_pcnt = '".$rowpddotrtmto[2]."' and id_equipe = 13 and fl_trtmto_fchd = 0 ";
+						
+											$retmaxpanelsolictrtmto = pg_query($pdo, $sql);
+												
+											if(!$retmaxpanelsolictrtmto) {
+												echo pg_last_error($pdo);		
+												exit;
+											}
+												
+											$rowmaxpanelsolictrtmto = pg_fetch_row($retmaxpanelsolictrtmto);
+														
+											$sql = "SELECT id_status_trtmto, ds_status_trtmto 
+													  FROM tratamento.tb_hstr_pnel_solic_trtmto 
+													WHERE cd_pcnt = '".$rowpddotrtmto[2]."' and id_equipe = 13 and fl_trtmto_fchd = 0 and id_hstr_pnel_solic_trtmto = ".$rowmaxpanelsolictrtmto[0]." ";
+
+											//echo $sql;
+
+											$rethstrtratamento = pg_query($pdo, $sql);
+
+											if(!$rethstrtratamento) {
+												echo pg_last_error($pdo);		
+												exit;
+											}
+
+											$rowhstrtratamento = pg_fetch_row($rethstrtratamento);
+											$idstatustratamentoatual = $rowhstrtratamento[0];
+											$statustratamentoatual = $rowhstrtratamento[1];
+										}
+										
+										$sql = "SELECT trtmto.id_status_trtmto, trtmto.ds_status_trtmto 
+												FROM tratamento.tb_c_status_trtmto trtmto
+												  WHERE trtmto.id_equipe = 13 
+												order by 2 asc";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -174,19 +218,21 @@
 											echo pg_last_error($pdo);
 											exit;
 										}
+										
 										?>
 										<td style="width:150px">
-											<select  id="sel_hstr_pnel_solic_trtmto" class="form-control" onchange=" 
-														var selObj = document.getElementById('sel_hstr_pnel_solic_trtmto');
+											<select  id="sel_id_status_trtmto" class="form-control" onchange=" 
+														var selObj = document.getElementById('sel_id_status_trtmto');
 														var selValue = selObj.options[selObj.selectedIndex].value;
-														document.getElementById('id_hstr_pnel_solic_trtmto').value = selValue;">
-														<option value="null"></option>
+														document.getElementById('id_status_trtmto').value = selValue;">
+														<option value="0"></option>
 																									
 											<?php
+											
 												$cont=1;																	
 											
 												while($row = pg_fetch_row($ret)) {
-													if($row[0]==$rowpddotrtmto[1]){														
+													if($row[1]==$statustratamentoatual){														
 												?>												
 													<option value="<?php echo $row[0]; ?>" selected><?php echo $row[1]; ?></option>
 												<?php																		
@@ -195,7 +241,6 @@
 													<option value="<?php echo $row[0]; ?>"><?php echo $row[1]; ?></option>												
 													<?php } 
 												$cont=$cont+1;} ?>	
-											</select>
 										
 										</td>	
 									   </tr>
@@ -653,11 +698,11 @@
 											<td style="width:50px"><input type="text" class="form-control" value="<?php echo $rowpddotrtmto[23]; ?>" name="ds_intrv_entre_ciclo_dia" id="ds_intrv_entre_ciclo_dia"></td>
 									 </tr>
 									 
-									 <input type="text" id="cd_pcnt" name="cd_pcnt" style="display:none"> 
+									 <input type="text" id="cd_pcnt" name="cd_pcnt" value="<?php echo $rowpddotrtmto[2]; ?>" style="display:none"> 
 									 <input type="text" id="cd_cnvo" name="cd_cnvo" value="<?php echo $rowpddotrtmto[34]; ?>" style="display:none"> 
 									 <input type="text" id="cd_cid" name="cd_cid" value="<?php echo $rowpddotrtmto[11]; ?>" style="display:none"> 
 									 
-									 <input type="text" id="id_hstr_pnel_solic_trtmto" name="id_hstr_pnel_solic_trtmto" value="<?php echo $rowpddotrtmto[1]; ?>" style="display:none"> 
+									 <input type="text" id="id_status_trtmto" name="id_status_trtmto" value="<?php echo $idstatustratamentoatual; ?>" style="display:none"> 
 									 
 									 <input type="text" id="ds_estmt" name="ds_estmt" value="<?php echo $rowpddotrtmto[24]; ?>" style="display:none"> 
 									 <input type="text" id="ds_tipo_linha_trtmto" name="ds_tipo_linha_trtmto" value="<?php echo $rowpddotrtmto[25]; ?>" style="display:none"> 

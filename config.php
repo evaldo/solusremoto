@@ -1,12 +1,14 @@
 <?php
-	//'Location: http://sistemas.vilaverde.saude.ws/integracao/index.php'
+	
 	class Config 
 	{
-		static $dbHost = '187.16.185.242';
-		static $dbPort = '5430';
-		static $webServer = 'Location: http://localhost/solus/index.php';		
-		static $webLogin = 'Location: http://localhost/solus/login.php';
-		static $webLogout = 'Location: http://localhost/solus/logout.php';
+			
+		static $dbHost = '201.48.37.65';
+		static $dbPort = '5433';
+		static $webServer = 'Location: http://201.48.37.65:8012/solus/index.php';		
+		static $webLogin = 'Location: http://201.48.37.65:8012/solus/login.php';	
+		static $webLogout = 'Location: http://201.48.37.65:8012/solus/logout.php';	
+		
 		static $destroy="N";
 		
 		public static function destroy()

@@ -21,7 +21,6 @@
 		
 		$sql="SELECT cd_faixa_ip_1, cd_faixa_ip_2, fl_acesso_ip, fl_sist_admn FROM tratamento.tb_c_usua_acesso where nm_usua_acesso = '" . $_SESSION['usuario'] . "'";
 		
-				
 		$ret = pg_query($pdo, $sql);
 		if(!$ret) {
 			echo pg_last_error($pdo);

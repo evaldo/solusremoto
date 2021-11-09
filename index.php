@@ -669,7 +669,7 @@
 							
 								while($row_submenu = pg_fetch_row($ret_submenu)) {					
 																 
-										echo "<a href=\"#\" onclick=\"removeIframe();iframeSelecionado('" . trim($row_submenu[2]) . "');prepareIframe('". $row_submenu[2] ."', '" . trim($row_submenu[9]) . "');\">" . trim($row_submenu[1]). "</a>";
+										echo "<a href=\"#\" onclick=\"removeIframe();iframeSelecionado('" . trim($row_submenu[2]) . "');prepareIframe('". $row_submenu[2] ."', '" . trim($row_submenu[10]) . "');\">" . trim($row_submenu[1]). "</a>";
 								}
 								
 								echo "</div>";

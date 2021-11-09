@@ -45,6 +45,9 @@
 		
 		try
 		{	
+		
+			$inserenovotratamento=0;
+		
 			if ($_POST['id_hstr_pnel_solic_trtmto']=='null' || $_POST['id_hstr_pnel_solic_trtmto']==null || $_POST['id_hstr_pnel_solic_trtmto']=='') {
 				$_POST['id_hstr_pnel_solic_trtmto']='null';
 			}
@@ -162,7 +165,11 @@
 					echo "";
 				} 
 			
-			} 				
+			} else {
+
+				$inserenovotratamento=1;
+
+			}
 			
 		
 			$sql = "INSERT INTO tratamento.tb_pddo_trtmto(id_pddo_trtmto, id_hstr_pnel_solic_trtmto, cd_pcnt, nm_pcnt, dt_nasc_pcnt, vl_idade_pcnt, nu_peso_pcnt, vl_altura_pcnt, vl_sup_corp, ds_indic_clnic, dt_diagn, cd_cid, ds_plano_trptco, ds_info_rlvnte, ds_diagn_cito_hstpagico, ds_tp_cirurgia, ds_area_irrda, dt_rlzd, dt_aplc, ds_obs_jfta, nu_qtde_ciclo_prta, ds_ciclo_atual, ds_dia_ciclo_atual, ds_intrv_entre_ciclo_dia, ds_estmt, ds_tipo_linha_trtmto, ds_fnlde, ic_tipo_tumor, ic_tipo_nodulo, ic_tipo_metastase, cd_usua_incs, dt_incs, cd_cnvo)
@@ -242,6 +249,91 @@
 			if($result){
 				echo "";
 			} 
+			
+			
+			if ($inserenovotratamento==1){
+				
+				//Continuar aqui	
+				$sqldataatual = "SELECT to_char(current_timestamp, 'dd/mm/yyyy hh24:mi') ";
+										  
+				$retdataatual = pg_query($pdo, $sqldataatual);
+			
+				if(!$retdataatual) {
+					echo pg_last_error($pdo);		
+					exit;
+				}
+				
+				$rowdataatual = pg_fetch_row($retdataatual);
+
+				$sqlequipetratamento = "SELECT 
+				       status_trtmto.id_equipe
+					 , equipe.ds_equipe
+					 , equipe.nu_seq_equipe_pnel
+					 , status_trtmto.id_status_trtmto	 
+					 , status_trtmto.ds_status_trtmto
+					 , status_trtmto.cd_cor_status_trtmto	
+				FROM tratamento.tb_c_status_trtmto status_trtmto
+				   , tratamento.tb_c_equipe equipe
+				WHERE equipe.id_equipe = status_trtmto.id_equipe
+				  and status_trtmto.fl_ativo = 1
+				  and status_trtmto.fl_status_inicial_trtmto = 1
+				ORDER BY equipe.nu_seq_equipe_pnel ";
+				
+				$retequipetratamento = pg_query($pdo, $sqlequipetratamento);
+									
+				if(!$retequipetratamento) {
+					echo pg_last_error($pdo);		
+					exit;
+				}
+									
+				while($rowretequipetratamento = pg_fetch_row($retequipetratamento)) {
+				
+					$sql = "INSERT INTO tratamento.tb_hstr_pnel_solic_trtmto(
+		id_hstr_pnel_solic_trtmto, cd_pcnt, nm_pcnt, dt_nasc_pcnt, ds_mncp_pcnt, id_equipe, ds_equipe, nu_seq_equipe_pnel, id_status_trtmto, ds_status_trtmto, fl_trtmto_fchd, dt_inicial_trtmto, dt_final_trtmto, ds_utlma_obs_pcnt, tp_dia_trtmto, tp_hora_trtmto, tp_minuto_trtmto, cd_usua_incs, dt_incs, cd_usua_altr, dt_altr, cd_cor_status_trtmto, cd_cnvo)
+		VALUES ((select NEXTVAL('tratamento.sq_hstr_pnel_solic_trtmto')), '". $_POST['cd_pcnt'] ."', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '". $_POST['cd_pcnt']."'), (select dt_nasc_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '". $_POST['cd_pcnt']."'), (select ds_mncp_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '". $_POST['cd_pcnt']."'),".$rowretequipetratamento[0].", '".$rowretequipetratamento[1]."', ".$rowretequipetratamento[2].", ".$rowretequipetratamento[3].", '".$rowretequipetratamento[4]."', 0, '".$rowdataatual[0]."', null, '".str_replace("'"," ", $msg)."', 0, 0, 0, '".$_SESSION['usuario']."', current_timestamp, null, null, '".$rowretequipetratamento[5]."', '". $_POST['cd_cnvo'] ."');";
+		
+					//echo $sql;
+		
+					$result = pg_query($pdo, $sql);
+					
+					if($result){
+						echo "";
+					}
+					
+					$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alrt, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'INSERCAO DE TRATAMENTO', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '".$_POST['cd_pcnt']."')||' - '".str_replace("'"," ", $msg)."' - ".$rowretequipetratamento[1]."', '".$_SESSION['usuario']."', current_timestamp)";
+						
+					$result = pg_query($pdo, $sql);
+
+					if($result){
+						echo "";
+					}
+					
+					
+					$sql = "INSERT INTO tratamento.tb_hstr_obs_pnel_solic_trtmto(id_hstr_obs_pnel_solic_trtmto, id_hstr_pnel_solic_trtmto, id_status_equipe, ds_status_equipe, dt_inic_status_equipe_trtmto, dt_final_status_equipe_trtmto, ds_obs_pcnt, tp_minuto_status_equipe_trtmto, cd_usua_incs, dt_incs, dt_inicial_trtmto, cd_pcnt, nm_pcnt, id_status_trtmto, ds_status_trtmto)
+	VALUES ((select NEXTVAL('tratamento.sq_hstr_obs_pnel_solic_trtmto')), (SELECT currval('tratamento.sq_hstr_pnel_solic_trtmto')), ".$rowretequipetratamento[0].", '".$rowretequipetratamento[1]."', '".$rowdataatual[0]."', null, '".str_replace("'"," ", $msg)."', 0, '".$_SESSION['usuario']."', current_timestamp, '".$rowdataatual[0]."', '".$_POST['cd_pcnt']."', (select nm_pcnt from tratamento.tb_c_pcnt where cd_pcnt = '". $_POST['cd_pcnt']."'),".$rowretequipetratamento[3].", '".$rowretequipetratamento[4]."') ";
+
+					//echo $sql;
+
+					$result = pg_query($pdo, $sql);
+					
+					if($result){
+						echo "";
+					}
+					
+				}
+				
+								
+				
+				$sql = "UPDATE tratamento.tb_pddo_trtmto SET id_hstr_pnel_solic_trtmto = (select currval('tratamento.sq_hstr_pnel_solic_trtmto')) WHERE id_pddo_trtmto = (select currval('tratamento.sq_pddo_trtmto'))";
+				
+				$result = pg_query($pdo, $sql);
+				if($result){
+					echo "";
+				} 
+			
+			
+			}
+			
 
 			$sql = "insert into tratamento.tb_log_alrt (id_log_alrt, cd_alrt, ds_alrt, cd_usua_incs_alrt, dt_incs_alrt) values ((select NEXTVAL('tratamento.sq_log_alrt')),'INSERCAO DE PEDIDO DE TRATAMENTO', '".str_replace("'"," ", $msg)."', '".$_SESSION['usuario']."', current_timestamp)";
 			

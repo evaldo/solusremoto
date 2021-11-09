@@ -34,7 +34,7 @@
 										<td style="width:150px"><label>Paciente:</label></td>  
 										<?php
 										
-										$sql = "SELECT cd_pcnt, nm_pcnt from tratamento.tb_c_pcnt order by 2";
+										$sql = "SELECT cd_pcnt, substr(nm_pcnt,0, 35) from tratamento.tb_c_pcnt order by 2";
 										
 										if ($pdo==null){
 												header(Config::$webLogin);
@@ -115,7 +115,7 @@
 										<?php
 										
 										$sql = "SELECT id_hstr_pnel_solic_trtmto
-													 , nm_pcnt||'-'||ds_status_trtmto
+													 , substr(nm_pcnt,0, 25)||'-'||substr(ds_status_trtmto,0, 25)
 												FROM tratamento.tb_hstr_pnel_solic_trtmto trtmto
 												  WHERE trtmto.fl_trtmto_fchd = 0
 													and trtmto.ds_equipe = 'Oncologistas';";

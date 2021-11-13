@@ -12,7 +12,7 @@
 	$sql = '';
 	
 		
-	$sql ="select * from tratamento.vw_painel_trtmto order by to_date(dt_incs,'dd/mm/yyyy hh24:mi') DESC";
+	$sql ="select * from tratamento.vw_painel_trtmto order by id_hstr_pnel_solic_trtmto DESC";
 			
 	$ret = pg_query($pdo, $sql);
 	
